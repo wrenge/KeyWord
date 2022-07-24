@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Crypto", "KeyWord.Crypto\KeyWord.Crypto.csproj", "{23364670-AA1D-4DC8-B4F5-07D88C39F52D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Crypto.Tests", "KeyWord.Crypto.Tests\KeyWord.Crypto.Tests.csproj", "{34406C7A-C9CC-43BC-8E36-E17F8A320BDD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23364670-AA1D-4DC8-B4F5-07D88C39F52D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23364670-AA1D-4DC8-B4F5-07D88C39F52D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23364670-AA1D-4DC8-B4F5-07D88C39F52D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23364670-AA1D-4DC8-B4F5-07D88C39F52D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34406C7A-C9CC-43BC-8E36-E17F8A320BDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34406C7A-C9CC-43BC-8E36-E17F8A320BDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34406C7A-C9CC-43BC-8E36-E17F8A320BDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34406C7A-C9CC-43BC-8E36-E17F8A320BDD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
