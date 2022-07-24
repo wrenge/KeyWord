@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Crypto", "KeyWord.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Crypto.Tests", "KeyWord.Crypto.Tests\KeyWord.Crypto.Tests.csproj", "{34406C7A-C9CC-43BC-8E36-E17F8A320BDD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Credentials", "KeyWord.Credentials\KeyWord.Credentials.csproj", "{DF562782-AEF8-48E8-A1D1-52687B689C20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Storage", "KeyWord.Storage\KeyWord.Storage.csproj", "{9D6BE6F9-E045-4465-8C5A-01BC9486D2CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{34406C7A-C9CC-43BC-8E36-E17F8A320BDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34406C7A-C9CC-43BC-8E36-E17F8A320BDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34406C7A-C9CC-43BC-8E36-E17F8A320BDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF562782-AEF8-48E8-A1D1-52687B689C20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF562782-AEF8-48E8-A1D1-52687B689C20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF562782-AEF8-48E8-A1D1-52687B689C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF562782-AEF8-48E8-A1D1-52687B689C20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D6BE6F9-E045-4465-8C5A-01BC9486D2CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D6BE6F9-E045-4465-8C5A-01BC9486D2CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D6BE6F9-E045-4465-8C5A-01BC9486D2CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D6BE6F9-E045-4465-8C5A-01BC9486D2CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
