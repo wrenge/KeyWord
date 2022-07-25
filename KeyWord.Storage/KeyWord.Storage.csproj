@@ -5,4 +5,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\KeyWord.Credentials\KeyWord.Credentials.csproj" />
+    </ItemGroup>
+
 </Project>
