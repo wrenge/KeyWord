@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Storage", "KeyWord.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Credentials.Test", "KeyWord.Credentials.Test\KeyWord.Credentials.Test.csproj", "{67527685-2847-4CC0-BCC1-AF68D38DD2E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Storage.Mobile", "KeyWord.Storage.Mobile\KeyWord.Storage.Mobile.csproj", "{D998D633-FD51-41E9-8019-858B264154CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Storage.Mobile.Tests", "KeyWord.Storage.Mobile.Tests\KeyWord.Storage.Mobile.Tests.csproj", "{ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,13 @@ Global
 		{67527685-2847-4CC0-BCC1-AF68D38DD2E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67527685-2847-4CC0-BCC1-AF68D38DD2E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67527685-2847-4CC0-BCC1-AF68D38DD2E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D998D633-FD51-41E9-8019-858B264154CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D998D633-FD51-41E9-8019-858B264154CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D998D633-FD51-41E9-8019-858B264154CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D998D633-FD51-41E9-8019-858B264154CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
