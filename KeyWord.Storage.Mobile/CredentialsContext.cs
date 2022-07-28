@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text.Json;
 using KeyWord.Credentials;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,7 @@ namespace KeyWord.Storage.Mobile;
 internal sealed class CredentialsContext : DbContext
 {
     public DbSet<ClassicCredentialsInfo> ClassicCredentialsInfos { get; set; }
+    public DbSet<KeyValueEntry> KeyValues { get; set; }
     public string DbFilePath { get; }
 
     public CredentialsContext (string dbFilePath)
@@ -26,5 +28,8 @@ internal sealed class CredentialsContext : DbContext
         modelBuilder.Entity<ClassicCredentialsInfo>()
             .Property(e => e.Id)
             .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<KeyValueEntry>()
+            .HasKey(x => x.Key);
     }
 }

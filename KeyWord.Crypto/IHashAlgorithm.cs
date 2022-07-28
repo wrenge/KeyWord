@@ -1,4 +1,4 @@
-﻿namespace Wrenge.KeyWord.Crypto
+﻿namespace KeyWord.Crypto
 {
     public interface IHashAlgorithm
     {

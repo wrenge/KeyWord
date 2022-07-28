@@ -1,10 +1,10 @@
 ﻿using System.Security.Cryptography;
 
-namespace Wrenge.KeyWord.Crypto
+namespace KeyWord.Crypto
 {
     public sealed class AesCbc : SymmetricAlgorithmAdapter<AesManaged>
     {
-        public AesCbc()
+        public AesCbc(ByteText vector) : base(vector)
         {
             CipherMode = CipherMode.CBC;
             PaddingMode = PaddingMode.ISO10126;

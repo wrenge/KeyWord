@@ -1,12 +1,10 @@
-﻿namespace Wrenge.KeyWord.Crypto
+﻿namespace KeyWord.Crypto
 {
     public interface IKeyDerivationAlgorithm
     {
-        byte[]? Password { get; set; }
-        byte[]? Salt { get; set; }
         int Iterations { get; set; }
         int Length { get; set; }
 
-        byte[] ComputeKey();
+        ByteText ComputeKey(ByteText password, ByteText salt);
     }
 }

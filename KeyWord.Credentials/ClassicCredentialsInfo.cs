@@ -13,7 +13,7 @@ namespace KeyWord.Credentials
 
         public ClassicCredentialsInfo() { }
 
-        public ClassicCredentialsInfo(ClassicCredentialsInfo info)
+        public ClassicCredentialsInfo(ICredentialsInfo info)
         {
             Id = info.Id;
             Identifier = info.Identifier;

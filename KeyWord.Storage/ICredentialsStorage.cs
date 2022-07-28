@@ -6,10 +6,13 @@ namespace KeyWord.Storage
     public interface ICredentialsStorage
     {
         string Password { set; }
+        int Count { get; }
         IReadOnlyList<CredentialsIdentity> GetIdentities();
-        ICredentialsInfo? GetInfo(int id);
+        ICredentialsInfo? FindInfo(int id);
         bool SaveInfo(ICredentialsInfo info);
         bool UpdateInfo(int id, ICredentialsInfo info);
         bool DeleteInfo(int id);
+        bool IsPasswordCorrect();
+        void ChangePassword(string newPassword);
     }
 }

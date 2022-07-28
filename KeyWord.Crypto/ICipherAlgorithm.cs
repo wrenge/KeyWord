@@ -1,13 +1,9 @@
-﻿using System;
-
-namespace Wrenge.KeyWord.Crypto
+﻿namespace KeyWord.Crypto
 {
     public interface ICipherAlgorithm
     {
-        byte[]? Value { get; set; }
-        byte[]? Key { get; set; }
-        byte[]? Vector { get; set; }
-        byte[] Encrypt();
-        byte[] Decrypt();
+        byte[] Vector { get; set; }
+        ByteText Encrypt(ByteText text, ByteText key);
+        ByteText Decrypt(ByteText text, ByteText key);
     }
 }

@@ -11,6 +11,7 @@ namespace KeyWord.Storage.Mobile.Tests;
 public class Tests
 {
     private const string Password = "mySecr3tP@$$w0rd!!!";
+    private const string WrongPassword = "anotherPassword";
     
     [SetUp]
     public void Setup()
@@ -45,7 +46,8 @@ public class Tests
     {
         var storage = new CredentialsStorageMobile(GetDbPath());
         storage.Password = Password;
-        Assert.AreEqual(storage.GetIdentities().Count, 0);
+        storage.ChangePassword(Password);
+        Assert.AreEqual(storage.Count, 0);
         
         var a = new ClassicCredentialsInfo
         {
@@ -60,7 +62,7 @@ public class Tests
         Assert.Greater(identities.Count, 0);
         Assert.Greater(identities[0].Id, 0);
         a.Id = identities[0].Id;
-        Assert.AreEqual(storage.GetInfo(identities[0].Id), a);
+        Assert.AreEqual(storage.FindInfo(identities[0].Id), a);
         Assert.IsFalse(storage.SaveInfo(a));
     }
     
@@ -69,7 +71,8 @@ public class Tests
     {
         var storage = new CredentialsStorageMobile(GetDbPath());
         storage.Password = Password;
-        Assert.AreEqual(storage.GetIdentities().Count, 0);
+        storage.ChangePassword(Password);
+        Assert.AreEqual(storage.Count, 0);
         
         var a = new ClassicCredentialsInfo
         {
@@ -92,7 +95,7 @@ public class Tests
         storage.UpdateInfo(identities[0].Id, b);
         Assert.AreNotEqual(b.Id, storage.GetIdentities()[0].Id);
         b.Id = identities[0].Id;
-        Assert.AreEqual(b, storage.GetInfo(identities[0].Id));
+        Assert.AreEqual(b, storage.FindInfo(identities[0].Id));
     }
     
     [Test]
@@ -100,7 +103,8 @@ public class Tests
     {
         var storage = new CredentialsStorageMobile(GetDbPath());
         storage.Password = Password;
-        Assert.AreEqual(storage.GetIdentities().Count, 0);
+        storage.ChangePassword(Password);
+        Assert.AreEqual(storage.Count, 0);
         
         var a = new ClassicCredentialsInfo
         {
@@ -129,7 +133,7 @@ public class Tests
         storage.SaveInfo(a);
         storage.SaveInfo(b);
         storage.SaveInfo(c);
-        Assert.Greater(storage.GetIdentities().Count, 0);
+        Assert.Greater(storage.Count, 0);
         Assert.IsTrue(storage.GetIdentities().Any(x => x.Login == b.Login));
 
         storage.DeleteInfo(storage.GetIdentities().First(x => x.Login == b.Login).Id);
@@ -153,7 +157,12 @@ public class Tests
             };
             storage.SaveInfo(a);
         });
-        
-        // TODO: add password validation check
+
+        storage.Password = Password;
+        Assert.IsFalse(storage.IsPasswordCorrect());
+        storage.ChangePassword(Password);
+        Assert.IsTrue(storage.IsPasswordCorrect());
+        storage.Password = WrongPassword;
+        Assert.IsFalse(storage.IsPasswordCorrect());
     }
 }
