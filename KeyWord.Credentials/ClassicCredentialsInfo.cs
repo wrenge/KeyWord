@@ -10,6 +10,7 @@ namespace KeyWord.Credentials
         public string Password { get; set; } = "";
         public DateTime CreationTime { get; set; }
         public DateTime? ModificationTime { get; set; }
+        public DateTime? RemoveTime { get; set; }
 
         public ClassicCredentialsInfo() { }
 
