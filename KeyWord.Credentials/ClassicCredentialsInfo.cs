@@ -5,6 +5,7 @@ namespace KeyWord.Credentials
     public class ClassicCredentialsInfo : ICredentialsInfo, IEquatable<ClassicCredentialsInfo>
     {
         public int Id { get; set; }
+        public string Name { get; set; } = "";
         public string Identifier { get; set; } = "";
         public string Login { get; set; } = "";
         public string Password { get; set; } = "";
@@ -46,7 +47,7 @@ namespace KeyWord.Credentials
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Identifier, Login, Password, CreationTime, ModificationTime);
+            return HashCode.Combine(Id, Name, Identifier, Login, Password, CreationTime, ModificationTime);
         }
 
         public static bool operator ==(ClassicCredentialsInfo? left, ClassicCredentialsInfo? right)

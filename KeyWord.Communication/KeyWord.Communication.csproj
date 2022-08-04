@@ -7,6 +7,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\KeyWord.Credentials\KeyWord.Credentials.csproj" />
+      <ProjectReference Include="..\KeyWord.Crypto\KeyWord.Crypto.csproj" />
     </ItemGroup>
 
 </Project>

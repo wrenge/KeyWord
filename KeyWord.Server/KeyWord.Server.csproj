@@ -13,6 +13,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\KeyWord.Communication\KeyWord.Communication.csproj" />
+      <ProjectReference Include="..\KeyWord.Crypto\KeyWord.Crypto.csproj" />
+      <ProjectReference Include="..\KeyWord.Server.Storage\KeyWord.Server.Storage.csproj" />
     </ItemGroup>
 
 </Project>
