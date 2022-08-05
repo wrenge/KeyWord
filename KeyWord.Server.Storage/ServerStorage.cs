@@ -11,18 +11,29 @@ public class ServerStorage : IStorage
         _dbFilePath = dbFilePath;
     }
 
+    public int Count
+    {
+        get
+        {
+            using var dbContext = new StorageContext(_dbFilePath);
+            return dbContext.ClassicCredentialsInfos.Count();
+        }
+    }
+
     public IEnumerable<ClassicCredentialsInfo> GetAddedCredentials(DateTime since)
     {
         using var dbContext = new StorageContext(_dbFilePath);
         return dbContext.ClassicCredentialsInfos
-            .Where(x => x.CreationTime > since);
+            .Where(x => x.CreationTime > since)
+            .ToArray();
     }
 
     public IEnumerable<ClassicCredentialsInfo> GetModifiedCredentials(DateTime since)
     {
         using var dbContext = new StorageContext(_dbFilePath);
         return dbContext.ClassicCredentialsInfos
-            .Where(x => x.CreationTime < since && x.ModificationTime != null && x.ModificationTime > since);
+            .Where(x => x.CreationTime < since && x.ModificationTime != null && x.ModificationTime > since)
+            .ToArray();
     }
 
     public IEnumerable<int> GetDeletedCredentials(DateTime since)
@@ -30,7 +41,8 @@ public class ServerStorage : IStorage
         using var dbContext = new StorageContext(_dbFilePath);
         return dbContext.ClassicCredentialsInfos
             .Where(x => x.RemoveTime != null && x.RemoveTime > since)
-            .Select(x => x.Id);
+            .Select(x => x.Id)
+            .ToArray();
     }
 
     public Device? FindDeviceById(string id)
@@ -39,14 +51,29 @@ public class ServerStorage : IStorage
         return dbContext.Devices.FirstOrDefault(x => x.Id == id);
     }
 
-    public void AddCredentials(IEnumerable<ClassicCredentialsInfo> infos)
+    public void AddDevice(Device device)
     {
         using var dbContext = new StorageContext(_dbFilePath);
+        dbContext.Devices.Add(device);
+        dbContext.SaveChanges();
+    }
+
+    public IEnumerable<Device> GetDevices()
+    {
+        using var dbContext = new StorageContext(_dbFilePath);
+        return dbContext.Devices.ToList();
+    }
+
+    public void AddCredentials(IEnumerable<ClassicCredentialsInfo> infos)
+    {
+        var infosQuery = infos.AsQueryable();
+        var infosIds = infosQuery.Select(x => x.Id).ToArray();
+        using var dbContext = new StorageContext(_dbFilePath);
         var existing = dbContext.ClassicCredentialsInfos
-            .Where(x => infos.Any(y => x.Id == y.Id));
+            .Where(x => infosIds.Contains(x.Id));
         
-        var infosToAdd = infos
-            .Where(x => existing.Any(y => x.CreationTime > y.CreationTime && x.ModificationTime > y.ModificationTime));
+        var infosToAdd = infosQuery
+            .Where(x => !existing.Any(y => y.Id == x.Id && y.CreationTime > x.CreationTime && y.ModificationTime > x.ModificationTime));
         
         dbContext.ClassicCredentialsInfos.AddRange(infosToAdd);
         dbContext.SaveChanges();
@@ -54,15 +81,15 @@ public class ServerStorage : IStorage
 
     public void UpdateCredentials(IEnumerable<ClassicCredentialsInfo> infos)
     {
-        var infosList = infos.ToList();
-        var now = DateTime.Now;
+        var infosQuery = infos.AsQueryable();
+        var infosIds = infosQuery.Select(y => y.Id).ToArray();
         using var dbContext = new StorageContext(_dbFilePath);
         var modified = dbContext.ClassicCredentialsInfos
-            .IntersectBy(infosList.ToList().Select(x => x.Id), x => x.Id);
+            .Where(x => infosIds.Contains(x.Id));
         
         foreach (var info in modified)
         {
-            var counterPart = infosList.First(x => x.Id == info.Id);
+            var counterPart = infosQuery.First(x => x.Id == info.Id);
             info.Name = counterPart.Name;
             info.Identifier = counterPart.Identifier;
             info.Login = counterPart.Login;
@@ -76,9 +103,11 @@ public class ServerStorage : IStorage
 
     public void DeleteCredentials(IEnumerable<int> infos)
     {
+        var infosArray = infos.ToArray();
         var now = DateTime.Now;
         using var dbContext = new StorageContext(_dbFilePath);
-        var removed = dbContext.ClassicCredentialsInfos.IntersectBy(infos, x => x.Id);
+        var removed = dbContext.ClassicCredentialsInfos
+            .Where(x => infosArray.Contains(x.Id));
         foreach (var info in removed)
         {
             info.Name = info.Identifier = info.Login = info.Password = "";
