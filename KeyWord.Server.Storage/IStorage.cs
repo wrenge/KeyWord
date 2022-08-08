@@ -5,6 +5,7 @@ namespace KeyWord.Server.Storage;
 public interface IStorage
 {
     int Count { get; }
+    IEnumerable<ClassicCredentialsInfo> GetAllCredentials();
     IEnumerable<ClassicCredentialsInfo> GetAddedCredentials(DateTime since);
     IEnumerable<ClassicCredentialsInfo> GetModifiedCredentials(DateTime since);
     IEnumerable<int> GetDeletedCredentials(DateTime since);

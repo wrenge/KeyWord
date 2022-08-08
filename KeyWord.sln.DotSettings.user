@@ -7,6 +7,9 @@
       &lt;TestId&gt;NUnit3x::ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A::net6.0::KeyWord.Storage.Mobile.Tests.Tests&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestSyncSend&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestSyncGet&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestSyncSet&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestWrongToken&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestWrongDevice&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

@@ -20,6 +20,12 @@ public class ServerStorage : IStorage
         }
     }
 
+    public IEnumerable<ClassicCredentialsInfo> GetAllCredentials()
+    {
+        using var dbContext = new StorageContext(_dbFilePath);
+        return dbContext.ClassicCredentialsInfos.ToArray();
+    }
+
     public IEnumerable<ClassicCredentialsInfo> GetAddedCredentials(DateTime since)
     {
         using var dbContext = new StorageContext(_dbFilePath);
@@ -32,7 +38,7 @@ public class ServerStorage : IStorage
     {
         using var dbContext = new StorageContext(_dbFilePath);
         return dbContext.ClassicCredentialsInfos
-            .Where(x => x.CreationTime < since && x.ModificationTime != null && x.ModificationTime > since)
+            .Where(x => x.CreationTime <= since && x.ModificationTime != null && x.ModificationTime > since)
             .ToArray();
     }
 
@@ -112,7 +118,7 @@ public class ServerStorage : IStorage
         {
             info.Name = info.Identifier = info.Login = info.Password = "";
             info.CreationTime = new DateTime();
-            info.ModificationTime = new DateTime();
+            info.ModificationTime = null;
             info.RemoveTime = now;
         }
         
