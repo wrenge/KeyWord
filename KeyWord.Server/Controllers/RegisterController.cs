@@ -27,7 +27,7 @@ public class RegisterController : ControllerBase
     // TODO Http attribute
     public ActionResult StartNewRegistration()
     {
-        if (_currentSession != null && !_currentSession.IsExpired())
+        if (_currentSession is {IsClosed: false } && !_currentSession.IsExpired())
         {
             _logger.LogWarning( "Closing session early: {Token}", _currentSession.Token);
             _currentSession.Close();
