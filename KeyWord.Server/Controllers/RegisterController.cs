@@ -86,9 +86,10 @@ public class RegisterController : ControllerBase
         try
         {
             var device = await _currentSession.DeviceCandidate.Task;
+            // TODO: if connection interrupted then close session
             return device;
         }
-        catch (TaskCanceledException e)
+        catch (TaskCanceledException)
         {
             return StatusCode(StatusCodes.Status503ServiceUnavailable);
         }
