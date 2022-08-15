@@ -27,7 +27,7 @@ public class RegisterController : ControllerBase
     // TODO Http attribute
     public ActionResult StartNewRegistration()
     {
-        if (_currentSession is {IsClosed: false } && !_currentSession.IsExpired())
+        if (_currentSession is {IsClosed: false, IsExpired: false })
         {
             _logger.LogWarning( "Closing session early: {Token}", _currentSession.Token);
             _currentSession.Close();
@@ -51,7 +51,7 @@ public class RegisterController : ControllerBase
     // TODO Http attribute
     public ActionResult<RegisterInfo> RequestNewToken()
     {
-        if (_currentSession == null || !_currentSession.IsExpired() || _currentSession.IsClosed)
+        if (_currentSession == null || _currentSession.IsExpired || _currentSession.IsClosed)
         {
             return NotFound();
         }
@@ -76,7 +76,7 @@ public class RegisterController : ControllerBase
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
 
-        if (_currentSession.IsExpired())
+        if (_currentSession.IsExpired)
         {
             const string errorMsg = "Tried to await device with expired session";
             _logger.LogError(errorMsg);
@@ -106,7 +106,7 @@ public class RegisterController : ControllerBase
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
         
-        if (_currentSession.IsExpired())
+        if (_currentSession.IsExpired)
         {
             const string errorMsg = "Tried to approve device with an expired session";
             _logger.LogInformation(errorMsg);
@@ -129,7 +129,7 @@ public class RegisterController : ControllerBase
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
         
-        if (_currentSession.IsExpired())
+        if (_currentSession.IsExpired)
         {
             const string errorMsg = "Tried to deny device with an expired session";
             _logger.LogInformation(errorMsg);
@@ -159,7 +159,7 @@ public class RegisterController : ControllerBase
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
         
-        if (_currentSession.IsExpired())
+        if (_currentSession.IsExpired)
         {
             const string errorMsg = "Tried to post device info with an expired session";
             _logger.LogInformation(errorMsg);
@@ -184,8 +184,7 @@ public class RegisterController : ControllerBase
     {
         if (_currentSession == null
             || _currentSession.IsClosed
-            || _currentSession.IsOccupied
-            || _currentSession.IsExpired()
+            || _currentSession.IsExpired
             || device.Token != _currentSession.Token
             )
         {

@@ -8,6 +8,7 @@ public class RegistrationSession
     public DateTime StartTime { get; }
     public TimeSpan Timeout { get; }
     public TaskCompletionSource<Device> DeviceCandidate { get; }
+    public bool IsExpired => DateTime.Now >= GetExpireDate();
     public bool IsOccupied { get; set; } = false;
     public bool IsClosed { get; private set; }
     public bool IsDeviceApproved { get; set; }
@@ -23,12 +24,12 @@ public class RegistrationSession
     }
 
     public DateTime GetExpireDate() => StartTime + Timeout;
-    public bool IsExpired() => DateTime.Now >= GetExpireDate();
+    
     public TimeSpan GetTimeLeft() => GetExpireDate() - DateTime.Now;
 
     public void Close()
     {
-        DeviceCandidate.SetCanceled();
+        DeviceCandidate.TrySetCanceled();
         if(IsDeviceApproved)
             DeviceApproval.SetResult();
         else
