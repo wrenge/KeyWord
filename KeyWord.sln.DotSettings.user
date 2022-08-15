@@ -10,6 +10,7 @@
       &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestSyncSet&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestWrongToken&lt;/TestId&gt;&#xD;
       &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestWrongDevice&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.RegisterControllerTest&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
