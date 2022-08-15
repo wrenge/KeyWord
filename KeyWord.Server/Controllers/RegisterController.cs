@@ -24,7 +24,8 @@ public class RegisterController : ControllerBase
     }
 
     // Only from admin client
-    // TODO Http attribute
+    [Host("localhost")]
+    [HttpPost(nameof(StartNewRegistration))]
     public ActionResult StartNewRegistration()
     {
         if (_currentSession is {IsClosed: false, IsExpired: false })
@@ -48,7 +49,8 @@ public class RegisterController : ControllerBase
     }
 
     // Only from admin client
-    // TODO Http attribute
+    [Host("localhost")]
+    [HttpGet(nameof(RequestNewToken))]
     public ActionResult<RegisterInfo> RequestNewToken()
     {
         if (_currentSession == null || _currentSession.IsExpired || _currentSession.IsClosed)
@@ -66,7 +68,8 @@ public class RegisterController : ControllerBase
     }
 
     // Only from admin client
-    // TODO Http attribute
+    [Host("localhost")]
+    [HttpGet(nameof(RequestDeviceCandidate))]
     public async Task<ActionResult<Device?>> RequestDeviceCandidate()
     {
         if (_currentSession == null || _currentSession.IsClosed)
@@ -96,7 +99,8 @@ public class RegisterController : ControllerBase
     }
 
     // Only from admin client
-    // TODO Http attribute
+    [Host("localhost")]
+    [HttpPost(nameof(ApprovePendingDevice))]
     public ActionResult ApprovePendingDevice()
     {
         if (_currentSession == null || _currentSession.IsClosed)
@@ -119,7 +123,8 @@ public class RegisterController : ControllerBase
     }
     
     // Only from admin client
-    // TODO Http attribute
+    [Host("localhost")]
+    [HttpPost(nameof(DenyPendingDevice))]
     public ActionResult DenyPendingDevice()
     {
         if (_currentSession == null || _currentSession.IsClosed)
@@ -142,7 +147,8 @@ public class RegisterController : ControllerBase
     }
     
     // Only from app client
-    // TODO Http attribute
+    [Host("localhost")]
+    [HttpPost(nameof(PostDeviceInfo))]
     public ActionResult PostDeviceInfo(Device device)
     {
         if (_currentSession == null || _currentSession.IsClosed)
@@ -179,7 +185,8 @@ public class RegisterController : ControllerBase
     }
     
     // Only from app client
-    // TODO Http attribute
+    [Host("localhost")]
+    [HttpGet(nameof(GetDeviceApproval))]
     public async Task<ActionResult> GetDeviceApproval(Device device)
     {
         if (_currentSession == null
