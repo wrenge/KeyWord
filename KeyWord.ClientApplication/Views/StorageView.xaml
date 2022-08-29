@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:clientApplication="clr-namespace:KeyWord.ClientApplication"
+             xmlns:viewModels="clr-namespace:KeyWord.ClientApplication.ViewModels"
+             xmlns:models="clr-namespace:KeyWord.ClientApplication.Models"
+             x:Class="KeyWord.ClientApplication.Views.StoragePage"
+             Title="Storage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="{FontImage &#xf2c7;, FontFamily=IonIcons}"></ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <SearchBar x:Name="SearchBar" Margin="0, 0, 0, 16"
+                   IsTextPredictionEnabled="False"
+                   TextChanged="SearchBar_OnTextChanged" />
+        <ListView Grid.Row="1" x:Name="ListView"
+                  x:DataType="viewModels:CredentialsViewModel"
+                  ItemsSource="{Binding CredentialsGroups}"
+                  IsGroupingEnabled="True"
+                  SelectionMode="None"
+                  HasUnevenRows="True">
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="models:CredentialsGroup">
+                    <ViewCell>
+                        <Label Text="{Binding Name}"
+                               Padding="30, 2, 30, 2"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               BackgroundColor="LightGray" />
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:CredentialsListElement">
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Favorite"
+                                      IconImageSource="favorite.png" />
+                            <MenuItem Text="Delete"
+                                      IconImageSource="delete.png" />
+                        </ViewCell.ContextActions>
+                        <Grid Padding="30, 10, 30, 10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Frame BackgroundColor="{Binding AvatarColor}" CornerRadius="25" WidthRequest="50" HeightRequest="50"
+                                   Padding="0">
+                                <Label Text="{Binding AvatarCharacter}"
+                                       FontAttributes="Bold"
+                                       FontSize="28"
+                                       VerticalOptions="Center"
+                                       TextColor="White"
+                                       HorizontalOptions="Center" />
+                            </Frame>
+                            <VerticalStackLayout Grid.Column="1" Margin="10">
+                                <Label Text="{Binding Identifier}" FontAttributes="Bold" FontSize="16" />
+                                <Label Text="{Binding Login}" TextColor="Grey" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentPage>

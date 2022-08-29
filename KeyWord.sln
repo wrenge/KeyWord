@@ -1,18 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Crypto", "KeyWord.Crypto\KeyWord.Crypto.csproj", "{23364670-AA1D-4DC8-B4F5-07D88C39F52D}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Crypto", "KeyWord.Crypto\KeyWord.Crypto.csproj", "{23364670-AA1D-4DC8-B4F5-07D88C39F52D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Crypto.Tests", "KeyWord.Crypto.Tests\KeyWord.Crypto.Tests.csproj", "{34406C7A-C9CC-43BC-8E36-E17F8A320BDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Crypto.Tests", "KeyWord.Crypto.Tests\KeyWord.Crypto.Tests.csproj", "{34406C7A-C9CC-43BC-8E36-E17F8A320BDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Credentials", "KeyWord.Credentials\KeyWord.Credentials.csproj", "{DF562782-AEF8-48E8-A1D1-52687B689C20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Credentials", "KeyWord.Credentials\KeyWord.Credentials.csproj", "{DF562782-AEF8-48E8-A1D1-52687B689C20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Storage", "KeyWord.Storage\KeyWord.Storage.csproj", "{9D6BE6F9-E045-4465-8C5A-01BC9486D2CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Storage", "KeyWord.Storage\KeyWord.Storage.csproj", "{9D6BE6F9-E045-4465-8C5A-01BC9486D2CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Credentials.Test", "KeyWord.Credentials.Test\KeyWord.Credentials.Test.csproj", "{67527685-2847-4CC0-BCC1-AF68D38DD2E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Credentials.Test", "KeyWord.Credentials.Test\KeyWord.Credentials.Test.csproj", "{67527685-2847-4CC0-BCC1-AF68D38DD2E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Storage.Mobile", "KeyWord.Storage.Mobile\KeyWord.Storage.Mobile.csproj", "{D998D633-FD51-41E9-8019-858B264154CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Storage.Mobile", "KeyWord.Storage.Mobile\KeyWord.Storage.Mobile.csproj", "{D998D633-FD51-41E9-8019-858B264154CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Storage.Mobile.Tests", "KeyWord.Storage.Mobile.Tests\KeyWord.Storage.Mobile.Tests.csproj", "{ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Storage.Mobile.Tests", "KeyWord.Storage.Mobile.Tests\KeyWord.Storage.Mobile.Tests.csproj", "{ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{95CE3ACA-8B17-40F4-A319-39DA79A0FE68}"
 EndProject
@@ -20,13 +23,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{B1AF95
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{F66ABFCF-43C1-4486-84C1-3931B6E62360}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Server.Storage", "KeyWord.Server.Storage\KeyWord.Server.Storage.csproj", "{E0C2FEDF-BB6A-4065-9086-7121E54BE430}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Server.Storage", "KeyWord.Server.Storage\KeyWord.Server.Storage.csproj", "{E0C2FEDF-BB6A-4065-9086-7121E54BE430}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Server", "KeyWord.Server\KeyWord.Server.csproj", "{957BDBD4-14AA-4548-87BA-C99DEE3EEA2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Server", "KeyWord.Server\KeyWord.Server.csproj", "{957BDBD4-14AA-4548-87BA-C99DEE3EEA2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Communication", "KeyWord.Communication\KeyWord.Communication.csproj", "{DFF6E24A-5DCB-460E-A932-958D0347B8CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Communication", "KeyWord.Communication\KeyWord.Communication.csproj", "{DFF6E24A-5DCB-460E-A932-958D0347B8CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Server.Tests", "KeyWord.Server.Tests\KeyWord.Server.Tests.csproj", "{6791BEA9-8842-429E-8060-3F21C80ACEC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Server.Tests", "KeyWord.Server.Tests\KeyWord.Server.Tests.csproj", "{6791BEA9-8842-429E-8060-3F21C80ACEC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.ClientApplication", "KeyWord.ClientApplication\KeyWord.ClientApplication.csproj", "{64861AFF-0C14-442C-A032-957CC16C5C12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,18 +83,31 @@ Global
 		{6791BEA9-8842-429E-8060-3F21C80ACEC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6791BEA9-8842-429E-8060-3F21C80ACEC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6791BEA9-8842-429E-8060-3F21C80ACEC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64861AFF-0C14-442C-A032-957CC16C5C12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64861AFF-0C14-442C-A032-957CC16C5C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64861AFF-0C14-442C-A032-957CC16C5C12}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{64861AFF-0C14-442C-A032-957CC16C5C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64861AFF-0C14-442C-A032-957CC16C5C12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64861AFF-0C14-442C-A032-957CC16C5C12}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{23364670-AA1D-4DC8-B4F5-07D88C39F52D} = {B1AF95A4-4BA4-46A7-AC27-E668D11D8826}
+		{34406C7A-C9CC-43BC-8E36-E17F8A320BDD} = {B1AF95A4-4BA4-46A7-AC27-E668D11D8826}
+		{DF562782-AEF8-48E8-A1D1-52687B689C20} = {B1AF95A4-4BA4-46A7-AC27-E668D11D8826}
 		{9D6BE6F9-E045-4465-8C5A-01BC9486D2CA} = {95CE3ACA-8B17-40F4-A319-39DA79A0FE68}
+		{67527685-2847-4CC0-BCC1-AF68D38DD2E6} = {B1AF95A4-4BA4-46A7-AC27-E668D11D8826}
 		{D998D633-FD51-41E9-8019-858B264154CC} = {95CE3ACA-8B17-40F4-A319-39DA79A0FE68}
 		{ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A} = {95CE3ACA-8B17-40F4-A319-39DA79A0FE68}
-		{DF562782-AEF8-48E8-A1D1-52687B689C20} = {B1AF95A4-4BA4-46A7-AC27-E668D11D8826}
-		{67527685-2847-4CC0-BCC1-AF68D38DD2E6} = {B1AF95A4-4BA4-46A7-AC27-E668D11D8826}
-		{34406C7A-C9CC-43BC-8E36-E17F8A320BDD} = {B1AF95A4-4BA4-46A7-AC27-E668D11D8826}
-		{23364670-AA1D-4DC8-B4F5-07D88C39F52D} = {B1AF95A4-4BA4-46A7-AC27-E668D11D8826}
 		{E0C2FEDF-BB6A-4065-9086-7121E54BE430} = {F66ABFCF-43C1-4486-84C1-3931B6E62360}
 		{957BDBD4-14AA-4548-87BA-C99DEE3EEA2C} = {F66ABFCF-43C1-4486-84C1-3931B6E62360}
 		{DFF6E24A-5DCB-460E-A932-958D0347B8CF} = {B1AF95A4-4BA4-46A7-AC27-E668D11D8826}
 		{6791BEA9-8842-429E-8060-3F21C80ACEC0} = {F66ABFCF-43C1-4486-84C1-3931B6E62360}
+		{64861AFF-0C14-442C-A032-957CC16C5C12} = {95CE3ACA-8B17-40F4-A319-39DA79A0FE68}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9AD8031A-5F68-4060-B7B9-D224DA9DC619}
 	EndGlobalSection
 EndGlobal
