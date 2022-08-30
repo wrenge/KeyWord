@@ -44,7 +44,7 @@ public class Tests
     [Test]
     public void TestSave()
     {
-        var storage = new CredentialsStorageMobile(GetDbPath());
+        var storage = new CredentialsStorageMobile(new TestDatabasePath(""), GetDbPath());
         storage.Password = Password;
         storage.ChangePassword(Password);
         Assert.AreEqual(storage.Count, 0);
@@ -69,7 +69,7 @@ public class Tests
     [Test]
     public void TestUpdate()
     {
-        var storage = new CredentialsStorageMobile(GetDbPath());
+        var storage = new CredentialsStorageMobile(new TestDatabasePath(""), GetDbPath());
         storage.Password = Password;
         storage.ChangePassword(Password);
         Assert.AreEqual(storage.Count, 0);
@@ -101,7 +101,7 @@ public class Tests
     [Test]
     public void TestDelete()
     {
-        var storage = new CredentialsStorageMobile(GetDbPath());
+        var storage = new CredentialsStorageMobile(new TestDatabasePath(""), GetDbPath());
         storage.Password = Password;
         storage.ChangePassword(Password);
         Assert.AreEqual(storage.Count, 0);
@@ -145,7 +145,7 @@ public class Tests
     [Test]
     public void TestPassword()
     {
-        var storage = new CredentialsStorageMobile(GetDbPath());
+        var storage = new CredentialsStorageMobile(new TestDatabasePath(""), GetDbPath());
         Assert.Catch<ArgumentNullException>(() =>
         {
             var a = new ClassicCredentialsInfo
@@ -169,7 +169,7 @@ public class Tests
     [Test]
     public void TestPasswordExistence()
     {
-        var storage = new CredentialsStorageMobile(GetDbPath());
+        var storage = new CredentialsStorageMobile(new TestDatabasePath(""), GetDbPath());
         Assert.IsFalse(storage.HasPassword());
         storage.ChangePassword(Password);
         Assert.IsTrue(storage.HasPassword());

@@ -13,20 +13,22 @@ public class CredentialsStorageMobile : ICredentialsStorage
     {
         get
         {
-            using var dbContext = new CredentialsContext(DbFilePath);
+            using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
             return dbContext.ClassicCredentialsInfos.Count();
         }
     }
 
-    public string DbFilePath { get; }
+    public string DbFileName { get; }
     private ByteText? _savedPasswordHash;
     private ByteText? _checkPasswordHash;
     private ByteText? _enteredPasswordHash;
     private const string SavedPasswordHashKey = "PasswordHash";
+    private IDatabasePath _databasePath;
 
-    public CredentialsStorageMobile(string dbFilePath)
+    public CredentialsStorageMobile(IDatabasePath databasePath, string dbFileName)
     {
-        DbFilePath = dbFilePath;
+        DbFileName = dbFileName;
+        _databasePath = databasePath;
         var savePasswordHash = FindKeyValue(SavedPasswordHashKey)?.Value;
         _savedPasswordHash = savePasswordHash == null ? null : new ByteText(savePasswordHash);
     }
@@ -36,7 +38,7 @@ public class CredentialsStorageMobile : ICredentialsStorage
         if (_enteredPasswordHash == null)
             throw new ArgumentNullException(null, nameof(Password));
         
-        using var dbContext = new CredentialsContext(DbFilePath);
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);
         return dbContext.ClassicCredentialsInfos
             .Select(x => x.GetClassicDecrypted(_enteredPasswordHash.Value).ToCredentialsIdentity())
             .ToArray();
@@ -49,7 +51,7 @@ public class CredentialsStorageMobile : ICredentialsStorage
         if (id <= 0)
             throw new ArgumentException(null, nameof(id));
         
-        using var dbContext = new CredentialsContext(DbFilePath);
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
         var info = dbContext.ClassicCredentialsInfos
             .FirstOrDefault(x => x.Id == id);
         
@@ -61,7 +63,7 @@ public class CredentialsStorageMobile : ICredentialsStorage
         if (_enteredPasswordHash == null)
             throw new ArgumentNullException(null, nameof(Password));
         
-        using var dbContext = new CredentialsContext(DbFilePath);
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
         var exists = dbContext.ClassicCredentialsInfos
             .AsEnumerable()
             .Select(x => x.GetClassicDecrypted(_enteredPasswordHash.Value))
@@ -85,7 +87,7 @@ public class CredentialsStorageMobile : ICredentialsStorage
         if (id <= 0)
             throw new ArgumentException(null, nameof(id));
         
-        using var dbContext = new CredentialsContext(DbFilePath);
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
         var oldInfo = dbContext.ClassicCredentialsInfos.FirstOrDefault(x => x.Id == id);
         if (oldInfo == null)
             return false;
@@ -107,7 +109,7 @@ public class CredentialsStorageMobile : ICredentialsStorage
         if (id <= 0)
             throw new ArgumentException(null, nameof(id));
         
-        using var dbContext = new CredentialsContext(DbFilePath);
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
         var info = dbContext.ClassicCredentialsInfos
             .FirstOrDefault(x => x.Id == id);
         
@@ -156,7 +158,7 @@ public class CredentialsStorageMobile : ICredentialsStorage
             var enteredPasswordHash = _enteredPasswordHash!.Value;
             var df = new Pbkdf2(CryptoConstants.KdIterations, CryptoConstants.KdLength);
             var newPasswordHash = df.ComputeKey(new ByteText(newPassword), new ByteText(CryptoConstants.KdSalt2));
-            using var dbContext = new CredentialsContext(DbFilePath);
+            using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
             foreach (var info in dbContext.ClassicCredentialsInfos)
             {
                 var reEncrypted = info.GetClassicDecrypted(enteredPasswordHash).EncryptClassic(newPasswordHash);
@@ -174,7 +176,7 @@ public class CredentialsStorageMobile : ICredentialsStorage
     {
         if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
         
-        using var dbContext = new CredentialsContext(DbFilePath);
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
         var result = dbContext.KeyValues.FirstOrDefault(x => x.Key == key);
         return result;
     }
@@ -183,7 +185,7 @@ public class CredentialsStorageMobile : ICredentialsStorage
     {
         if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
         
-        using var dbContext = new CredentialsContext(DbFilePath);
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
         dbContext.KeyValues.Update(new KeyValueEntry() {Key = key, Value = value});
     }
 

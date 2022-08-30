@@ -7,20 +7,22 @@ namespace KeyWord.Storage.Mobile;
 
 internal sealed class CredentialsContext : DbContext
 {
-    public DbSet<ClassicCredentialsInfo> ClassicCredentialsInfos { get; set; }
-    public DbSet<KeyValueEntry> KeyValues { get; set; }
-    public string DbFilePath { get; }
+    public DbSet<ClassicCredentialsInfo> ClassicCredentialsInfos { get; set; } = null!;
+    public DbSet<KeyValueEntry> KeyValues { get; set; } = null!;
+    public string DbFileName { get; }
+    private IDatabasePath _databasePath;
 
-    public CredentialsContext (string dbFilePath)
+    public CredentialsContext (IDatabasePath databasePath, string dbFileName)
     {
-        DbFilePath = dbFilePath;
+        DbFileName = dbFileName;
+        _databasePath = databasePath;
         SQLitePCL.Batteries_V2.Init();
         this.Database.EnsureCreated();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite($"Filename={DbFilePath}");
+        optionsBuilder.UseSqlite($"Filename={_databasePath.GetPath(DbFileName)}");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
