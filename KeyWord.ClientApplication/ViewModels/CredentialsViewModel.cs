@@ -14,7 +14,11 @@ public partial class CredentialsViewModel : ObservableObject
     public ObservableCollection<CredentialsGroup> CredentialsGroups { get; private set; }
 
     public ICommand SearchCommand => new Command<string>(SearchElement);
+    public ICommand RefreshCommand => new Command(async () => await RefreshStorageAsync());
+
     private readonly ICredentialsStorage _storage;
+    private string _searchString;
+    [ObservableProperty] private bool _isRefreshing;
 
     public CredentialsViewModel()
     {
@@ -60,22 +64,37 @@ public partial class CredentialsViewModel : ObservableObject
 
     private void SearchElement(string obj)
     {
+        _searchString = obj;
+        RefreshList(_source);
+    }
+
+    private async Task RefreshStorageAsync()
+    {
+        // TODO
+        IsRefreshing = true;
+        await Task.Delay(1000);
+        RefreshList(_source);
+        IsRefreshing = false;
+    }
+
+    private void RefreshList(IEnumerable<CredentialsListElement> elements)
+    {
         CredentialsGroups.Clear();
-        if (string.IsNullOrEmpty(obj))
+        var dataSource = FilterElements(elements, _searchString);
+        foreach (var element in ExtractGroups(dataSource))
         {
-            foreach (var element in ExtractGroups(_source))
-            {
-                CredentialsGroups.Add(element);
-            }
+            CredentialsGroups.Add(element);
         }
-        else
+    }
+
+    private static IEnumerable<CredentialsListElement> FilterElements(IEnumerable<CredentialsListElement> list, string searchString)
+    {
+        if (string.IsNullOrEmpty(searchString))
         {
-            var dataSource = _source.Where(x => x.Identifier.Contains(obj) || x.Login.Contains(obj));
-            foreach (var element in ExtractGroups(dataSource))
-            {
-                CredentialsGroups.Add(element);
-            }
+            return list;
         }
+
+        return list.Where(x => x.Identifier.Contains(searchString) || x.Login.Contains(searchString));
     }
 
     private static IEnumerable<CredentialsGroup> ExtractGroups(IEnumerable<CredentialsListElement> elements)

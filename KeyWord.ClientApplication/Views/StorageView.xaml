@@ -8,7 +8,8 @@
              x:Class="KeyWord.ClientApplication.Views.StoragePage"
              Title="Storage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="{FontImage &#xf2c7;, FontFamily=IonIcons}"></ToolbarItem>
+        <ToolbarItem IconImageSource="{FontImage &#xf2c7;, FontFamily=IonIcons}"
+                     Clicked="AddButton_OnClicked"/>
     </ContentPage.ToolbarItems>
     <Grid>
         <Grid.RowDefinitions>
@@ -23,7 +24,11 @@
                   ItemsSource="{Binding CredentialsGroups}"
                   IsGroupingEnabled="True"
                   SelectionMode="None"
-                  HasUnevenRows="True">
+                  HasUnevenRows="True"
+                  IsPullToRefreshEnabled="true"
+                  RefreshCommand="{Binding RefreshCommand}"
+                  IsRefreshing="{Binding IsRefreshing}"
+                  ItemTapped="ListView_OnItemTapped">
             <ListView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="models:CredentialsGroup">
                     <ViewCell>
