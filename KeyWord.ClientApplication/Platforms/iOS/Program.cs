@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace KeyWord.ClientApplication
+namespace KeyWord.ClientApplication.iOS
 {
     public class Program
     {

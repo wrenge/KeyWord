@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace KeyWord.ClientApplication
+namespace KeyWord.ClientApplication.Android
 {
     [Application]
     public class MainApplication : MauiApplication
@@ -11,6 +11,6 @@ namespace KeyWord.ClientApplication
         {
         }
 
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp(new AndroidDatabasePath());
     }
 }

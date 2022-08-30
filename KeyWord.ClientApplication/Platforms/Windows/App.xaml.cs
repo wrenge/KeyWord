@@ -3,7 +3,7 @@
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace KeyWord.ClientApplication.WinUI
+namespace KeyWord.ClientApplication.Windows
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
@@ -19,6 +19,6 @@ namespace KeyWord.ClientApplication.WinUI
             this.InitializeComponent();
         }
 
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp(new WindowsDatabasePath());
     }
 }

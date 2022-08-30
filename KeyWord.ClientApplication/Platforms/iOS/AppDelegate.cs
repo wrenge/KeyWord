@@ -1,10 +1,10 @@
 ﻿using Foundation;
 
-namespace KeyWord.ClientApplication
+namespace KeyWord.ClientApplication.iOS
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate
     {
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp(new IosDatabasePath());
     }
 }

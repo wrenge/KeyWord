@@ -55,6 +55,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\KeyWord.Credentials\KeyWord.Credentials.csproj" />
+	  <ProjectReference Include="..\KeyWord.Storage.Mobile\KeyWord.Storage.Mobile.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -67,6 +68,12 @@
 	  <Compile Update="Views\StorageView.xaml.cs">
 	    <DependentUpon>StoragePage.xaml</DependentUpon>
 	    <SubType>Code</SubType>
+	  </Compile>
+	  <Compile Update="Platforms\Windows\WindowsDatabasePath.cs">
+	    <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+	  </Compile>
+	  <Compile Update="Platforms\MacCatalyst\IosDatabasePath.cs">
+	    <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
 	  </Compile>
 	</ItemGroup>
 

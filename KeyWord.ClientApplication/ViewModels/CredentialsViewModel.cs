@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using KeyWord.ClientApplication.Helpers;
 using KeyWord.ClientApplication.Models;
 using KeyWord.Credentials;
+using KeyWord.Storage;
 
 namespace KeyWord.ClientApplication.ViewModels;
 
@@ -12,9 +14,11 @@ public partial class CredentialsViewModel : ObservableObject
     public ObservableCollection<CredentialsGroup> CredentialsGroups { get; private set; }
 
     public ICommand SearchCommand => new Command<string>(SearchElement);
+    private readonly ICredentialsStorage _storage;
 
-    public CredentialsViewModel ()
+    public CredentialsViewModel()
     {
+        _storage = ServiceHelper.GetService<ICredentialsStorage>();
         _source = new List<CredentialsListElement>();
         CreateCredentialsIdentityList();
     }
@@ -27,21 +31,21 @@ public partial class CredentialsViewModel : ObservableObject
             Identifier = "github.com",
             Login = "username@email.com"
         });
-        
+
         _source.Add(new CredentialsListElement()
         {
             Id = 2,
             Identifier = "yahoo.com",
             Login = "username@email.com"
         });
-        
+
         _source.Add(new CredentialsListElement()
         {
             Id = 3,
             Identifier = "yandex.com",
             Login = "username@email.com"
         });
-        
+
         _source.Add(new CredentialsListElement()
         {
             Id = 4,
@@ -49,7 +53,9 @@ public partial class CredentialsViewModel : ObservableObject
             Login = "username@email.com"
         });
 
-        CredentialsGroups = new ObservableCollection<CredentialsGroup>(ExtractGroups(_source));
+        var groups = ExtractGroups(_source);
+        // var groups = ExtractGroups(ExtractElements(_storage.GetIdentities()));
+        CredentialsGroups = new ObservableCollection<CredentialsGroup>(groups);
     }
 
     private void SearchElement(string obj)
@@ -78,5 +84,15 @@ public partial class CredentialsViewModel : ObservableObject
             .OrderBy(x => x.Identifier)
             .GroupBy(x => char.ToUpperInvariant(x.Identifier[0]))
             .Select(x => new CredentialsGroup(x.Key.ToString(), x));
+    }
+
+    private static IEnumerable<CredentialsListElement> ExtractElements(IEnumerable<CredentialsIdentity> list)
+    {
+        return list.Select(x => new CredentialsListElement
+        {
+            Id = x.Id,
+            Identifier = x.Identifier,
+            Login = x.Login
+        });
     }
 }
