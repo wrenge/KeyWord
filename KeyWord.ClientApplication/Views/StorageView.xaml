@@ -8,8 +8,7 @@
              x:Class="KeyWord.ClientApplication.Views.StoragePage"
              Title="Storage">
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="{FontImage &#xf2c7;, FontFamily=IonIcons}"
-                     Clicked="AddButton_OnClicked"/>
+        <ToolbarItem Text="Add" Clicked="AddButton_OnClicked"/>
     </ContentPage.ToolbarItems>
     <Grid>
         <Grid.RowDefinitions>
@@ -44,10 +43,9 @@
                 <DataTemplate x:DataType="models:CredentialsListElement">
                     <ViewCell>
                         <ViewCell.ContextActions>
-                            <MenuItem Text="Favorite"
-                                      IconImageSource="favorite.png" />
                             <MenuItem Text="Delete"
-                                      IconImageSource="delete.png" />
+                                      Command="{Binding Source={x:Reference ListView}, Path=BindingContext.DeleteCommand}"
+                                      CommandParameter="{Binding}"/>
                         </ViewCell.ContextActions>
                         <Grid Padding="30, 10, 30, 10">
                             <Grid.ColumnDefinitions>

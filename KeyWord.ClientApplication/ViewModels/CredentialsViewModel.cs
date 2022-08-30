@@ -10,81 +10,52 @@ namespace KeyWord.ClientApplication.ViewModels;
 
 public partial class CredentialsViewModel : ObservableObject
 {
-    private readonly IList<CredentialsListElement> _source;
-    public ObservableCollection<CredentialsGroup> CredentialsGroups { get; private set; }
+    public IEnumerable<CredentialsListElement> Identities { get; set; }
 
     public ICommand SearchCommand => new Command<string>(SearchElement);
     public ICommand RefreshCommand => new Command(async () => await RefreshStorageAsync());
+    public ICommand DeleteCommand => new Command<CredentialsListElement>(DeleteCredentials);
 
     private readonly ICredentialsStorage _storage;
     private string _searchString;
+    [ObservableProperty] private IEnumerable<CredentialsGroup> _credentialsGroups;
     [ObservableProperty] private bool _isRefreshing;
 
     public CredentialsViewModel()
     {
         _storage = ServiceHelper.GetService<ICredentialsStorage>();
-        _source = new List<CredentialsListElement>();
-        CreateCredentialsIdentityList();
-    }
-
-    private void CreateCredentialsIdentityList()
-    {
-        _source.Add(new CredentialsListElement()
-        {
-            Id = 1,
-            Identifier = "github.com",
-            Login = "username@email.com"
-        });
-
-        _source.Add(new CredentialsListElement()
-        {
-            Id = 2,
-            Identifier = "yahoo.com",
-            Login = "username@email.com"
-        });
-
-        _source.Add(new CredentialsListElement()
-        {
-            Id = 3,
-            Identifier = "yandex.com",
-            Login = "username@email.com"
-        });
-
-        _source.Add(new CredentialsListElement()
-        {
-            Id = 4,
-            Identifier = "google.com",
-            Login = "username@email.com"
-        });
-
-        var groups = ExtractGroups(_source);
-        // var groups = ExtractGroups(ExtractElements(_storage.GetIdentities()));
-        CredentialsGroups = new ObservableCollection<CredentialsGroup>(groups);
+        RefreshLocalStorage();
     }
 
     private void SearchElement(string obj)
     {
         _searchString = obj;
-        RefreshList(_source);
+        RefreshList(Identities);
     }
 
     private async Task RefreshStorageAsync()
     {
-        // TODO
-        IsRefreshing = true;
-        await Task.Delay(1000);
-        RefreshList(_source);
-        IsRefreshing = false;
+        try
+        {
+            await Task.Delay(1000);
+            RefreshLocalStorage();
+        }
+        finally
+        {
+            IsRefreshing = false;
+        }
+    }
+
+    private void RefreshLocalStorage()
+    {
+        Identities = ExtractElements(_storage.GetIdentities());
+        RefreshList(Identities);
     }
 
     private void RefreshList(IEnumerable<CredentialsListElement> elements)
     {
-        CredentialsGroups.Clear();
         var dataSource = FilterElements(elements, _searchString);
-        foreach (var element in ExtractGroups(dataSource))
-        {
-            CredentialsGroups.Add(element);
-        }
+        CredentialsGroups = ExtractGroups(dataSource);
     }
 
     private static IEnumerable<CredentialsListElement> FilterElements(IEnumerable<CredentialsListElement> list, string searchString)
@@ -101,7 +72,7 @@ public partial class CredentialsViewModel : ObservableObject
     {
         return elements
             .OrderBy(x => x.Identifier)
-            .GroupBy(x => char.ToUpperInvariant(x.Identifier[0]))
+            .GroupBy(x => x.Identifier.Length > 0 ? char.ToUpperInvariant(x.Identifier[0]) : '#')
             .Select(x => new CredentialsGroup(x.Key.ToString(), x));
     }
 
@@ -113,5 +84,12 @@ public partial class CredentialsViewModel : ObservableObject
             Identifier = x.Identifier,
             Login = x.Login
         });
+    }
+    
+    private void DeleteCredentials(CredentialsListElement info)
+    {
+        var storage = ServiceHelper.GetService<ICredentialsStorage>();
+        storage.DeleteInfo(info.Id);
+        RefreshLocalStorage();
     }
 }

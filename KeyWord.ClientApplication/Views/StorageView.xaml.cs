@@ -21,7 +21,7 @@ public partial class StoragePage : ContentPage
 
     private async void AddButton_OnClicked(object sender, EventArgs e)
     {
-        var page = (Page) Activator.CreateInstance<InspectCredentialsView>();
+        var page = (Page) Activator.CreateInstance<EditCredentialsView>();
         await Navigation.PushAsync(page);
     }
 

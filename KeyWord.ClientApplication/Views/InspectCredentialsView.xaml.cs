@@ -1,4 +1,5 @@
-﻿using KeyWord.ClientApplication.Models;
+﻿using KeyWord.ClientApplication.Helpers;
+using KeyWord.ClientApplication.Models;
 using KeyWord.Credentials;
 using KeyWord.Storage;
 using Plugin.Fingerprint;
@@ -58,11 +59,22 @@ public partial class InspectCredentialsView : ContentPage
     private async Task TryFillCredentialsInfoAsync()
     {
         var info = (CredentialsListElement) BindingContext;
-        var request =
-            new AuthenticationRequestConfiguration ("Prove you have fingers!", "Because without it you can't have access");
-        var result = await CrossFingerprint.Current.AuthenticateAsync(request);
-        var storage = Helpers.ServiceHelper.GetService<ICredentialsStorage>();
-        if (result.Authenticated)
+        var isAuthenticated = false;
+        if(await CrossFingerprint.Current.IsAvailableAsync(true))
+        {
+            var request =
+                new AuthenticationRequestConfiguration("Prove you have fingers!",
+                    "Because without it you can't have access");
+            var result = await CrossFingerprint.Current.AuthenticateAsync(request);
+            isAuthenticated = result.Authenticated;
+        }
+        else
+        {
+            isAuthenticated = true;
+        }
+
+        var storage = ServiceHelper.GetService<ICredentialsStorage>();
+        if (isAuthenticated)
         {
             _credentials = storage.FindInfo(info.Id);
         }
@@ -94,6 +106,9 @@ public partial class InspectCredentialsView : ContentPage
 
     private async void RemoveButton_OnTapped(object sender, EventArgs e)
     {
-        throw new NotImplementedException();
+        var info = (CredentialsListElement) BindingContext;
+        var storage = ServiceHelper.GetService<ICredentialsStorage>();
+        storage.DeleteInfo(info.Id);
+        await Navigation.PopAsync();
     }
 }
