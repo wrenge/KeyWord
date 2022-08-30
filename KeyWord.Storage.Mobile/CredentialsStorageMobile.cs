@@ -131,6 +131,11 @@ public class CredentialsStorageMobile : ICredentialsStorage
         return _savedPasswordHash.Value.ToBase64() == _checkPasswordHash.Value.ToBase64();
     }
 
+    public bool HasPassword()
+    {
+        return _savedPasswordHash != null;
+    }
+
     public void ChangePassword(string newPassword)
     {
         if (_savedPasswordHash == null)

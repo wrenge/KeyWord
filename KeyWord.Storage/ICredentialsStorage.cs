@@ -13,6 +13,7 @@ namespace KeyWord.Storage
         bool UpdateInfo(int id, ICredentialsInfo info);
         bool DeleteInfo(int id);
         bool IsPasswordCorrect();
+        bool HasPassword();
         void ChangePassword(string newPassword);
     }
 }

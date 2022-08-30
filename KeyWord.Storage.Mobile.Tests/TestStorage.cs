@@ -165,4 +165,13 @@ public class Tests
         storage.Password = WrongPassword;
         Assert.IsFalse(storage.IsPasswordCorrect());
     }
+    
+    [Test]
+    public void TestPasswordExistence()
+    {
+        var storage = new CredentialsStorageMobile(GetDbPath());
+        Assert.IsFalse(storage.HasPassword());
+        storage.ChangePassword(Password);
+        Assert.IsTrue(storage.HasPassword());
+    }
 }
