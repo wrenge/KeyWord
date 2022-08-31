@@ -70,7 +70,7 @@ public class RegisterController : ControllerBase
     // Only from admin client
     [Host("localhost")]
     [HttpGet(nameof(RequestDeviceCandidate))]
-    public async Task<ActionResult<Device?>> RequestDeviceCandidate()
+    public async Task<ActionResult<DeviceCandidate?>> RequestDeviceCandidate()
     {
         if (_currentSession == null || _currentSession.IsClosed)
         {
@@ -109,6 +109,13 @@ public class RegisterController : ControllerBase
             _logger.LogInformation(errorMsg);
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
+
+        if (!_currentSession.DeviceCandidate.Task.IsCompleted)
+        {
+            const string errorMsg = "Tried to approve device without device itself";
+            _logger.LogInformation(errorMsg);
+            return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
+        }
         
         if (_currentSession.IsExpired)
         {
@@ -119,6 +126,14 @@ public class RegisterController : ControllerBase
         
         _currentSession.IsDeviceApproved = true;
         _currentSession.Close();
+        var deviceCandidate = _currentSession.DeviceCandidate.Task.Result;
+        _storage.AddDevice(new Device()
+        {
+            Id = deviceCandidate.Id,
+            Name = deviceCandidate.Name,
+            RegisterDate = DateTime.Now,
+            Token = deviceCandidate.Token
+        });
         return Ok();
     }
     
@@ -147,9 +162,8 @@ public class RegisterController : ControllerBase
     }
     
     // Only from app client
-    [Host("localhost")]
     [HttpPost(nameof(PostDeviceInfo))]
-    public ActionResult PostDeviceInfo(Device device)
+    public ActionResult PostDeviceInfo(DeviceCandidate device)
     {
         if (_currentSession == null || _currentSession.IsClosed)
         {
@@ -185,9 +199,8 @@ public class RegisterController : ControllerBase
     }
     
     // Only from app client
-    [Host("localhost")]
     [HttpGet(nameof(GetDeviceApproval))]
-    public async Task<ActionResult> GetDeviceApproval(Device device)
+    public async Task<ActionResult> GetDeviceApproval(DeviceCandidate device)
     {
         if (_currentSession == null
             || _currentSession.IsClosed

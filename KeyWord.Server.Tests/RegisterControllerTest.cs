@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using KeyWord.Communication;
 using KeyWord.Server.Controllers;
 using KeyWord.Server.Storage;
 using Microsoft.AspNetCore.Http;
@@ -55,15 +56,14 @@ public class RegisterControllerTest
         var token = controller.RequestNewToken();
         Assert.NotNull(token.Value);
 
-        var mockDevice = new Device()
+        var mockDevice = new DeviceCandidate()
         {
             Id = Guid.NewGuid().ToString(),
             Name = "MockDevice1",
-            RegisterDate = new DateTime(),
             Token = token.Value!.Token
         };
 
-        ActionResult<Device?>? device = null;
+        ActionResult<DeviceCandidate?>? device = null;
         await Task.WhenAll(
             Task.Run(async () => device = await controller.RequestDeviceCandidate()),
             Task.Run(async () =>
@@ -102,15 +102,14 @@ public class RegisterControllerTest
         var token = controller.RequestNewToken();
         Assert.NotNull(token.Value);
 
-        var mockDevice = new Device()
+        var mockDevice = new DeviceCandidate()
         {
             Id = Guid.NewGuid().ToString(),
             Name = "MockDevice1",
-            RegisterDate = new DateTime(),
             Token = token.Value!.Token
         };
 
-        ActionResult<Device?>? device = null;
+        ActionResult<DeviceCandidate?>? device = null;
         await Task.WhenAll(
             Task.Run(async () => device = await controller.RequestDeviceCandidate()),
             Task.Run(async () =>
@@ -191,11 +190,10 @@ public class RegisterControllerTest
         var storage = new ServerStorage(dbFilePath);
         var controller = new RegisterController(storage, new LoggerFactory().CreateLogger<RegisterController>());
         
-        var mockDevice = new Device()
+        var mockDevice = new DeviceCandidate()
         {
             Id = Guid.NewGuid().ToString(),
             Name = "MockDevice1",
-            RegisterDate = new DateTime()
         };
         
         // No session
@@ -233,11 +231,10 @@ public class RegisterControllerTest
         controller.StartNewRegistration();
         var token = controller.RequestNewToken();
         
-        var mockDevice = new Device()
+        var mockDevice = new DeviceCandidate()
         {
             Id = Guid.NewGuid().ToString(),
             Name = "MockDevice1",
-            RegisterDate = new DateTime(),
             Token = token.Value!.Token
         };
 

@@ -1,4 +1,5 @@
-﻿using KeyWord.Server.Storage;
+﻿using KeyWord.Communication;
+using KeyWord.Server.Storage;
 
 namespace KeyWord.Server.Controllers;
 
@@ -7,7 +8,7 @@ public class RegistrationSession
     public string Token { get; }
     public DateTime StartTime { get; }
     public TimeSpan Timeout { get; }
-    public TaskCompletionSource<Device> DeviceCandidate { get; }
+    public TaskCompletionSource<DeviceCandidate> DeviceCandidate { get; }
     public bool IsExpired => DateTime.Now >= GetExpireDate();
     public bool IsOccupied { get; set; } = false;
     public bool IsClosed { get; private set; }
@@ -19,7 +20,7 @@ public class RegistrationSession
         Token = token;
         StartTime = startTime;
         Timeout = timeout;
-        DeviceCandidate = new TaskCompletionSource<Device>();
+        DeviceCandidate = new TaskCompletionSource<DeviceCandidate>();
         DeviceApproval = new TaskCompletionSource();
     }
 
