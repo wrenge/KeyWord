@@ -1,9 +1,8 @@
 ﻿using KeyWord.Communication;
-using KeyWord.Server.Storage;
 
-namespace KeyWord.Server.Controllers;
+namespace KeyWord.Server;
 
-public class RegistrationSession
+public class RegisterSession
 {
     public string Token { get; }
     public DateTime StartTime { get; }
@@ -15,7 +14,7 @@ public class RegistrationSession
     public bool IsDeviceApproved { get; set; }
     private TaskCompletionSource DeviceApproval { get; }
 
-    public RegistrationSession(string token, DateTime startTime, TimeSpan timeout)
+    public RegisterSession(string token, DateTime startTime, TimeSpan timeout)
     {
         Token = token;
         StartTime = startTime;

@@ -3,22 +3,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KeyWord.Server.Storage;
 
-public class StorageContext : DbContext
+public class StorageContext : DbContext, IStorageContext
 {
     public DbSet<ClassicCredentialsInfo> ClassicCredentialsInfos { get; set; } = null!;
     public DbSet<Device> Devices { get; set; } = null!;
-    public string DbFilePath { get; }
 
-    public StorageContext (string dbFilePath)
+    public StorageContext(DbContextOptions<StorageContext> options) : base(options)
     {
-        DbFilePath = dbFilePath;
         SQLitePCL.Batteries_V2.Init();
         this.Database.EnsureCreated();
-    }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlite($"Filename={DbFilePath}");
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

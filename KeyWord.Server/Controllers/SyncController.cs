@@ -10,19 +10,19 @@ namespace KeyWord.Server.Controllers;
 [Route("[controller]")]
 public class SyncController : ControllerBase
 {
+    public ServerStorage Storage { get; }
     private readonly ILogger<SyncController> _logger;
-    private readonly ServerStorage _storage;
 
-    public SyncController(ILogger<SyncController> logger, string dbFilePath = "keyword.db3")
+    public SyncController(StorageContext context, ILogger<SyncController> logger)
     {
+        Storage = new ServerStorage(context);
         _logger = logger;
-        _storage = new ServerStorage(dbFilePath); // TODO: move to appsettings.json
     }
 
     [HttpPost(Name = nameof(RequestSync))]
     public ActionResult<SyncResponse?> RequestSync([FromBody] SyncRequest request)
     {
-        var device = _storage.FindDeviceById(request.DeviceId);
+        var device = Storage.FindDeviceById(request.DeviceId);
         if (device == null)
             return Unauthorized(null);
 
@@ -33,14 +33,14 @@ public class SyncController : ControllerBase
         
         var syncData = new SyncData
         {
-            AddedCredentials = _storage.GetAddedCredentials(request.LastSyncTime).ToArray(),
-            ModifiedCredentials = _storage.GetModifiedCredentials(request.LastSyncTime).ToArray(),
-            DeletedCredentialsIds = _storage.GetDeletedCredentials(request.LastSyncTime).ToArray()
+            AddedCredentials = Storage.GetAddedCredentials(request.LastSyncTime).ToArray(),
+            ModifiedCredentials = Storage.GetModifiedCredentials(request.LastSyncTime).ToArray(),
+            DeletedCredentialsIds = Storage.GetDeletedCredentials(request.LastSyncTime).ToArray()
         };
         
-        _storage.AddCredentials(request.SyncData.AddedCredentials);
-        _storage.UpdateCredentials(request.SyncData.ModifiedCredentials);
-        _storage.DeleteCredentials(request.SyncData.DeletedCredentialsIds);
+        Storage.AddCredentials(request.SyncData.AddedCredentials);
+        Storage.UpdateCredentials(request.SyncData.ModifiedCredentials);
+        Storage.DeleteCredentials(request.SyncData.DeletedCredentialsIds);
 
         var result = new SyncResponse();
         result.SyncData = syncData;

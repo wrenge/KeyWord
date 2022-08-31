@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using KeyWord.Communication;
 using KeyWord.Credentials;
 using KeyWord.Crypto;
@@ -8,6 +9,8 @@ using KeyWord.Server.Controllers;
 using KeyWord.Server.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 namespace KeyWord.Server.Tests;
@@ -15,40 +18,18 @@ namespace KeyWord.Server.Tests;
 [TestFixture]
 public class SyncControllerTest
 {
-    [SetUp]
-    public void Setup()
-    {
-        var dbPath = GetDbPath();
-        if(File.Exists(dbPath))
-            File.Delete(dbPath);
-    }
-    
-    [TearDown]
-    public void TearDown()
-    {
-        // Hacks to force SQLite release a file
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        SqliteConnection.ClearAllPools();
-
-        var dbPath = GetDbPath();
-        if (File.Exists(dbPath))
-            File.Delete(dbPath);
-    }
-    
-    private static string GetDbPath()
-    {
-        var currentContext = TestContext.CurrentContext;
-        var dbPath = $"{currentContext.Test.ID}.db3";
-        return Path.Combine(currentContext.TestDirectory, dbPath);
-    }
-    
     [Test]
-    public void TestSyncGet()
+    public async Task TestSyncGet()
     {
-        var dbFilePath = GetDbPath();
-        var storage = new ServerStorage(dbFilePath);
-        var controller = new SyncController(null!, dbFilePath);
+        await using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var contextOptions = new DbContextOptionsBuilder<StorageContext>()
+            .UseSqlite(connection)
+            .Options;
+        var context = new StorageContext(contextOptions);
+        var storage = new ServerStorage(context);
+        var controller = new SyncController(context, new LoggerFactory().CreateLogger<SyncController>());
+        
         var device1 = new MockDevice();
         var pbkdf2 = new Pbkdf2(1, 16);
         var credentials = new TestCredentials(9);
@@ -99,11 +80,17 @@ public class SyncControllerTest
     }
 
     [Test]
-    public void TestSyncSet()
+    public async Task TestSyncSet()
     {
-        var dbFilePath = GetDbPath();
-        var storage = new ServerStorage(dbFilePath);
-        var controller = new SyncController(null!, dbFilePath);
+        await using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var contextOptions = new DbContextOptionsBuilder<StorageContext>()
+            .UseSqlite(connection)
+            .Options;
+        var context = new StorageContext(contextOptions);
+        var storage = new ServerStorage(context);
+        var controller = new SyncController(context, new LoggerFactory().CreateLogger<SyncController>());
+        
         var device1 = new MockDevice();
         var pbkdf2 = new Pbkdf2(1, 16);
         var credentials = new TestCredentials(9);
@@ -189,11 +176,17 @@ public class SyncControllerTest
     }
 
     [Test]
-    public void TestWrongDevice()
+    public async Task TestWrongDevice()
     {
-        var dbFilePath = GetDbPath();
-        var storage = new ServerStorage(dbFilePath);
-        var controller = new SyncController(null!, dbFilePath);
+        await using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var contextOptions = new DbContextOptionsBuilder<StorageContext>()
+            .UseSqlite(connection)
+            .Options;
+        var context = new StorageContext(contextOptions);
+        var storage = new ServerStorage(context);
+        var controller = new SyncController(context, new LoggerFactory().CreateLogger<SyncController>());
+        
         var device1 = new MockDevice();
         var device2 = new MockDevice();
         var pbkdf2 = new Pbkdf2(1, 16);
@@ -229,11 +222,17 @@ public class SyncControllerTest
     }
     
     [Test]
-    public void TestWrongToken()
+    public async Task TestWrongToken()
     {
-        var dbFilePath = GetDbPath();
-        var storage = new ServerStorage(dbFilePath);
-        var controller = new SyncController(null!, dbFilePath);
+        await using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var contextOptions = new DbContextOptionsBuilder<StorageContext>()
+            .UseSqlite(connection)
+            .Options;
+        var context = new StorageContext(contextOptions);
+        var storage = new ServerStorage(context);
+        var controller = new SyncController(context, new LoggerFactory().CreateLogger<SyncController>());
+        
         var device1 = new MockDevice();
         var device2 = new MockDevice();
         var pbkdf2 = new Pbkdf2(1, 16);

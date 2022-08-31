@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using KeyWord.Communication;
 using KeyWord.Server.Controllers;
+using KeyWord.Server.Services;
 using KeyWord.Server.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
@@ -16,40 +18,19 @@ namespace KeyWord.Server.Tests;
 [TestFixture]
 public class RegisterControllerTest
 {
-    [SetUp]
-    public void Setup()
-    {
-        var dbPath = GetDbPath();
-        if (File.Exists(dbPath))
-            File.Delete(dbPath);
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-        // Hacks to force SQLite release a file
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-        SqliteConnection.ClearAllPools();
-
-        var dbPath = GetDbPath();
-        if (File.Exists(dbPath))
-            File.Delete(dbPath);
-    }
-
-    private static string GetDbPath()
-    {
-        var currentContext = TestContext.CurrentContext;
-        var dbPath = $"{currentContext.Test.ID}.db3";
-        return Path.Combine(currentContext.TestDirectory, dbPath);
-    }
-
     [Test]
     public async Task TestRegistration()
     {
-        var dbFilePath = GetDbPath();
-        var storage = new ServerStorage(dbFilePath);
-        var controller = new RegisterController(storage, new LoggerFactory().CreateLogger<RegisterController>());
+        await using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var contextOptions = new DbContextOptionsBuilder<StorageContext>()
+            .UseSqlite(connection)
+            .Options;
+        var context = new StorageContext(contextOptions);
+        var storage = new ServerStorage(context);
+        var service = new RegisterService();
+        var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
+        
         Assert.LessOrEqual(0, storage.GetDevices().Count());
 
         controller.StartNewRegistration();
@@ -93,9 +74,16 @@ public class RegisterControllerTest
     [Test]
     public async Task TestRegistrationDeny()
     {
-        var dbFilePath = GetDbPath();
-        var storage = new ServerStorage(dbFilePath);
-        var controller = new RegisterController(storage, new LoggerFactory().CreateLogger<RegisterController>());
+        await using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var contextOptions = new DbContextOptionsBuilder<StorageContext>()
+            .UseSqlite(connection)
+            .Options;
+        var context = new StorageContext(contextOptions);
+        var storage = new ServerStorage(context);
+        var service = new RegisterService();
+        var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
+        
         Assert.LessOrEqual(0, storage.GetDevices().Count());
 
         controller.StartNewRegistration();
@@ -137,11 +125,17 @@ public class RegisterControllerTest
     }
 
     [Test]
-    public void TestRegistrationTokenNotFound()
+    public async Task TestRegistrationTokenNotFound()
     {
-        var dbFilePath = GetDbPath();
-        var storage = new ServerStorage(dbFilePath);
-        var controller = new RegisterController(storage, new LoggerFactory().CreateLogger<RegisterController>());
+        await using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var contextOptions = new DbContextOptionsBuilder<StorageContext>()
+            .UseSqlite(connection)
+            .Options;
+        var context = new StorageContext(contextOptions);
+        var storage = new ServerStorage(context);
+        var service = new RegisterService();
+        var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
 
         var token = controller.RequestNewToken();
         Assert.IsAssignableFrom<NotFoundResult>(token.Result);
@@ -150,9 +144,16 @@ public class RegisterControllerTest
     [Test]
     public async Task TestRequestDeviceCandidate()
     {
-        var dbFilePath = GetDbPath();
-        var storage = new ServerStorage(dbFilePath);
-        var controller = new RegisterController(storage, new LoggerFactory().CreateLogger<RegisterController>());
+        await using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var contextOptions = new DbContextOptionsBuilder<StorageContext>()
+            .UseSqlite(connection)
+            .Options;
+        var context = new StorageContext(contextOptions);
+        var storage = new ServerStorage(context);
+        var service = new RegisterService();
+        var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
+        
         var deviceResp = await controller.RequestDeviceCandidate();
         Assert.IsAssignableFrom<ObjectResult>(deviceResp.Result);
         Assert.AreEqual(((ObjectResult)deviceResp.Result!).StatusCode, StatusCodes.Status400BadRequest);
@@ -170,11 +171,18 @@ public class RegisterControllerTest
     }
     
     [Test]
-    public void TestApproveDenyFails()
+    public async Task TestApproveDenyFails()
     {
-        var dbFilePath = GetDbPath();
-        var storage = new ServerStorage(dbFilePath);
-        var controller = new RegisterController(storage, new LoggerFactory().CreateLogger<RegisterController>());
+        await using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var contextOptions = new DbContextOptionsBuilder<StorageContext>()
+            .UseSqlite(connection)
+            .Options;
+        var context = new StorageContext(contextOptions);
+        var storage = new ServerStorage(context);
+        var service = new RegisterService();
+        var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
+        
         var resp = controller.ApprovePendingDevice();
         Assert.IsAssignableFrom<ObjectResult>(resp);
         Assert.AreEqual(((ObjectResult) resp).StatusCode, StatusCodes.Status400BadRequest);
@@ -184,11 +192,17 @@ public class RegisterControllerTest
     }
 
     [Test]
-    public void TestPostDeviceFails()
+    public async Task TestPostDeviceFails()
     {
-        var dbFilePath = GetDbPath();
-        var storage = new ServerStorage(dbFilePath);
-        var controller = new RegisterController(storage, new LoggerFactory().CreateLogger<RegisterController>());
+        await using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var contextOptions = new DbContextOptionsBuilder<StorageContext>()
+            .UseSqlite(connection)
+            .Options;
+        var context = new StorageContext(contextOptions);
+        var storage = new ServerStorage(context);
+        var service = new RegisterService();
+        var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
         
         var mockDevice = new DeviceCandidate()
         {
@@ -224,9 +238,15 @@ public class RegisterControllerTest
     [Test]
     public async Task TestDeviceApprovalCancel()
     {
-        var dbFilePath = GetDbPath();
-        var storage = new ServerStorage(dbFilePath);
-        var controller = new RegisterController(storage, new LoggerFactory().CreateLogger<RegisterController>());
+        await using var connection = new SqliteConnection("Filename=:memory:");
+        connection.Open();
+        var contextOptions = new DbContextOptionsBuilder<StorageContext>()
+            .UseSqlite(connection)
+            .Options;
+        var context = new StorageContext(contextOptions);
+        var storage = new ServerStorage(context);
+        var service = new RegisterService();
+        var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
         
         controller.StartNewRegistration();
         var token = controller.RequestNewToken();

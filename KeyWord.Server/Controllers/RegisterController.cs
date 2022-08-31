@@ -1,7 +1,9 @@
 ﻿using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using KeyWord.Communication;
+using KeyWord.Server.Services;
 using KeyWord.Server.Storage;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,15 +14,22 @@ namespace KeyWord.Server.Controllers;
 public class RegisterController : ControllerBase
 {
     private const int TokenByteLength = 32;
-    private const int TokenTimeout = 30;
-    private readonly ServerStorage _storage;
+    // private const int TokenTimeout = 30;
+    private const int TokenTimeout = 600;
+    private readonly RegisterService _registerService;
     private readonly ILogger<RegisterController> _logger;
-    private RegistrationSession? _currentSession;
+    private readonly IStorage _storage;
+    private RegisterSession? CurrentSession
+    {
+        get => _registerService.CurrentSession;
+        set => _registerService.CurrentSession = value;
+    }
 
-    public RegisterController(ServerStorage storage, ILogger<RegisterController> logger)
+    public RegisterController(IStorage storage, RegisterService registerService, ILogger<RegisterController> logger)
     {
         _storage = storage;
         _logger = logger;
+        _registerService = registerService;
     }
 
     // Only from admin client
@@ -28,20 +37,20 @@ public class RegisterController : ControllerBase
     [HttpPost(nameof(StartNewRegistration))]
     public ActionResult StartNewRegistration()
     {
-        if (_currentSession is {IsClosed: false, IsExpired: false })
+        if (CurrentSession is {IsClosed: false, IsExpired: false })
         {
-            _logger.LogWarning( "Closing session early: {Token}", _currentSession.Token);
-            _currentSession.Close();
+            _logger.LogWarning( "Closing session early: {Token}", CurrentSession.Token);
+            CurrentSession.Close();
         }
         
         var newToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(TokenByteLength));
-        _currentSession = new RegistrationSession(newToken, DateTime.Now, TimeSpan.FromSeconds(TokenTimeout));
-        _logger.LogInformation( "Starting session {Token}", _currentSession.Token);
-        CloseSessionOnExpire(_currentSession);
+        CurrentSession = new RegisterSession(newToken, DateTime.Now, TimeSpan.FromSeconds(TokenTimeout));
+        _logger.LogInformation( "Starting session {Token}", CurrentSession.Token);
+        CloseSessionOnExpire(CurrentSession);
         return Ok();
     }
 
-    private async void CloseSessionOnExpire(RegistrationSession session)
+    private async void CloseSessionOnExpire(RegisterSession session)
     {
         await Task.Delay(session.GetTimeLeft());
         _logger.LogInformation( "Closing session {Token}", session.Token);
@@ -53,18 +62,18 @@ public class RegisterController : ControllerBase
     [HttpGet(nameof(RequestNewToken))]
     public ActionResult<RegisterInfo> RequestNewToken()
     {
-        if (_currentSession == null || _currentSession.IsExpired || _currentSession.IsClosed)
+        if (CurrentSession == null || CurrentSession.IsExpired || CurrentSession.IsClosed)
         {
             return NotFound();
         }
-        return new RegisterInfo(_currentSession.Token, _currentSession.GetExpireDate(), GetLocalIpAddress());
+        return new RegisterInfo(CurrentSession.Token, CurrentSession.GetExpireDate(), GetLocalIpAddress());
     }
 
     private static IPAddress GetLocalIpAddress()
     {
-        var hostname = Environment.MachineName;
-        var host = Dns.GetHostEntry(hostname);
-        return host.AddressList.First(x => x.AddressFamily == AddressFamily.InterNetwork);
+        var hostname = Dns.GetHostName();
+        var host = Dns.GetHostAddresses(hostname);
+        return host.First(x => x.AddressFamily == AddressFamily.InterNetwork);
     }
 
     // Only from admin client
@@ -72,14 +81,14 @@ public class RegisterController : ControllerBase
     [HttpGet(nameof(RequestDeviceCandidate))]
     public async Task<ActionResult<DeviceCandidate?>> RequestDeviceCandidate()
     {
-        if (_currentSession == null || _currentSession.IsClosed)
+        if (CurrentSession == null || CurrentSession.IsClosed)
         {
             const string errorMsg = "Tried to await device without starting a session";
             _logger.LogError(errorMsg);
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
 
-        if (_currentSession.IsExpired)
+        if (CurrentSession.IsExpired)
         {
             const string errorMsg = "Tried to await device with expired session";
             _logger.LogError(errorMsg);
@@ -88,7 +97,7 @@ public class RegisterController : ControllerBase
         
         try
         {
-            var device = await _currentSession.DeviceCandidate.Task;
+            var device = await CurrentSession.DeviceCandidate.Task;
             // TODO: if connection interrupted then close session
             return device;
         }
@@ -103,30 +112,30 @@ public class RegisterController : ControllerBase
     [HttpPost(nameof(ApprovePendingDevice))]
     public ActionResult ApprovePendingDevice()
     {
-        if (_currentSession == null || _currentSession.IsClosed)
+        if (CurrentSession == null || CurrentSession.IsClosed)
         {
             const string errorMsg = "Tried to approve device without session";
             _logger.LogInformation(errorMsg);
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
 
-        if (!_currentSession.DeviceCandidate.Task.IsCompleted)
+        if (!CurrentSession.DeviceCandidate.Task.IsCompleted)
         {
             const string errorMsg = "Tried to approve device without device itself";
             _logger.LogInformation(errorMsg);
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
         
-        if (_currentSession.IsExpired)
+        if (CurrentSession.IsExpired)
         {
             const string errorMsg = "Tried to approve device with an expired session";
             _logger.LogInformation(errorMsg);
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
         
-        _currentSession.IsDeviceApproved = true;
-        _currentSession.Close();
-        var deviceCandidate = _currentSession.DeviceCandidate.Task.Result;
+        CurrentSession.IsDeviceApproved = true;
+        CurrentSession.Close();
+        var deviceCandidate = CurrentSession.DeviceCandidate.Task.Result;
         _storage.AddDevice(new Device()
         {
             Id = deviceCandidate.Id,
@@ -142,22 +151,22 @@ public class RegisterController : ControllerBase
     [HttpPost(nameof(DenyPendingDevice))]
     public ActionResult DenyPendingDevice()
     {
-        if (_currentSession == null || _currentSession.IsClosed)
+        if (CurrentSession == null || CurrentSession.IsClosed)
         {
             const string errorMsg = "Tried to deny device without session";
             _logger.LogInformation(errorMsg);
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
         
-        if (_currentSession.IsExpired)
+        if (CurrentSession.IsExpired)
         {
             const string errorMsg = "Tried to deny device with an expired session";
             _logger.LogInformation(errorMsg);
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
 
-        _currentSession.IsDeviceApproved = false;
-        _currentSession.Close();
+        CurrentSession.IsDeviceApproved = false;
+        CurrentSession.Close();
         return Ok();
     }
     
@@ -165,46 +174,46 @@ public class RegisterController : ControllerBase
     [HttpPost(nameof(PostDeviceInfo))]
     public ActionResult PostDeviceInfo([FromBody] DeviceCandidate device)
     {
-        if (_currentSession == null || _currentSession.IsClosed)
+        if (CurrentSession == null || CurrentSession.IsClosed)
         {
             const string errorMsg = "Tried to post device info without session";
             _logger.LogInformation(errorMsg);
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
 
-        if (device.Token != _currentSession.Token)
+        if (device.Token != CurrentSession.Token)
         {
             const string errorMsg = "Tried to post device info with an invalid token";
             _logger.LogInformation(errorMsg);
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
         
-        if (_currentSession.IsExpired)
+        if (CurrentSession.IsExpired)
         {
             const string errorMsg = "Tried to post device info with an expired session";
             _logger.LogInformation(errorMsg);
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
         
-        if (_currentSession.IsOccupied)
+        if (CurrentSession.IsOccupied)
         {
             const string errorMsg = "Tried to post device info with an occupied token";
             _logger.LogInformation(errorMsg);
             return Problem(errorMsg, statusCode: StatusCodes.Status400BadRequest);
         }
 
-        _currentSession.IsOccupied = true;
-        _currentSession.DeviceCandidate.SetResult(device);
+        CurrentSession.IsOccupied = true;
+        CurrentSession.DeviceCandidate.SetResult(device);
         return Ok();
     }
     
     // Only from app client
-    [HttpGet(nameof(GetDeviceApproval) + "/{deviceId:string}")]
+    [HttpGet(nameof(GetDeviceApproval) + "/{deviceId:alpha}")]
     public async Task<ActionResult> GetDeviceApproval(string deviceId)
     {
-        if (_currentSession == null
-            || _currentSession.IsClosed
-            || _currentSession.IsExpired
+        if (CurrentSession == null
+            || CurrentSession.IsClosed
+            || CurrentSession.IsExpired
             )
         {
             var existingDevice = _storage.FindDeviceById(deviceId);
@@ -218,7 +227,7 @@ public class RegisterController : ControllerBase
 
         try
         {
-            await _currentSession.GetApprovalHandle();
+            await CurrentSession.GetApprovalHandle();
             return Ok();
         }
         catch (TaskCanceledException)
