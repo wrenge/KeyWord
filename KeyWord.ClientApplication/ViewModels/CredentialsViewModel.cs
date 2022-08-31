@@ -15,6 +15,8 @@ public partial class CredentialsViewModel : ObservableObject
     public ICommand SearchCommand => new Command<string>(SearchElement);
     public ICommand RefreshCommand => new Command(async () => await RefreshStorageAsync());
     public ICommand DeleteCommand => new Command<CredentialsListElement>(DeleteCredentials);
+    public ICommand CopyPasswordCommand => new Command<CredentialsListElement>(async x => await CopyPasswordAsync(x));
+    public ICommand CopyLoginCommand => new Command<CredentialsListElement>(async x => await CopyLoginAsync(x));
 
     private readonly ICredentialsStorage _storage;
     private string _searchString;
@@ -91,5 +93,20 @@ public partial class CredentialsViewModel : ObservableObject
         var storage = ServiceHelper.GetService<ICredentialsStorage>();
         storage.DeleteInfo(info.Id);
         RefreshLocalStorage();
+    }
+    
+    private async Task CopyPasswordAsync(CredentialsListElement credentials)
+    {
+        var storage = ServiceHelper.GetService<ICredentialsStorage>();
+        var info = storage.FindInfo(credentials.Id);
+        if(info == null)
+            return;
+
+        await Clipboard.SetTextAsync(info.Password);
+    }
+    
+    private async Task CopyLoginAsync(CredentialsListElement credentials)
+    {
+        await Clipboard.SetTextAsync(credentials.Login);
     }
 }

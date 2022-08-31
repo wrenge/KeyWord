@@ -2,6 +2,7 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:clientApplication="clr-namespace:KeyWord.ClientApplication"
              xmlns:viewModels="clr-namespace:KeyWord.ClientApplication.ViewModels"
              xmlns:models="clr-namespace:KeyWord.ClientApplication.Models"
@@ -43,6 +44,12 @@
                 <DataTemplate x:DataType="models:CredentialsListElement">
                     <ViewCell>
                         <ViewCell.ContextActions>
+                            <MenuItem Text="Copy Login"
+                                      Command="{Binding Source={x:Reference ListView}, Path=BindingContext.CopyLoginCommand}"
+                                      CommandParameter="{Binding}"/>
+                            <MenuItem Text="Copy Password"
+                                      Command="{Binding Source={x:Reference ListView}, Path=BindingContext.CopyPasswordCommand}"
+                                      CommandParameter="{Binding}"/>
                             <MenuItem Text="Delete"
                                       Command="{Binding Source={x:Reference ListView}, Path=BindingContext.DeleteCommand}"
                                       CommandParameter="{Binding}"/>
