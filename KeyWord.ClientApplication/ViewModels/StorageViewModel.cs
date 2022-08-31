@@ -74,7 +74,16 @@ public partial class StorageViewModel : ObservableObject
     {
         return elements
             .OrderBy(x => x.Identifier)
-            .GroupBy(x => x.Identifier.Length > 0 ? char.ToUpperInvariant(x.Identifier[0]) : '#')
+            .GroupBy(x =>
+            {
+                var identifier = x.Identifier;
+                if (string.IsNullOrEmpty(identifier))
+                    return '-';
+
+                var hostName = identifier.Replace("www.", "");
+                var letter = hostName[0];
+                return char.IsLetter(letter) ? char.ToUpperInvariant(letter) : '#';
+            })
             .Select(x => new CredentialsGroup(x.Key.ToString(), x));
     }
 
