@@ -5,18 +5,18 @@ namespace KeyWord.ClientApplication.Views;
 
 public partial class StoragePage : ContentPage
 {
-    private readonly CredentialsViewModel _credentialsViewModel;
+    private readonly StorageViewModel _storageViewModel;
 
     public StoragePage()
     {
         InitializeComponent();
-        _credentialsViewModel = new CredentialsViewModel();
-        BindingContext = _credentialsViewModel;
+        _storageViewModel = new StorageViewModel();
+        BindingContext = _storageViewModel;
     }
 
     private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
     {
-        _credentialsViewModel.SearchCommand.Execute(e.NewTextValue);
+        _storageViewModel.SearchCommand.Execute(e.NewTextValue);
     }
 
     private async void AddButton_OnClicked(object sender, EventArgs e)
@@ -36,6 +36,6 @@ public partial class StoragePage : ContentPage
 
     private void OnCredentialsChanged()
     {
-        _credentialsViewModel.RefreshLocalStorage();
+        _storageViewModel.RefreshLocalStorage();
     }
 }

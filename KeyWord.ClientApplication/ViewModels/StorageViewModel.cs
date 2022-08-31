@@ -8,7 +8,7 @@ using KeyWord.Storage;
 
 namespace KeyWord.ClientApplication.ViewModels;
 
-public partial class CredentialsViewModel : ObservableObject
+public partial class StorageViewModel : ObservableObject
 {
     public IEnumerable<CredentialsListElement> Identities { get; set; }
 
@@ -23,7 +23,7 @@ public partial class CredentialsViewModel : ObservableObject
     [ObservableProperty] private IEnumerable<CredentialsGroup> _credentialsGroups;
     [ObservableProperty] private bool _isRefreshing;
 
-    public CredentialsViewModel()
+    public StorageViewModel()
     {
         _storage = ServiceHelper.GetService<ICredentialsStorage>();
         RefreshLocalStorage();

@@ -20,7 +20,7 @@
                    IsTextPredictionEnabled="False"
                    TextChanged="SearchBar_OnTextChanged" />
         <ListView Grid.Row="1" x:Name="ListView"
-                  x:DataType="viewModels:CredentialsViewModel"
+                  x:DataType="viewModels:StorageViewModel"
                   ItemsSource="{Binding CredentialsGroups}"
                   IsGroupingEnabled="True"
                   SelectionMode="None"
