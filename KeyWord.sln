@@ -9,13 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Crypto.Tests", "Key
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Credentials", "KeyWord.Credentials\KeyWord.Credentials.csproj", "{DF562782-AEF8-48E8-A1D1-52687B689C20}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Storage", "KeyWord.Storage\KeyWord.Storage.csproj", "{9D6BE6F9-E045-4465-8C5A-01BC9486D2CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Client.Storage", "KeyWord.Client.Storage\KeyWord.Client.Storage.csproj", "{9D6BE6F9-E045-4465-8C5A-01BC9486D2CA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Credentials.Test", "KeyWord.Credentials.Test\KeyWord.Credentials.Test.csproj", "{67527685-2847-4CC0-BCC1-AF68D38DD2E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Storage.Mobile", "KeyWord.Storage.Mobile\KeyWord.Storage.Mobile.csproj", "{D998D633-FD51-41E9-8019-858B264154CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Client.Storage.Mobile", "KeyWord.Client.Storage.Mobile\KeyWord.Client.Storage.Mobile.csproj", "{D998D633-FD51-41E9-8019-858B264154CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Storage.Mobile.Tests", "KeyWord.Storage.Mobile.Tests\KeyWord.Storage.Mobile.Tests.csproj", "{ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Client.Storage.Mobile.Tests", "KeyWord.Client.Storage.Mobile.Tests\KeyWord.Client.Storage.Mobile.Tests.csproj", "{ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{95CE3ACA-8B17-40F4-A319-39DA79A0FE68}"
 EndProject
@@ -31,9 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Communication", "Ke
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Server.Tests", "KeyWord.Server.Tests\KeyWord.Server.Tests.csproj", "{6791BEA9-8842-429E-8060-3F21C80ACEC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.ClientApplication", "KeyWord.ClientApplication\KeyWord.ClientApplication.csproj", "{64861AFF-0C14-442C-A032-957CC16C5C12}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Client.Application", "KeyWord.Client.Application\KeyWord.Client.Application.csproj", "{64861AFF-0C14-442C-A032-957CC16C5C12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Network", "KeyWord.Network\KeyWord.Network.csproj", "{C538E026-0950-40F8-B6EB-DF4B3AF3375A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Client.Network", "KeyWord.Client.Network\KeyWord.Client.Network.csproj", "{C538E026-0950-40F8-B6EB-DF4B3AF3375A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

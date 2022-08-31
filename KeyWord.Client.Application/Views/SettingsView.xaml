@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KeyWord.Client.Application.Views.SettingsView"
+             Title="Settings">
+    <ContentPage.Content>
+        <TableView Intent="Settings" BackgroundColor="White">
+            <TableRoot>
+                <TableSection Title="Security">
+                    <TextCell Text="Change Auth Key"/>
+                    <TextCell Text="Lock Now"/>
+                </TableSection>
+                <TableSection Title="Other">
+                    <TextCell Text="Remove All Credentials"
+                              TextColor="Red"/>
+                </TableSection>
+            </TableRoot>
+        </TableView>
+    </ContentPage.Content>
+</ContentPage>
