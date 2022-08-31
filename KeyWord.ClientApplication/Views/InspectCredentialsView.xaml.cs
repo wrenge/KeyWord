@@ -9,6 +9,7 @@ namespace KeyWord.ClientApplication.Views;
 
 public partial class InspectCredentialsView : ContentPage
 {
+    public event Action CredentialsChanged;
     private ICredentialsInfo _credentials;
     private bool _passwordVisible = false;
     
@@ -109,6 +110,29 @@ public partial class InspectCredentialsView : ContentPage
         var info = (CredentialsListElement) BindingContext;
         var storage = ServiceHelper.GetService<ICredentialsStorage>();
         storage.DeleteInfo(info.Id);
+        CredentialsChanged?.Invoke();
         await Navigation.PopAsync();
+    }
+
+    private async void EditButton_OnClicked(object sender, EventArgs e)
+    {
+        await TryFillCredentialsInfoAsync();
+        if(_credentials is ClassicCredentialsInfo info)
+        {
+            var page = Activator.CreateInstance<EditCredentialsView>();
+            page.SetCredentials(info);
+            page.CredentialsChanged += () =>
+            {
+                var credentials = page.GetCredentials();
+                BindingContext = new CredentialsListElement()
+                {
+                    Id = credentials.Id,
+                    Identifier = credentials.Identifier,
+                    Login = credentials.Login
+                };
+                CredentialsChanged?.Invoke();
+            };
+            await Navigation.PushAsync(page);
+        }
     }
 }

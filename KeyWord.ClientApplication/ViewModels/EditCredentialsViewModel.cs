@@ -8,7 +8,23 @@ namespace KeyWord.ClientApplication.ViewModels;
 
 public class EditCredentialsViewModel : ObservableObject
 {
-    public ClassicCredentialsInfo CredentialsInfo { get; set; } = new ();
+    private ClassicCredentialsInfo _credentialsInfo = new ();
+
+    public ClassicCredentialsInfo CredentialsInfo
+    {
+        get => _credentialsInfo;
+        set
+        {
+            if (Equals(value, _credentialsInfo)) return;
+            _credentialsInfo = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(AvatarCharacter));
+            OnPropertyChanged(nameof(Identifier));
+            OnPropertyChanged(nameof(Login));
+            OnPropertyChanged(nameof(Password));
+        }
+    }
+
     public string AvatarCharacter => GetAvatarCharacter(CredentialsInfo.Identifier).ToString();
 
     public string Identifier

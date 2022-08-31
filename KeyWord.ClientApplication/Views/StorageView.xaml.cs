@@ -21,14 +21,21 @@ public partial class StoragePage : ContentPage
 
     private async void AddButton_OnClicked(object sender, EventArgs e)
     {
-        var page = (Page) Activator.CreateInstance<EditCredentialsView>();
+        var page = Activator.CreateInstance<EditCredentialsView>();
+        page.CredentialsChanged += OnCredentialsChanged;
         await Navigation.PushAsync(page);
     }
 
     private async void ListView_OnItemTapped(object sender, ItemTappedEventArgs e)
     {
-        var page = (Page) Activator.CreateInstance<InspectCredentialsView>();
+        var page = Activator.CreateInstance<InspectCredentialsView>();
+        page.CredentialsChanged += OnCredentialsChanged;
         page.BindingContext = (CredentialsListElement) e.Item;
         await Navigation.PushAsync(page);
+    }
+
+    private void OnCredentialsChanged()
+    {
+        _credentialsViewModel.RefreshLocalStorage();
     }
 }

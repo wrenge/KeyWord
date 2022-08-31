@@ -46,7 +46,7 @@ public partial class CredentialsViewModel : ObservableObject
         }
     }
 
-    private void RefreshLocalStorage()
+    public void RefreshLocalStorage()
     {
         Identities = ExtractElements(_storage.GetIdentities());
         RefreshList(Identities);

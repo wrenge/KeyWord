@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KeyWord.ClientApplication.ViewModels;
+using KeyWord.Credentials;
 
 namespace KeyWord.ClientApplication.Views;
 
 public partial class EditCredentialsView : ContentPage
 {
+    public event Action CredentialsChanged;
+    
     private readonly EditCredentialsViewModel _viewModel;
 
     public EditCredentialsView()
@@ -21,6 +24,14 @@ public partial class EditCredentialsView : ContentPage
     private async void SaveButton_OnClicked(object sender, EventArgs e)
     {
         _viewModel.SaveInfo();
+        CredentialsChanged?.Invoke();
         await Navigation.PopAsync();
     }
+
+    public void SetCredentials(ClassicCredentialsInfo info)
+    {
+        _viewModel.CredentialsInfo = info;
+    }
+
+    public ClassicCredentialsInfo GetCredentials() => _viewModel.CredentialsInfo;
 }
