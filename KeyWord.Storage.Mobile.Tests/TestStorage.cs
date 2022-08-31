@@ -63,7 +63,7 @@ public class Tests
         Assert.Greater(identities[0].Id, 0);
         a.Id = identities[0].Id;
         Assert.AreEqual(storage.FindInfo(identities[0].Id), a);
-        Assert.IsFalse(storage.SaveInfo(a));
+        Assert.Throws<ElementExistsException>(() => storage.SaveInfo(a));
     }
     
     [Test]
@@ -146,7 +146,7 @@ public class Tests
     public void TestPassword()
     {
         var storage = new CredentialsStorageMobile(new TestDatabasePath(""), GetDbPath());
-        Assert.Catch<ArgumentNullException>(() =>
+        Assert.Catch<PasswordInvalidException>(() =>
         {
             var a = new ClassicCredentialsInfo
             {
