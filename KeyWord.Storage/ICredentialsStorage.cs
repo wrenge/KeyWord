@@ -9,9 +9,9 @@ namespace KeyWord.Storage
         int Count { get; }
         IReadOnlyList<CredentialsIdentity> GetIdentities();
         ICredentialsInfo? FindInfo(int id);
-        bool SaveInfo(ICredentialsInfo info);
-        bool UpdateInfo(int id, ICredentialsInfo info);
-        bool DeleteInfo(int id);
+        void SaveInfo(ICredentialsInfo info);
+        void UpdateInfo(int id, ICredentialsInfo info);
+        void DeleteInfo(int id);
         bool IsPasswordCorrect();
         bool HasPassword();
         void ChangePassword(string newPassword);

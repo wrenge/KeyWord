@@ -30,6 +30,11 @@ public class CredentialsStorageMobile : ICredentialsStorage
         _savedPasswordHash = savePasswordHash == null ? null : new ByteText(savePasswordHash);
     }
 
+    /// <summary>
+    /// Returns list of credentials identities.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="PasswordInvalidException">Password null or incorrect.</exception>
     public IReadOnlyList<CredentialsIdentity> GetIdentities()
     {
         if (_enteredPasswordHash == null || !IsPasswordCorrect())
@@ -41,6 +46,13 @@ public class CredentialsStorageMobile : ICredentialsStorage
             .ToArray();
     }
 
+    /// <summary>
+    /// Tries to find credential info with id
+    /// </summary>
+    /// <param name="id">Id of proposed info</param>
+    /// <returns>ICredentialsInfo if found, null if not found.</returns>
+    /// <exception cref="PasswordInvalidException">Password null or incorrect.</exception>
+    /// <exception cref="ArgumentException">passed id lesser or equal to zero.</exception>
     public ICredentialsInfo? FindInfo(int id)
     {
         if (_enteredPasswordHash == null || !IsPasswordCorrect())
@@ -55,7 +67,14 @@ public class CredentialsStorageMobile : ICredentialsStorage
         return info?.GetClassicDecrypted(_enteredPasswordHash.Value);
     }
 
-    public bool SaveInfo(ICredentialsInfo info)
+    /// <summary>
+    ///     <p>Saves credentials info.</p>
+    ///     <b>Currently only supports <see cref="ClassicCredentialsInfo"/>.</b>
+    /// </summary>
+    /// <exception cref="PasswordInvalidException">Password null or incorrect.</exception>
+    /// <exception cref="ElementExistsException">Found duplicate item while saving.</exception>
+    /// <exception cref="NotSupportedException">Passed non-supported info.</exception>
+    public void SaveInfo(ICredentialsInfo info)
     {
         if (_enteredPasswordHash == null || !IsPasswordCorrect())
             throw new PasswordInvalidException();
@@ -67,17 +86,26 @@ public class CredentialsStorageMobile : ICredentialsStorage
             .Any(x => x.Identifier == info.Identifier && x.Login == info.Login);
         
         if (exists)
-            return false;
+            throw new ElementExistsException();
 
         if (info is not ClassicCredentialsInfo classicInfo)
-            return false;
+            throw new NotSupportedException(info.GetType().ToString());
 
         dbContext.ClassicCredentialsInfos.Add(classicInfo.GetClassicEncrypted(_enteredPasswordHash.Value));
         dbContext.SaveChanges();
-        return true;
     }
 
-    public bool UpdateInfo(int id, ICredentialsInfo info)
+    /// <summary>
+    ///     <p>Replaces existing info with a new one.</p>
+    ///     <b>Currently only supports <see cref="ClassicCredentialsInfo"/> </b>
+    /// </summary>
+    /// <param name="id">id of replaced info</param>
+    /// <param name="info">new info</param>
+    /// <exception cref="PasswordInvalidException">Password null or incorrect.</exception>
+    /// <exception cref="ArgumentException">id is lesser or equal to zero.</exception>
+    /// <exception cref="ElementNotExistException"></exception>
+    /// <exception cref="NotSupportedException"></exception>
+    public void UpdateInfo(int id, ICredentialsInfo info)
     {
         if (_enteredPasswordHash == null || !IsPasswordCorrect())
             throw new PasswordInvalidException();
@@ -87,19 +115,24 @@ public class CredentialsStorageMobile : ICredentialsStorage
         using var dbContext = new CredentialsContext(_databasePath, DbFileName);
         var oldInfo = dbContext.ClassicCredentialsInfos.FirstOrDefault(x => x.Id == id);
         if (oldInfo == null)
-            return false;
+            throw new ElementNotExistException();
         if (info is not ClassicCredentialsInfo classicInfo)
-            return false;
+            throw new NotSupportedException(info.GetType().ToString());
 
         var newInfo = new ClassicCredentialsInfo(classicInfo);
         newInfo.Id = id;
         dbContext.Entry(oldInfo).CurrentValues.SetValues(newInfo.GetClassicEncrypted(_enteredPasswordHash.Value));
         dbContext.SaveChanges();
-        
-        return true;
     }
 
-    public bool DeleteInfo(int id)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <exception cref="PasswordInvalidException"></exception>
+    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="ElementNotExistException"></exception>
+    public void DeleteInfo(int id)
     {
         if (_enteredPasswordHash == null || !IsPasswordCorrect())
             throw new PasswordInvalidException();
@@ -111,14 +144,16 @@ public class CredentialsStorageMobile : ICredentialsStorage
             .FirstOrDefault(x => x.Id == id);
         
         if (info == null)
-            return false;
+            throw new ElementNotExistException();
 
         dbContext.ClassicCredentialsInfos.Remove(info);
         dbContext.SaveChanges();
-        
-        return true;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public bool IsPasswordCorrect()
     {
         if (_checkPasswordHash == null)
@@ -130,11 +165,20 @@ public class CredentialsStorageMobile : ICredentialsStorage
         return _savedPasswordHash.Value.ToBase64() == _checkPasswordHash.Value.ToBase64();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public bool HasPassword()
     {
         return _savedPasswordHash != null;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="newPassword"></param>
+    /// <exception cref="PasswordInvalidException"></exception>
     public void ChangePassword(string newPassword)
     {
         if (_savedPasswordHash == null)
@@ -166,6 +210,12 @@ public class CredentialsStorageMobile : ICredentialsStorage
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     private KeyValueEntry? FindKeyValue(string key)
     {
         if (string.IsNullOrEmpty(key)) 
@@ -176,6 +226,12 @@ public class CredentialsStorageMobile : ICredentialsStorage
         return result;
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     private void SetKeyValue(string key, string value)
     {
         if (string.IsNullOrEmpty(key)) 
@@ -185,6 +241,10 @@ public class CredentialsStorageMobile : ICredentialsStorage
         dbContext.KeyValues.Update(new KeyValueEntry() {Key = key, Value = value});
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     private void SetPassword(string? value)
     {
         if (value == null)
