@@ -23,9 +23,17 @@ public partial class EditCredentialsView : ContentPage
 
     private async void SaveButton_OnClicked(object sender, EventArgs e)
     {
-        _viewModel.SaveInfo();
-        CredentialsChanged?.Invoke();
-        await Navigation.PopAsync();
+        try
+        {
+            _viewModel.SaveInfo();
+            CredentialsChanged?.Invoke();
+            await Navigation.PopAsync();
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception);
+            throw;
+        }
     }
 
     public void SetCredentials(ClassicCredentialsInfo info)

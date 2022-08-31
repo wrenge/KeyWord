@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using KeyWord.Credentials;
+﻿using KeyWord.Credentials;
 using KeyWord.Crypto;
 
 namespace KeyWord.Storage.Mobile;
@@ -13,7 +10,7 @@ public class CredentialsStorageMobile : ICredentialsStorage
     {
         get
         {
-            using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
+            using var dbContext = new CredentialsContext(_databasePath, DbFileName);
             return dbContext.ClassicCredentialsInfos.Count();
         }
     }
@@ -35,8 +32,8 @@ public class CredentialsStorageMobile : ICredentialsStorage
 
     public IReadOnlyList<CredentialsIdentity> GetIdentities()
     {
-        if (_enteredPasswordHash == null)
-            throw new ArgumentNullException(null, nameof(Password));
+        if (_enteredPasswordHash == null || !IsPasswordCorrect())
+            throw new PasswordInvalidException();
         
         using var dbContext = new CredentialsContext(_databasePath, DbFileName);
         return dbContext.ClassicCredentialsInfos
@@ -46,12 +43,12 @@ public class CredentialsStorageMobile : ICredentialsStorage
 
     public ICredentialsInfo? FindInfo(int id)
     {
-        if (_enteredPasswordHash == null)
-            throw new ArgumentNullException(null, nameof(Password));
+        if (_enteredPasswordHash == null || !IsPasswordCorrect())
+            throw new PasswordInvalidException();
         if (id <= 0)
             throw new ArgumentException(null, nameof(id));
         
-        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);
         var info = dbContext.ClassicCredentialsInfos
             .FirstOrDefault(x => x.Id == id);
         
@@ -60,10 +57,10 @@ public class CredentialsStorageMobile : ICredentialsStorage
 
     public bool SaveInfo(ICredentialsInfo info)
     {
-        if (_enteredPasswordHash == null)
-            throw new ArgumentNullException(null, nameof(Password));
+        if (_enteredPasswordHash == null || !IsPasswordCorrect())
+            throw new PasswordInvalidException();
         
-        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);
         var exists = dbContext.ClassicCredentialsInfos
             .AsEnumerable()
             .Select(x => x.GetClassicDecrypted(_enteredPasswordHash.Value))
@@ -82,12 +79,12 @@ public class CredentialsStorageMobile : ICredentialsStorage
 
     public bool UpdateInfo(int id, ICredentialsInfo info)
     {
-        if (_enteredPasswordHash == null)
-            throw new ArgumentNullException(null, nameof(Password));
+        if (_enteredPasswordHash == null || !IsPasswordCorrect())
+            throw new PasswordInvalidException();
         if (id <= 0)
             throw new ArgumentException(null, nameof(id));
         
-        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);
         var oldInfo = dbContext.ClassicCredentialsInfos.FirstOrDefault(x => x.Id == id);
         if (oldInfo == null)
             return false;
@@ -104,12 +101,12 @@ public class CredentialsStorageMobile : ICredentialsStorage
 
     public bool DeleteInfo(int id)
     {
-        if (_enteredPasswordHash == null)
-            throw new ArgumentNullException(null, nameof(Password));
+        if (_enteredPasswordHash == null || !IsPasswordCorrect())
+            throw new PasswordInvalidException();
         if (id <= 0)
             throw new ArgumentException(null, nameof(id));
         
-        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);
         var info = dbContext.ClassicCredentialsInfos
             .FirstOrDefault(x => x.Id == id);
         
@@ -125,7 +122,7 @@ public class CredentialsStorageMobile : ICredentialsStorage
     public bool IsPasswordCorrect()
     {
         if (_checkPasswordHash == null)
-            throw new ArgumentNullException(null, nameof(Password));
+            return false;
         
         if (_savedPasswordHash == null)
             return false;
@@ -149,16 +146,13 @@ public class CredentialsStorageMobile : ICredentialsStorage
         }
         else
         {
-            if (_checkPasswordHash == null)
-                throw new ArgumentNullException(null, nameof(Password));
-
-            if (!IsPasswordCorrect())
-                throw new ArgumentException("Password is not correct");
+            if (_enteredPasswordHash == null || !IsPasswordCorrect())
+                throw new PasswordInvalidException();
 
             var enteredPasswordHash = _enteredPasswordHash!.Value;
             var df = new Pbkdf2(CryptoConstants.KdIterations, CryptoConstants.KdLength);
             var newPasswordHash = df.ComputeKey(new ByteText(newPassword), new ByteText(CryptoConstants.KdSalt2));
-            using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
+            using var dbContext = new CredentialsContext(_databasePath, DbFileName);
             foreach (var info in dbContext.ClassicCredentialsInfos)
             {
                 var reEncrypted = info.GetClassicDecrypted(enteredPasswordHash).EncryptClassic(newPasswordHash);
@@ -174,18 +168,20 @@ public class CredentialsStorageMobile : ICredentialsStorage
 
     private KeyValueEntry? FindKeyValue(string key)
     {
-        if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
+        if (string.IsNullOrEmpty(key)) 
+            throw new ArgumentNullException(nameof(key));
         
-        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);
         var result = dbContext.KeyValues.FirstOrDefault(x => x.Key == key);
         return result;
     }
     
     private void SetKeyValue(string key, string value)
     {
-        if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
+        if (string.IsNullOrEmpty(key)) 
+            throw new ArgumentNullException(nameof(key));
         
-        using var dbContext = new CredentialsContext(_databasePath, DbFileName);;
+        using var dbContext = new CredentialsContext(_databasePath, DbFileName);
         dbContext.KeyValues.Update(new KeyValueEntry() {Key = key, Value = value});
     }
 

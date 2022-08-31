@@ -5,8 +5,8 @@ namespace KeyWord.Server.Storage;
 
 public class StorageContext : DbContext
 {
-    public DbSet<ClassicCredentialsInfo> ClassicCredentialsInfos { get; set; }
-    public DbSet<Device> Devices { get; set; }
+    public DbSet<ClassicCredentialsInfo> ClassicCredentialsInfos { get; set; } = null!;
+    public DbSet<Device> Devices { get; set; } = null!;
     public string DbFilePath { get; }
 
     public StorageContext (string dbFilePath)
