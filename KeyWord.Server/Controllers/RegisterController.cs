@@ -163,7 +163,7 @@ public class RegisterController : ControllerBase
     
     // Only from app client
     [HttpPost(nameof(PostDeviceInfo))]
-    public ActionResult PostDeviceInfo(DeviceCandidate device)
+    public ActionResult PostDeviceInfo([FromBody] DeviceCandidate device)
     {
         if (_currentSession == null || _currentSession.IsClosed)
         {
@@ -199,17 +199,16 @@ public class RegisterController : ControllerBase
     }
     
     // Only from app client
-    [HttpGet(nameof(GetDeviceApproval))]
-    public async Task<ActionResult> GetDeviceApproval(DeviceCandidate device)
+    [HttpGet(nameof(GetDeviceApproval) + "/{deviceId:string}")]
+    public async Task<ActionResult> GetDeviceApproval(string deviceId)
     {
         if (_currentSession == null
             || _currentSession.IsClosed
             || _currentSession.IsExpired
-            || device.Token != _currentSession.Token
             )
         {
-            var existingDevice = _storage.FindDeviceById(device.Id);
-            if (existingDevice != null && existingDevice.Token == device.Token)
+            var existingDevice = _storage.FindDeviceById(deviceId);
+            if (existingDevice != null)
             {
                 return Ok();
             }

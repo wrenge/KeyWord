@@ -78,7 +78,7 @@ public class RegisterControllerTest
 
         ActionResult? approvalResult = null;
         await Task.WhenAll(
-            Task.Run(async () => approvalResult = await controller.GetDeviceApproval(mockDevice)),
+            Task.Run(async () => approvalResult = await controller.GetDeviceApproval(mockDevice.Id)),
             Task.Run(async () =>
             {
                 await Task.Delay(1000);
@@ -124,7 +124,7 @@ public class RegisterControllerTest
 
         ActionResult? approvalResult = null;
         await Task.WhenAll(
-            Task.Run(async () => approvalResult = await controller.GetDeviceApproval(mockDevice)),
+            Task.Run(async () => approvalResult = await controller.GetDeviceApproval(mockDevice.Id)),
             Task.Run(async () =>
             {
                 await Task.Delay(1000);
@@ -244,7 +244,7 @@ public class RegisterControllerTest
 
         ActionResult? approvalResp = null;
         await Task.WhenAll(
-            Task.Run(async () => approvalResp = await controller.GetDeviceApproval(mockDevice)),
+            Task.Run(async () => approvalResp = await controller.GetDeviceApproval(mockDevice.Id)),
             Task.Run(async () =>
             {
                 await Task.Delay(1000);
