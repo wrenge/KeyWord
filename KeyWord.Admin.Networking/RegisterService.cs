@@ -9,65 +9,58 @@ namespace KeyWord.Admin.Networking
 {
     public class RegisterService : INetworkService
     {
+        private readonly HttpClient _client;
+
+        public RegisterService(HttpClient client)
+        {
+            _client = client;
+        }
+
+        public RegisterService(Uri baseAddress)
+        {
+            _client = new HttpClient();
+            _client.BaseAddress = baseAddress;
+        }
+        
         public async Task StartNewRegistration()
         {
-            var uriBuilder = new UriBuilder("http", "localhost");
-            uriBuilder.Path = "Register/StartNewRegistration"; // TODO вынести в константы
-            var client = new HttpClient();
-            
-            var response = await client.GetAsync(uriBuilder.Uri);
+            var response = await _client.PostAsync("Register/StartNewRegistration", null);
             if (!response.IsSuccessStatusCode)
-                throw new Exception(await response.Content.ReadAsStringAsync());;
+                throw new Exception(await response.Content.ReadAsStringAsync());
         }
         
         public async Task<RegisterInfo> RequestNewToken()
         {
-            var uriBuilder = new UriBuilder("http", "localhost");
-            uriBuilder.Path = "Register/RequestNewToken"; // TODO вынести в константы
-            var client = new HttpClient();
-            
-            var response = await client.GetAsync(uriBuilder.Uri);
+            var response = await _client.GetAsync("Register/RequestNewToken");
             if (!response.IsSuccessStatusCode)
                 throw new Exception(await response.Content.ReadAsStringAsync());
 
             var contentString = await response.Content.ReadAsStringAsync();
-            var info = JsonSerializer.Deserialize<RegisterInfo>(contentString);
+            var info = JsonSerializer.Deserialize<RegisterInfo>(contentString, new JsonSerializerOptions(JsonSerializerDefaults.Web));
             return info!;
         }
         
         public async Task<DeviceCandidate> RequestDeviceCandidate()
         {
-            var uriBuilder = new UriBuilder("http", "localhost");
-            uriBuilder.Path = "Register/RequestDeviceCandidate"; // TODO вынести в константы
-            var client = new HttpClient();
-            
-            var response = await client.GetAsync(uriBuilder.Uri);
+            var response = await _client.GetAsync("Register/RequestDeviceCandidate");
             if (!response.IsSuccessStatusCode)
                 throw new Exception(await response.Content.ReadAsStringAsync());
 
             var contentString = await response.Content.ReadAsStringAsync();
-            var device = JsonSerializer.Deserialize<DeviceCandidate>(contentString);
+            var device = JsonSerializer.Deserialize<DeviceCandidate>(contentString, new JsonSerializerOptions(JsonSerializerDefaults.Web));
             return device!;
         }
         
         public async Task ApprovePendingDevice()
         {
-            var uriBuilder = new UriBuilder("http", "localhost");
-            uriBuilder.Path = "Register/ApprovePendingDevice"; // TODO вынести в константы
-            var client = new HttpClient();
-            
-            var postResponse = await client.PostAsync(uriBuilder.Uri, null);
+            var postResponse = await _client.PostAsync("Register/ApprovePendingDevice", null);
             if (!postResponse.IsSuccessStatusCode)
                 throw new Exception(await postResponse.Content.ReadAsStringAsync());
         }
         
         public async Task DenyPendingDevice()
         {
-            var uriBuilder = new UriBuilder("http", "localhost");
-            uriBuilder.Path = "Register/DenyPendingDevice"; // TODO вынести в константы
-            var client = new HttpClient();
-            
-            var postResponse = await client.PostAsync(uriBuilder.Uri, null);
+            var postResponse = await _client.PostAsync("Register/DenyPendingDevice", null);
             if (!postResponse.IsSuccessStatusCode)
                 throw new Exception(await postResponse.Content.ReadAsStringAsync());
         }

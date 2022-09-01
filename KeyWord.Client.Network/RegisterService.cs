@@ -12,13 +12,21 @@ namespace KeyWord.Client.Network
 {
     public class RegisterService : INetworkService
     {
-        public string HostName { get; set; } = "";
+        private readonly HttpClient _client;
 
-        public async Task<bool> TryRegister(string id, string name, string token)
+        public RegisterService(HttpClient client)
         {
-            var uriBuilder = new UriBuilder("http", HostName);
-            uriBuilder.Path = "Register/PostDeviceInfo"; // TODO вынести в константы
-            var client = new HttpClient();
+            _client = client;
+        }
+
+        public RegisterService(Uri baseAddress)
+        {
+            _client = new HttpClient();
+            _client.BaseAddress = baseAddress;
+        }
+        
+        public async Task<bool> TryRegister(string id, string name, IPAddress host, string token)
+        {
             var deviceInfo = new DeviceCandidate()
             {
                 Id = id,
@@ -27,59 +35,15 @@ namespace KeyWord.Client.Network
             };
             var json = JsonSerializer.Serialize(deviceInfo);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var postResponse = await client.PostAsync(uriBuilder.Uri, content);
+            var postResponse = await _client.PostAsync("/Register/PostDeviceInfo", content);
             if (!postResponse.IsSuccessStatusCode)
                 return false; // TODO детализировать ошибку
 
+            var uriBuilder = new UriBuilder();
             uriBuilder.Path = "Register/GetDeviceApproval"; // TODO вынести в константы
             uriBuilder.Query = $"deviceId={deviceInfo.Id}";
-            var approvalResponse = await client.GetAsync(uriBuilder.Uri);
+            var approvalResponse = await _client.GetAsync($"Register/GetDeviceApproval/{deviceInfo.Id}");
             return approvalResponse.IsSuccessStatusCode;
-        }
-
-        public async Task<IPAddress?> DiscoverServer(int port, string token, TimeSpan timeout)
-        {
-            using var client = new UdpClient();
-            client.Client.Bind(new IPEndPoint(IPAddress.Any, port));
-            client.EnableBroadcast = true;
-            
-            var requestCode = SyncUtilities.GetDiscoveryRequestAuthKey(token);
-            var expectedResponseCode = SyncUtilities.GetDiscoveryResponseAuthKey(token).ToBase64();
-            var requestString = string.Format(NetworkConstants.DiscoveryRequestPattern, requestCode.ToBase64());
-            var requestData = NetworkConstants.DiscoveryEncoding.GetBytes(requestString);
-
-            await client.SendAsync(requestData, requestData.Length, new IPEndPoint(IPAddress.Broadcast, port));
-
-            IPAddress? result = null;
-
-            async Task ReceiveData()
-            {
-                var responseCode = "";
-                UdpReceiveResult responseResult;
-                while (expectedResponseCode != responseCode)
-                {
-                    responseResult = await client.ReceiveAsync();
-                    var responseData = responseResult.Buffer;
-                    var responseString = NetworkConstants.DiscoveryEncoding.GetString(responseData);
-                    try
-                    {
-                        var match = Regex.Match(responseString, NetworkConstants.DiscoveryResponseRegex);
-                        responseCode = match.Groups[1].Value;
-                    }
-                    catch (Exception)
-                    {
-                        // ignored
-                    }
-                }
-
-                result = responseResult.RemoteEndPoint.Address;
-            }
-
-            async Task Wait() => await Task.Delay(timeout);
-
-            await Task.WhenAny(ReceiveData(), Wait());
-
-            return result;
         }
     }
 }

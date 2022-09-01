@@ -44,7 +44,7 @@ namespace KeyWord.Client.Network
                 return null; // TODO детализировать ошибку
 
             var responseContent = await postResponse.Content.ReadAsStringAsync();
-            var syncResponse = JsonSerializer.Deserialize<SyncResponse>(responseContent);
+            var syncResponse = JsonSerializer.Deserialize<SyncResponse>(responseContent, new JsonSerializerOptions(JsonSerializerDefaults.Web));
             return syncResponse?.SyncData;
         }
     }

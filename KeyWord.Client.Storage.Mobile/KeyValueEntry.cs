@@ -9,7 +9,7 @@ public class KeyValueEntry
 
     public T GetValue<T>()
     {
-        return JsonSerializer.Deserialize<T>(Value) ?? throw new JsonException();
+        return JsonSerializer.Deserialize<T>(Value, new JsonSerializerOptions(JsonSerializerDefaults.Web)) ?? throw new JsonException();
     }
     
     public void SetValue<T>(T value)

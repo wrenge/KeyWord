@@ -2,18 +2,13 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\wreng\.nuget\packages\communitytoolkit.mvvm\8.0.0\lib\net6.0\CommunityToolkit.Mvvm.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a6d5b297_002Dfcb6_002D43b7_002Da8fb_002D7863fca8f3e3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from AesAdapterTest.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Or&gt;&#xD;
-    &lt;ProjectFile&gt;34406C7A-C9CC-43BC-8E36-E17F8A320BDD/f:AesAdapterTest.cs&lt;/ProjectFile&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8aa0a51d_002D3375_002D4cf1_002D88ca_002D742a96ec1b33/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;And&gt;&#xD;
     &lt;TestAncestor&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::67527685-2847-4CC0-BCC1-AF68D38DD2E6::net6.0::KeyWord.Credentials.Test.Tests&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::ABE6A6A7-4E1C-46CB-B41E-7D229E1AD11A::net6.0::KeyWord.Storage.Mobile.Tests.Tests&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestSyncSend&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestSyncGet&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestSyncSet&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestWrongToken&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.SyncControllerTest.TestWrongDevice&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::6791BEA9-8842-429E-8060-3F21C80ACEC0::net6.0::KeyWord.Server.Tests.RegisterControllerTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::B748D919-6048-495D-A4F4-BDB8333AA7BF::net6.0::KeyWord.IntegrationTests.RegisterControllerIntegrationTests.TestRegister&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
-  &lt;/Or&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+    &lt;Project Location="E:\Projects\psu\KeyWord\KeyWord.IntegrationTests" Presentation="&amp;lt;KeyWord.IntegrationTests&amp;gt;" /&gt;&#xD;
+    &lt;Namespace&gt;KeyWord.IntegrationTests&lt;/Namespace&gt;&#xD;
+  &lt;/And&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	</wpf:ResourceDictionary>

@@ -15,6 +15,7 @@ namespace KeyWord.Communication
         public const int DiscoveryKeyLength = 8;
         public const int DiscoveryIterations = 1;
         public static readonly Encoding DiscoveryEncoding = Encoding.ASCII;
-        public const int Port = 8989;
+        public const int RequestPort = 8989;
+        public const int ResponsePort = 8990;
     }
 }

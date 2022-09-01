@@ -44,10 +44,10 @@ public class RegisterController : ControllerBase
         }
         
         var newToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(TokenByteLength));
-        var port = NetworkConstants.Port; // TODO генерировать рандомный порт
+        var port = NetworkConstants.RequestPort; // TODO генерировать рандомный порт
         CurrentSession = new RegisterSession(newToken, DateTime.Now, TimeSpan.FromSeconds(TokenTimeout), port);
         _logger.LogInformation( "Starting session {Token}", CurrentSession.Token);
-        Task.Run(async () => await CurrentSession.ListenDiscoveryAsync(CurrentSession.Port));
+        Task.Run(async () => await CurrentSession.ListenDiscoveryAsync());
         Task.Run(async () => await CloseSessionOnExpire(CurrentSession));
         return Ok();
     }
@@ -206,17 +206,19 @@ public class RegisterController : ControllerBase
     [HttpGet(nameof(GetDeviceApproval) + "/{deviceId:alpha}")]
     public async Task<ActionResult> GetDeviceApproval(string deviceId)
     {
+        var existingDevice = _storage.FindDeviceById(deviceId);
+        if (existingDevice != null)
+        {
+            return Ok();
+        }
+        
         if (CurrentSession == null
             || CurrentSession.IsClosed
             || CurrentSession.IsExpired
+            || !CurrentSession.DeviceCandidate.Task.IsCompleted
+            || CurrentSession.DeviceCandidate.Task.Result.Id != deviceId
             )
         {
-            var existingDevice = _storage.FindDeviceById(deviceId);
-            if (existingDevice != null)
-            {
-                return Ok();
-            }
-
             return Forbid();
         }
 

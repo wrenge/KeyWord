@@ -49,17 +49,17 @@ public class RegisterSession
 
     public Task GetApprovalHandle() => DeviceApproval.Task;
 
-    public async Task ListenDiscoveryAsync(int port)
+    public async Task ListenDiscoveryAsync()
     {
         var responseCode = SyncUtilities.GetDiscoveryResponseAuthKey(Token);
-        var expectedRequestCode = SyncUtilities.GetDiscoveryResponseAuthKey(Token).ToBase64();
-        var responseString = string.Format(NetworkConstants.DiscoveryRequestPattern, responseCode.ToBase64());
+        var expectedRequestCode = SyncUtilities.GetDiscoveryRequestAuthKey(Token).ToBase64();
+        var responseString = string.Format(NetworkConstants.DiscoveryResponsePattern, responseCode.ToBase64());
         var responseData = NetworkConstants.DiscoveryEncoding.GetBytes(responseString);
 
         while (!IsClosed && !IsExpired)
         {
-            var clientEndPoint = new IPEndPoint(IPAddress.Any, port);
-            var receivedData = _udpServer.Receive(ref clientEndPoint);
+            var incoming = await _udpServer.ReceiveAsync();
+            var receivedData = incoming.Buffer;
             var receivedString = Encoding.ASCII.GetString(receivedData);
             var requestCode = "";
             try
@@ -73,7 +73,7 @@ public class RegisterSession
             }
 
             if (expectedRequestCode == requestCode)
-                await _udpServer.SendAsync(responseData);
+                await _udpServer.SendAsync(responseData, responseData.Length, incoming.RemoteEndPoint);
         }
     }
 }

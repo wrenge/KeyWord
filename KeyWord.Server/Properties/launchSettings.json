@@ -19,6 +19,10 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+    "KeyWord.Server.Release": {
+      "commandName": "Project",
+      "applicationUrl": "https://localhost:7078"
+    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
