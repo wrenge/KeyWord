@@ -18,7 +18,8 @@ public class SyncControllerIntegrationTest : IClassFixture<TestingWebAppFactory>
     {
         _client = factory.CreateClient();
         _context = new StorageContext(new DbContextOptionsBuilder<StorageContext>()
-            .UseInMemoryDatabase("server_storage", TestingWebAppFactory.DbRoot).Options);
+            .UseInMemoryDatabase(TestingWebAppFactory.DbName, TestingWebAppFactory.DbRoot).Options);
+        _context.Database.EnsureCreated();
     }
     
     [Fact]
@@ -166,12 +167,14 @@ public class SyncControllerIntegrationTest : IClassFixture<TestingWebAppFactory>
     {
         foreach (var i in table)
         {
-            await _context.Entry(i).ReloadAsync();
+            await _context.Entry(i!).ReloadAsync();
         }
     }
 
     public void Dispose()
     {
         _client.Dispose();
+        _context.Database.EnsureDeleted();
+        _context.Dispose();
     }
 }

@@ -5,7 +5,6 @@ using KeyWord.Server.Storage;
 
 namespace KeyWord.Server.Controllers;
 
-// [Authorize]
 [ApiController]
 [Route("[controller]")]
 public class SyncController : ControllerBase

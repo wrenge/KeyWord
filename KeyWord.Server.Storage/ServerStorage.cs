@@ -1,4 +1,5 @@
-﻿using KeyWord.Credentials;
+﻿using KeyWord.Communication;
+using KeyWord.Credentials;
 using Microsoft.EntityFrameworkCore;
 
 namespace KeyWord.Server.Storage;
@@ -50,6 +51,28 @@ public class ServerStorage : IStorage
     {
         _storageContext.Devices.Add(device);
         _storageContext.SaveChanges();
+    }
+
+    public bool DeleteDevice(string id)
+    {
+        var device = _storageContext.Devices.FirstOrDefault(x => x.Id == id);
+        if (device == null)
+            return false;
+        
+        _storageContext.Devices.Remove(device);
+        _storageContext.SaveChanges();
+        return true;
+    }
+
+    public bool RenameDevice(string id, string name)
+    {
+        var device = _storageContext.Devices.FirstOrDefault(x => x.Id == id);
+        if (device == null)
+            return false;
+
+        device.Name = name;
+        _storageContext.SaveChanges();
+        return true;
     }
 
     public IEnumerable<Device> GetDevices()

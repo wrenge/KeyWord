@@ -2,6 +2,8 @@
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using System.Text;
+using System.Web;
 using KeyWord.Communication;
 using KeyWord.Server.Services;
 using KeyWord.Server.Storage;
@@ -203,9 +205,10 @@ public class RegisterController : ControllerBase
     }
     
     // Only from app client
-    [HttpGet(nameof(GetDeviceApproval) + "/{deviceId:alpha}")]
-    public async Task<ActionResult> GetDeviceApproval(string deviceId)
+    [HttpGet(nameof(GetDeviceApproval) + "/{idUrlEncoded}")]
+    public async Task<ActionResult> GetDeviceApproval(string idUrlEncoded)
     {
+        var deviceId = HttpUtility.UrlDecode(idUrlEncoded);
         var existingDevice = _storage.FindDeviceById(deviceId);
         if (existingDevice != null)
         {

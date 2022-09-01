@@ -1,13 +1,20 @@
-﻿using Xunit;
+﻿using KeyWord.Server.Storage;
+using Microsoft.EntityFrameworkCore;
+using Xunit;
 
 namespace KeyWord.IntegrationTests;
 
-public class RegisterControllerIntegrationTests : IClassFixture<TestingWebAppFactory>
+public class RegisterControllerIntegrationTests : IClassFixture<TestingWebAppFactory>, IDisposable
 {
     private readonly HttpClient _client;
+    private readonly StorageContext _context;
+
     public RegisterControllerIntegrationTests(TestingWebAppFactory factory)
     {
         _client = factory.CreateClient();
+        _context = new StorageContext(new DbContextOptionsBuilder<StorageContext>()
+            .UseInMemoryDatabase(TestingWebAppFactory.DbName, TestingWebAppFactory.DbRoot).Options);
+        _context.Database.EnsureCreated();
     }
     
     [Fact]
@@ -39,7 +46,13 @@ public class RegisterControllerIntegrationTests : IClassFixture<TestingWebAppFac
         await Task.Delay(TimeSpan.FromSeconds(1));
         await admin.ApprovePendingDevice();
 
-        Assert.Equal(await Task.WhenAny(registerTask, Task.Delay(TimeSpan.FromSeconds(1))), registerTask);
+        Assert.Equal(await Task.WhenAny(registerTask, Task.Delay(TimeSpan.FromSeconds(10))), registerTask);
         Assert.True(registerTask.Result);
+    }
+
+    public void Dispose()
+    {
+        _client.Dispose();
+        _context.Database.EnsureDeleted();
     }
 }

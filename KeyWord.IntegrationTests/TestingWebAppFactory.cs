@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using Xunit;
 
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace KeyWord.IntegrationTests;
 
 public class TestingWebAppFactory : WebApplicationFactory<Program>
 {
+    public const string DbName = "server_storage";
     public static readonly InMemoryDatabaseRoot DbRoot = new InMemoryDatabaseRoot();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -22,7 +25,7 @@ public class TestingWebAppFactory : WebApplicationFactory<Program>
             if (descriptor != null)
                 services.Remove(descriptor);
 
-            services.AddDbContext<StorageContext>(options => options.UseInMemoryDatabase("server_storage", DbRoot));
+            services.AddDbContext<StorageContext>(options => options.UseInMemoryDatabase(DbName, DbRoot));
 
             // var sp = services.BuildServiceProvider();
             // using var scope = sp.CreateScope();

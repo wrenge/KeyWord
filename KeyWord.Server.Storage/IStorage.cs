@@ -1,4 +1,5 @@
-﻿using KeyWord.Credentials;
+﻿using KeyWord.Communication;
+using KeyWord.Credentials;
 
 namespace KeyWord.Server.Storage;
 
@@ -11,6 +12,8 @@ public interface IStorage
     IEnumerable<int> GetDeletedCredentials(DateTime since);
     Device? FindDeviceById(string id);
     void AddDevice(Device device);
+    bool DeleteDevice(string id);
+    bool RenameDevice(string id, string name);
     IEnumerable<Device> GetDevices();
 
     void AddCredentials(IEnumerable<ClassicCredentialsInfo> infos);

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using KeyWord.Communication;
 
 namespace KeyWord.Client.Network
@@ -34,15 +36,13 @@ namespace KeyWord.Client.Network
                 Token = token
             };
             var json = JsonSerializer.Serialize(deviceInfo);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
             var postResponse = await _client.PostAsync("/Register/PostDeviceInfo", content);
             if (!postResponse.IsSuccessStatusCode)
                 return false; // TODO детализировать ошибку
 
-            var uriBuilder = new UriBuilder();
-            uriBuilder.Path = "Register/GetDeviceApproval"; // TODO вынести в константы
-            uriBuilder.Query = $"deviceId={deviceInfo.Id}";
-            var approvalResponse = await _client.GetAsync($"Register/GetDeviceApproval/{deviceInfo.Id}");
+            var idUrlEncoded = HttpUtility.UrlEncode(deviceInfo.Id);
+            var approvalResponse = await _client.GetAsync($"Register/GetDeviceApproval/{idUrlEncoded}");
             return approvalResponse.IsSuccessStatusCode;
         }
     }

@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\KeyWord.Communication\KeyWord.Communication.csproj" />
       <ProjectReference Include="..\KeyWord.Credentials\KeyWord.Credentials.csproj" />
     </ItemGroup>
 

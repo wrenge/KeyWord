@@ -1,4 +1,5 @@
-﻿using KeyWord.Credentials;
+﻿using KeyWord.Communication;
+using KeyWord.Credentials;
 using Microsoft.EntityFrameworkCore;
 
 namespace KeyWord.Server.Storage;
