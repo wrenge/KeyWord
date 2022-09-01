@@ -37,7 +37,7 @@ namespace KeyWord.Client.Network
             return approvalResponse.IsSuccessStatusCode;
         }
 
-        public async Task<IPAddress?> DiscoverServer(int port, string token)
+        public async Task<IPAddress?> DiscoverServer(int port, string token, TimeSpan timeout)
         {
             using var client = new UdpClient();
             client.Client.Bind(new IPEndPoint(IPAddress.Any, port));
@@ -75,7 +75,7 @@ namespace KeyWord.Client.Network
                 result = responseResult.RemoteEndPoint.Address;
             }
 
-            async Task Wait() => await Task.Delay(TimeSpan.FromSeconds(30));
+            async Task Wait() => await Task.Delay(timeout);
 
             await Task.WhenAny(ReceiveData(), Wait());
 
