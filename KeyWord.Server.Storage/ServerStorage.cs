@@ -81,12 +81,14 @@ public class ServerStorage : IStorage
         foreach (var info in modified)
         {
             var counterPart = infosQuery.First(x => x.Id == info.Id);
+            _storageContext.Set<ClassicCredentialsInfo>();
             info.Name = counterPart.Name;
             info.Identifier = counterPart.Identifier;
             info.Login = counterPart.Login;
             info.Password =  counterPart.Password;
             info.CreationTime = counterPart.CreationTime;
             info.ModificationTime = counterPart.ModificationTime;
+            _storageContext.Entry(info).State = EntityState.Modified;
         }
         
         _storageContext.SaveChanges();

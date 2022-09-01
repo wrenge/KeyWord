@@ -2,13 +2,11 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\wreng\.nuget\packages\communitytoolkit.mvvm\8.0.0\lib\net6.0\CommunityToolkit.Mvvm.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8aa0a51d_002D3375_002D4cf1_002D88ca_002D742a96ec1b33/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=24dfbb2d_002Dbf62_002D41ee_002D8e15_002D0b6581b67879/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;And&gt;&#xD;
-    &lt;TestAncestor&gt;&#xD;
-      &lt;TestId&gt;xUnit::B748D919-6048-495D-A4F4-BDB8333AA7BF::net6.0::KeyWord.IntegrationTests.RegisterControllerIntegrationTests.TestRegister&lt;/TestId&gt;&#xD;
-    &lt;/TestAncestor&gt;&#xD;
-    &lt;Project Location="E:\Projects\psu\KeyWord\KeyWord.IntegrationTests" Presentation="&amp;lt;KeyWord.IntegrationTests&amp;gt;" /&gt;&#xD;
-    &lt;Namespace&gt;KeyWord.IntegrationTests&lt;/Namespace&gt;&#xD;
+    &lt;Project Location="E:\Projects\psu\KeyWord\KeyWord.Server.Tests" Presentation="&amp;lt;Server&amp;gt;\&amp;lt;KeyWord.Server.Tests&amp;gt;" /&gt;&#xD;
+    &lt;Namespace&gt;KeyWord.Server.Tests&lt;/Namespace&gt;&#xD;
   &lt;/And&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	
 	</wpf:ResourceDictionary>

@@ -19,7 +19,7 @@ public class SyncController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost(Name = nameof(RequestSync))]
+    [HttpPost(nameof(RequestSync))]
     public ActionResult<SyncResponse?> RequestSync([FromBody] SyncRequest request)
     {
         var device = Storage.FindDeviceById(request.DeviceId);

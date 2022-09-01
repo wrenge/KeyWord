@@ -6,7 +6,7 @@ using KeyWord.Communication;
 
 namespace KeyWord.Server;
 
-public class RegisterSession
+public class RegisterSession : IDisposable
 {
     public string Token { get; }
     public int Port { get; }
@@ -75,5 +75,12 @@ public class RegisterSession
             if (expectedRequestCode == requestCode)
                 await _udpServer.SendAsync(responseData, responseData.Length, incoming.RemoteEndPoint);
         }
+    }
+
+    public void Dispose()
+    {
+        if(!IsClosed)
+            Close();
+        _udpServer.Dispose();
     }
 }

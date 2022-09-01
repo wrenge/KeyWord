@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KeyWord.IntegrationTests;
 
-public class TestingWebAppFactory<TEntryPoint> : WebApplicationFactory<Program> where TEntryPoint : Program
+public class TestingWebAppFactory : WebApplicationFactory<Program>
 {
+    public static readonly InMemoryDatabaseRoot DbRoot = new InMemoryDatabaseRoot();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -19,8 +22,8 @@ public class TestingWebAppFactory<TEntryPoint> : WebApplicationFactory<Program> 
             if (descriptor != null)
                 services.Remove(descriptor);
 
-            services.AddDbContext<StorageContext>(options => options.UseSqlite("DataSource=file::memory:"));
-            
+            services.AddDbContext<StorageContext>(options => options.UseInMemoryDatabase("server_storage", DbRoot));
+
             // var sp = services.BuildServiceProvider();
             // using var scope = sp.CreateScope();
             // using var appContext = scope.ServiceProvider.GetRequiredService<StorageContext>();

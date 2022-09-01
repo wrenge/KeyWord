@@ -21,14 +21,16 @@ public class RegisterControllerTest
     [Test]
     public async Task TestRegistration()
     {
+        await Task.Yield();
         await using var connection = new SqliteConnection("Filename=:memory:");
         connection.Open();
         var contextOptions = new DbContextOptionsBuilder<StorageContext>()
             .UseSqlite(connection)
             .Options;
         var context = new StorageContext(contextOptions);
+        await context.Database.EnsureCreatedAsync();
         var storage = new ServerStorage(context);
-        var service = new RegisterService();
+        using var service = new RegisterService();
         var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
         
         Assert.LessOrEqual(0, storage.GetDevices().Count());
@@ -80,8 +82,9 @@ public class RegisterControllerTest
             .UseSqlite(connection)
             .Options;
         var context = new StorageContext(contextOptions);
+        await context.Database.EnsureCreatedAsync();
         var storage = new ServerStorage(context);
-        var service = new RegisterService();
+        using var service = new RegisterService();
         var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
         
         Assert.LessOrEqual(0, storage.GetDevices().Count());
@@ -133,8 +136,9 @@ public class RegisterControllerTest
             .UseSqlite(connection)
             .Options;
         var context = new StorageContext(contextOptions);
+        await context.Database.EnsureCreatedAsync();
         var storage = new ServerStorage(context);
-        var service = new RegisterService();
+        using var service = new RegisterService();
         var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
 
         var token = controller.RequestNewToken();
@@ -150,8 +154,9 @@ public class RegisterControllerTest
             .UseSqlite(connection)
             .Options;
         var context = new StorageContext(contextOptions);
+        await context.Database.EnsureCreatedAsync();
         var storage = new ServerStorage(context);
-        var service = new RegisterService();
+        using var service = new RegisterService();
         var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
         
         var deviceResp = await controller.RequestDeviceCandidate();
@@ -179,8 +184,9 @@ public class RegisterControllerTest
             .UseSqlite(connection)
             .Options;
         var context = new StorageContext(contextOptions);
+        await context.Database.EnsureCreatedAsync();
         var storage = new ServerStorage(context);
-        var service = new RegisterService();
+        using var service = new RegisterService();
         var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
         
         var resp = controller.ApprovePendingDevice();
@@ -200,8 +206,9 @@ public class RegisterControllerTest
             .UseSqlite(connection)
             .Options;
         var context = new StorageContext(contextOptions);
+        await context.Database.EnsureCreatedAsync();
         var storage = new ServerStorage(context);
-        var service = new RegisterService();
+        using var service = new RegisterService();
         var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
         
         var mockDevice = new DeviceCandidate()
@@ -244,8 +251,9 @@ public class RegisterControllerTest
             .UseSqlite(connection)
             .Options;
         var context = new StorageContext(contextOptions);
+        await context.Database.EnsureCreatedAsync();
         var storage = new ServerStorage(context);
-        var service = new RegisterService();
+        using var service = new RegisterService();
         var controller = new RegisterController(storage, service, new LoggerFactory().CreateLogger<RegisterController>());
         
         controller.StartNewRegistration();

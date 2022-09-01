@@ -29,6 +29,13 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetService<StorageContext>();
+    SQLitePCL.Batteries_V2.Init();
+    context!.Database.EnsureCreated();
+}
+
 app.Run();
 
 public partial class Program

@@ -8,11 +8,7 @@ public class StorageContext : DbContext, IStorageContext
     public DbSet<ClassicCredentialsInfo> ClassicCredentialsInfos { get; set; } = null!;
     public DbSet<Device> Devices { get; set; } = null!;
 
-    public StorageContext(DbContextOptions<StorageContext> options) : base(options)
-    {
-        SQLitePCL.Batteries_V2.Init();
-        this.Database.EnsureCreated();
-    }
+    public StorageContext(DbContextOptions<StorageContext> options) : base(options) { }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

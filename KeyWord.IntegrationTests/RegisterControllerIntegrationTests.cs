@@ -2,10 +2,10 @@
 
 namespace KeyWord.IntegrationTests;
 
-public class RegisterControllerIntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
+public class RegisterControllerIntegrationTests : IClassFixture<TestingWebAppFactory>
 {
     private readonly HttpClient _client;
-    public RegisterControllerIntegrationTests(TestingWebAppFactory<Program> factory)
+    public RegisterControllerIntegrationTests(TestingWebAppFactory factory)
     {
         _client = factory.CreateClient();
     }

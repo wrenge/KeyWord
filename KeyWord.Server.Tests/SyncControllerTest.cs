@@ -27,6 +27,7 @@ public class SyncControllerTest
             .UseSqlite(connection)
             .Options;
         var context = new StorageContext(contextOptions);
+        await context.Database.EnsureCreatedAsync();
         var storage = new ServerStorage(context);
         var controller = new SyncController(context, new LoggerFactory().CreateLogger<SyncController>());
         
@@ -88,6 +89,7 @@ public class SyncControllerTest
             .UseSqlite(connection)
             .Options;
         var context = new StorageContext(contextOptions);
+        await context.Database.EnsureCreatedAsync();
         var storage = new ServerStorage(context);
         var controller = new SyncController(context, new LoggerFactory().CreateLogger<SyncController>());
         
@@ -184,6 +186,7 @@ public class SyncControllerTest
             .UseSqlite(connection)
             .Options;
         var context = new StorageContext(contextOptions);
+        await context.Database.EnsureCreatedAsync();
         var storage = new ServerStorage(context);
         var controller = new SyncController(context, new LoggerFactory().CreateLogger<SyncController>());
         
@@ -230,6 +233,7 @@ public class SyncControllerTest
             .UseSqlite(connection)
             .Options;
         var context = new StorageContext(contextOptions);
+        await context.Database.EnsureCreatedAsync();
         var storage = new ServerStorage(context);
         var controller = new SyncController(context, new LoggerFactory().CreateLogger<SyncController>());
         
