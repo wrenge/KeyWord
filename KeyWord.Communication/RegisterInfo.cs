@@ -5,13 +5,13 @@ namespace KeyWord.Communication
 {
     public class RegisterInfo
     {
-        public string ServerAddress { get; }
+        public int ServerPort { get; }
         public string Token { get; }
         public DateTime ExpireDate { get; }
 
-        public RegisterInfo(string token, DateTime expireDate, IPAddress serverAddress)
+        public RegisterInfo(string token, DateTime expireDate, int port)
         {
-            ServerAddress = serverAddress.ToString();
+            ServerPort = port;
             Token = token;
             ExpireDate = expireDate;
         }

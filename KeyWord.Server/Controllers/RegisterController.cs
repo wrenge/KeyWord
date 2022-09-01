@@ -44,13 +44,15 @@ public class RegisterController : ControllerBase
         }
         
         var newToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(TokenByteLength));
-        CurrentSession = new RegisterSession(newToken, DateTime.Now, TimeSpan.FromSeconds(TokenTimeout));
+        var port = NetworkConstants.Port; // TODO генерировать рандомный порт
+        CurrentSession = new RegisterSession(newToken, DateTime.Now, TimeSpan.FromSeconds(TokenTimeout), port);
         _logger.LogInformation( "Starting session {Token}", CurrentSession.Token);
-        CloseSessionOnExpire(CurrentSession);
+        Task.Run(async () => await CurrentSession.ListenDiscoveryAsync(CurrentSession.Port));
+        Task.Run(async () => await CloseSessionOnExpire(CurrentSession));
         return Ok();
     }
 
-    private async void CloseSessionOnExpire(RegisterSession session)
+    private async Task CloseSessionOnExpire(RegisterSession session)
     {
         await Task.Delay(session.GetTimeLeft());
         _logger.LogInformation( "Closing session {Token}", session.Token);
@@ -66,14 +68,7 @@ public class RegisterController : ControllerBase
         {
             return NotFound();
         }
-        return new RegisterInfo(CurrentSession.Token, CurrentSession.GetExpireDate(), GetLocalIpAddress());
-    }
-
-    private static IPAddress GetLocalIpAddress()
-    {
-        var hostname = Dns.GetHostName();
-        var host = Dns.GetHostAddresses(hostname);
-        return host.First(x => x.AddressFamily == AddressFamily.InterNetwork);
+        return new RegisterInfo(CurrentSession.Token, CurrentSession.GetExpireDate(), CurrentSession.Port);
     }
 
     // Only from admin client

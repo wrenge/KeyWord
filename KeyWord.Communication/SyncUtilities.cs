@@ -19,5 +19,25 @@ namespace KeyWord.Communication
         
             return hasher.ComputeKey(new ByteText(bytes), new ByteText(CryptoConstants.KdSalt));
         }
+        
+        public static ByteText GetDiscoveryRequestAuthKey(string token)
+        {
+            var requestSalt = NetworkConstants.DiscoveryRequestSalt;
+            return GetDiscoveryAuthKey(token, requestSalt);
+        }
+        
+        public static ByteText GetDiscoveryResponseAuthKey(string token)
+        {
+            var requestSalt = NetworkConstants.DiscoveryResponseSalt;
+            return GetDiscoveryAuthKey(token, requestSalt);
+        }
+
+        private static ByteText GetDiscoveryAuthKey(string token, string requestSalt)
+        {
+            var hasher = new Pbkdf2(NetworkConstants.DiscoveryIterations, NetworkConstants.DiscoveryKeyLength);
+            var bytes = Encoding.Default.GetBytes(token).ToArray();
+
+            return hasher.ComputeKey(new ByteText(bytes), new ByteText(requestSalt));
+        }
     }
 }
