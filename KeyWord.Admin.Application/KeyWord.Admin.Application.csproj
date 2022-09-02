@@ -54,4 +54,8 @@
       <ProjectReference Include="..\KeyWord.Admin.Services\KeyWord.Admin.Services.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="QRCoder" Version="1.4.3" />
+    </ItemGroup>
+
 </Project>
