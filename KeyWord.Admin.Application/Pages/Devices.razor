@@ -95,9 +95,9 @@
     private string _qrCodeString = "";
     private string _deviceName = "DeviceName123";
     private string _deviceId = "DeviceId123";
-    private Device? _pendingDevice = null;
+    private DeviceCandidate? _pendingDevice = null;
     private bool RegisterButtonDisabled => _pendingDevice == null;
-    private RegisterInfo _registerInfo;
+    private RegisterInfo? _registerInfo;
 
     protected override async Task OnInitializedAsync()
     {
@@ -116,6 +116,8 @@
 
     private async Task StartRegistration()
     {
+        _deviceName = "None";
+        _deviceId = "0:0:0:0";
         await RegisterService.StartNewRegistration();
         _registerInfo = await RegisterService.RequestNewToken();
         var qrCodeContent = new QrCodeContent()
@@ -125,7 +127,9 @@
         };
         var json = JsonSerializer.Serialize(qrCodeContent);
         _qrCodeString = GenerateQrCode(json);
-        // TODO get device
+        _pendingDevice = await RegisterService.RequestDeviceCandidate();
+        _deviceName = _pendingDevice.Name;
+        _deviceId = _pendingDevice.Id;
     }
 
     private void OnEditDeviceBtn_Click(Device device)
