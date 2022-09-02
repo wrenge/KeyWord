@@ -21,7 +21,7 @@ public class RegisterControllerIntegrationTests : IClassFixture<TestingWebAppFac
     public async Task TestRegister()
     {
         var admin = new Admin.Services.RegisterService(_client);
-        var clientDiscovery = new Client.Network.DiscoveryService();
+        var clientDiscovery = new Client.Services.DiscoveryService();
 
         await admin.StartNewRegistration();
         var token = await admin.RequestNewToken();
@@ -31,7 +31,7 @@ public class RegisterControllerIntegrationTests : IClassFixture<TestingWebAppFac
         var hostResponse = await clientDiscovery.DiscoverServer(token.ServerPort, token.Token, TimeSpan.FromSeconds(60));
         Assert.NotNull(hostResponse);
         var host = hostResponse!;
-        var client = new Client.Network.RegisterService(_client);
+        var client = new Client.Services.RegisterService(_client);
 
         var deviceId = "MockDeviceId";
         var deviceName = "MockDevice";

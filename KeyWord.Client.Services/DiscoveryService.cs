@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using KeyWord.Communication;
 
-namespace KeyWord.Client.Network
+namespace KeyWord.Client.Services
 {
     public class DiscoveryService
     {

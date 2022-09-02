@@ -1,5 +1,5 @@
 ﻿using System.Collections.Immutable;
-using KeyWord.Client.Network;
+using KeyWord.Client.Services;
 using KeyWord.Communication;
 using KeyWord.Credentials;
 using KeyWord.Server.Storage;

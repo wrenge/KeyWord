@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Server.Tests", "Key
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Client.Application", "KeyWord.Client.Application\KeyWord.Client.Application.csproj", "{64861AFF-0C14-442C-A032-957CC16C5C12}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Client.Network", "KeyWord.Client.Network\KeyWord.Client.Network.csproj", "{C538E026-0950-40F8-B6EB-DF4B3AF3375A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Client.Services", "KeyWord.Client.Services\KeyWord.Client.Services.csproj", "{C538E026-0950-40F8-B6EB-DF4B3AF3375A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{F536E843-147A-4107-81A4-3CD12FD8DE5B}"
 EndProject

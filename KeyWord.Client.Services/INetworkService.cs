@@ -1,4 +1,4 @@
-﻿namespace KeyWord.Client.Network
+﻿namespace KeyWord.Client.Services
 {
     public interface INetworkService
     {

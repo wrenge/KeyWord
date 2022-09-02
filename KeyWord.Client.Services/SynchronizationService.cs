@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using KeyWord.Communication;
 using KeyWord.Credentials;
 
-namespace KeyWord.Client.Network
+namespace KeyWord.Client.Services
 {
     public class SynchronizationService : INetworkService
     {

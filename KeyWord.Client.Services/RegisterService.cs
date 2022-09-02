@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using KeyWord.Communication;
 
-namespace KeyWord.Client.Network
+namespace KeyWord.Client.Services
 {
     public class RegisterService : INetworkService
     {
