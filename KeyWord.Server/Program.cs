@@ -7,9 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+var databasePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "keyword.db3");  // TODO: Move to app appsettings.json
 builder.Services.AddControllers();
 builder.Services.AddEntityFrameworkSqlite()
-    .AddDbContext<StorageContext>(options => options.UseSqlite("Filename=keyword.db3")); // TODO: Move to app appsettings.json
+    .AddDbContext<StorageContext>(options => options.UseSqlite($"Filename={databasePath}"));
 builder.Services.AddSingleton<RegisterService>();
 builder.Services.AddScoped<IStorage, ServerStorage>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
