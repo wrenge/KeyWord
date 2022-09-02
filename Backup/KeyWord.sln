@@ -31,17 +31,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Communication", "Ke
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Server.Tests", "KeyWord.Server.Tests\KeyWord.Server.Tests.csproj", "{6791BEA9-8842-429E-8060-3F21C80ACEC0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Client.Application", "KeyWord.Client.Application\KeyWord.Client.Application.csproj", "{64861AFF-0C14-442C-A032-957CC16C5C12}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Client.Application", "KeyWord.Client.Application\KeyWord.Client.Application.csproj", "{64861AFF-0C14-442C-A032-957CC16C5C12}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Client.Network", "KeyWord.Client.Network\KeyWord.Client.Network.csproj", "{C538E026-0950-40F8-B6EB-DF4B3AF3375A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Client.Network", "KeyWord.Client.Network\KeyWord.Client.Network.csproj", "{C538E026-0950-40F8-B6EB-DF4B3AF3375A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{F536E843-147A-4107-81A4-3CD12FD8DE5B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Admin.Services", "KeyWord.Admin.Services\KeyWord.Admin.Services.csproj", "{B3AF4251-BC3A-4B36-957B-29E1E8A5CF1D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Admin.Networking", "KeyWord.Admin.Networking\KeyWord.Admin.Networking.csproj", "{B3AF4251-BC3A-4B36-957B-29E1E8A5CF1D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.IntegrationTests", "KeyWord.IntegrationTests\KeyWord.IntegrationTests.csproj", "{B748D919-6048-495D-A4F4-BDB8333AA7BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.IntegrationTests", "KeyWord.IntegrationTests\KeyWord.IntegrationTests.csproj", "{B748D919-6048-495D-A4F4-BDB8333AA7BF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyWord.Admin.Application", "KeyWord.Admin.Application\KeyWord.Admin.Application.csproj", "{06E09D47-BF0B-45FA-9D46-C80D059271CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWord.Admin.Application", "KeyWord.Admin.Application\KeyWord.Admin.Application.csproj", "{EB150498-D550-4F98-A713-06B058CE1936}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,11 +111,10 @@ Global
 		{B748D919-6048-495D-A4F4-BDB8333AA7BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B748D919-6048-495D-A4F4-BDB8333AA7BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B748D919-6048-495D-A4F4-BDB8333AA7BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06E09D47-BF0B-45FA-9D46-C80D059271CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06E09D47-BF0B-45FA-9D46-C80D059271CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06E09D47-BF0B-45FA-9D46-C80D059271CC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{06E09D47-BF0B-45FA-9D46-C80D059271CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06E09D47-BF0B-45FA-9D46-C80D059271CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB150498-D550-4F98-A713-06B058CE1936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB150498-D550-4F98-A713-06B058CE1936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB150498-D550-4F98-A713-06B058CE1936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB150498-D550-4F98-A713-06B058CE1936}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,7 +134,7 @@ Global
 		{64861AFF-0C14-442C-A032-957CC16C5C12} = {95CE3ACA-8B17-40F4-A319-39DA79A0FE68}
 		{C538E026-0950-40F8-B6EB-DF4B3AF3375A} = {95CE3ACA-8B17-40F4-A319-39DA79A0FE68}
 		{B3AF4251-BC3A-4B36-957B-29E1E8A5CF1D} = {F536E843-147A-4107-81A4-3CD12FD8DE5B}
-		{06E09D47-BF0B-45FA-9D46-C80D059271CC} = {F536E843-147A-4107-81A4-3CD12FD8DE5B}
+		{EB150498-D550-4F98-A713-06B058CE1936} = {F536E843-147A-4107-81A4-3CD12FD8DE5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9AD8031A-5F68-4060-B7B9-D224DA9DC619}

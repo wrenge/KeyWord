@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using KeyWord.Communication;
 
-namespace KeyWord.Admin.Networking
+namespace KeyWord.Admin.Services
 {
     public class RegisterService : INetworkService
     {

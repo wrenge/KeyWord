@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\KeyWord.Admin.Networking\KeyWord.Admin.Networking.csproj" />
+      <ProjectReference Include="..\KeyWord.Admin.Services\KeyWord.Admin.Services.csproj" />
       <ProjectReference Include="..\KeyWord.Client.Network\KeyWord.Client.Network.csproj" />
       <ProjectReference Include="..\KeyWord.Server\KeyWord.Server.csproj" />
     </ItemGroup>

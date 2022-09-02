@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using KeyWord.Communication;
 
-namespace KeyWord.Admin.Networking
+namespace KeyWord.Admin.Services
 {
     public class DevicesService
     {

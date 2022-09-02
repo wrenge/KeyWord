@@ -20,7 +20,7 @@ public class RegisterControllerIntegrationTests : IClassFixture<TestingWebAppFac
     [Fact]
     public async Task TestRegister()
     {
-        var admin = new Admin.Networking.RegisterService(_client);
+        var admin = new Admin.Services.RegisterService(_client);
         var clientDiscovery = new Client.Network.DiscoveryService();
 
         await admin.StartNewRegistration();

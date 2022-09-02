@@ -1,4 +1,4 @@
-﻿namespace KeyWord.Admin.Networking
+﻿namespace KeyWord.Admin.Services
 {
     public interface INetworkService
     {
