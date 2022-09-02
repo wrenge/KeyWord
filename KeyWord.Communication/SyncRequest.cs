@@ -6,6 +6,7 @@ namespace KeyWord.Communication
     public class SyncRequest
     {
         public string AuthKey { get; set; } = "";
+        public string AuthId { get; set; } = "";
         public string DeviceId { get; set; } = "";
         public DateTime LastSyncTime { get; set; }
         public SyncData SyncData { get; set; } = new SyncData(); // TODO: encrypt that

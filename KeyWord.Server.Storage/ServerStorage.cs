@@ -15,28 +15,31 @@ public class ServerStorage : IStorage
 
     public int Count => _storageContext.ClassicCredentialsInfos.Count();
 
-    public IEnumerable<ClassicCredentialsInfo> GetAllCredentials()
+    public IEnumerable<ClassicCredentialsInfo> GetAllCredentials(string authId)
     {
         return _storageContext.ClassicCredentialsInfos.ToArray();
     }
 
-    public IEnumerable<ClassicCredentialsInfo> GetAddedCredentials(DateTime since)
+    public IEnumerable<ClassicCredentialsInfo> GetAddedCredentials(DateTime since, string authId)
     {
         return _storageContext.ClassicCredentialsInfos
+            .Where(x => x.AuthId == authId)
             .Where(x => x.CreationTime > since)
             .ToArray();
     }
 
-    public IEnumerable<ClassicCredentialsInfo> GetModifiedCredentials(DateTime since)
+    public IEnumerable<ClassicCredentialsInfo> GetModifiedCredentials(DateTime since, string authId)
     {
         return _storageContext.ClassicCredentialsInfos
+            .Where(x => x.AuthId == authId)
             .Where(x => x.CreationTime <= since && x.ModificationTime != null && x.ModificationTime > since)
             .ToArray();
     }
 
-    public IEnumerable<int> GetDeletedCredentials(DateTime since)
+    public IEnumerable<int> GetDeletedCredentials(DateTime since, string authId)
     {
         return _storageContext.ClassicCredentialsInfos
+            .Where(x => x.AuthId == authId)
             .Where(x => x.RemoveTime != null && x.RemoveTime > since)
             .Select(x => x.Id)
             .ToArray();
@@ -80,7 +83,7 @@ public class ServerStorage : IStorage
         return _storageContext.Devices.ToList();
     }
 
-    public void AddCredentials(IEnumerable<ClassicCredentialsInfo> infos)
+    public void AddCredentials(IEnumerable<ClassicCredentialsInfo> infos, string authId)
     {
         var infosQuery = infos.AsQueryable();
         var infosIds = infosQuery.Select(x => x.Id).ToArray();
@@ -90,45 +93,39 @@ public class ServerStorage : IStorage
         var infosToAdd = infosQuery
             .Where(x => !existing.Any(y => y.Id == x.Id && y.CreationTime > x.CreationTime && y.ModificationTime > x.ModificationTime));
         
-        _storageContext.ClassicCredentialsInfos.AddRange(infosToAdd);
+        _storageContext.ClassicCredentialsInfos.AddRange(
+            infosToAdd.Select(x => new ClassicCredentialsStorageElement(x, authId)));
         _storageContext.SaveChanges();
     }
 
-    public void UpdateCredentials(IEnumerable<ClassicCredentialsInfo> infos)
+    public void UpdateCredentials(IEnumerable<ClassicCredentialsInfo> infos, string authId)
     {
         var infosQuery = infos.AsQueryable();
         var infosIds = infosQuery.Select(y => y.Id).ToArray();
         var modified = _storageContext.ClassicCredentialsInfos
+            .Where(x => x.AuthId == authId)
             .Where(x => infosIds.Contains(x.Id));
         
         foreach (var info in modified)
         {
             var counterPart = infosQuery.First(x => x.Id == info.Id);
-            _storageContext.Set<ClassicCredentialsInfo>();
-            info.Name = counterPart.Name;
-            info.Identifier = counterPart.Identifier;
-            info.Login = counterPart.Login;
-            info.Password =  counterPart.Password;
-            info.CreationTime = counterPart.CreationTime;
-            info.ModificationTime = counterPart.ModificationTime;
-            _storageContext.Entry(info).State = EntityState.Modified;
+            _storageContext.Entry(info).CurrentValues.SetValues(new ClassicCredentialsStorageElement(counterPart, authId));
         }
         
         _storageContext.SaveChanges();
     }
 
-    public void DeleteCredentials(IEnumerable<int> infos)
+    public void DeleteCredentials(IEnumerable<int> infos, string authId)
     {
         var infosArray = infos.ToArray();
         var now = DateTime.Now;
         var removed = _storageContext.ClassicCredentialsInfos
+            .Where(x => x.AuthId == authId)
             .Where(x => infosArray.Contains(x.Id));
         foreach (var info in removed)
         {
-            info.Name = info.Identifier = info.Login = info.Password = "";
-            info.CreationTime = new DateTime();
-            info.ModificationTime = null;
-            info.RemoveTime = now;
+            _storageContext.Entry(info).CurrentValues
+                .SetValues(new ClassicCredentialsStorageElement(authId) {Id = info.Id, RemoveTime = now});
         }
         
         _storageContext.SaveChanges();

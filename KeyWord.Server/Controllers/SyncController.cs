@@ -23,23 +23,27 @@ public class SyncController : ControllerBase
     {
         var device = Storage.FindDeviceById(request.DeviceId);
         if (device == null)
-            return Unauthorized(null);
+            return Unauthorized("Device is not registered");
 
         var keyValid = request.AuthKey == SyncUtilities.GetDeviceAuthKey(device.Id, device.Token).ToBase64();
         
         if(!keyValid)
-            return Unauthorized(null);
+            return Unauthorized("Auth key is not valid");
+
+        var authId = request.AuthId;
+        if (string.IsNullOrEmpty(authId))
+            return Unauthorized("AuthId is empty");
         
         var syncData = new SyncData
         {
-            AddedCredentials = Storage.GetAddedCredentials(request.LastSyncTime).ToArray(),
-            ModifiedCredentials = Storage.GetModifiedCredentials(request.LastSyncTime).ToArray(),
-            DeletedCredentialsIds = Storage.GetDeletedCredentials(request.LastSyncTime).ToArray()
+            AddedCredentials = Storage.GetAddedCredentials(request.LastSyncTime, authId).ToArray(),
+            ModifiedCredentials = Storage.GetModifiedCredentials(request.LastSyncTime, authId).ToArray(),
+            DeletedCredentialsIds = Storage.GetDeletedCredentials(request.LastSyncTime, authId).ToArray()
         };
         
-        Storage.AddCredentials(request.SyncData.AddedCredentials);
-        Storage.UpdateCredentials(request.SyncData.ModifiedCredentials);
-        Storage.DeleteCredentials(request.SyncData.DeletedCredentialsIds);
+        Storage.AddCredentials(request.SyncData.AddedCredentials, authId);
+        Storage.UpdateCredentials(request.SyncData.ModifiedCredentials, authId);
+        Storage.DeleteCredentials(request.SyncData.DeletedCredentialsIds, authId);
 
         var result = new SyncResponse();
         result.SyncData = syncData;

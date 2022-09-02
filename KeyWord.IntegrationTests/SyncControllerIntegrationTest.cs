@@ -35,7 +35,8 @@ public class SyncControllerIntegrationTest : IClassFixture<TestingWebAppFactory>
             RegisterDate = new DateTime()
         };
         storage.AddDevice(device);
-        
+        var authId = "AuthId";
+
         var credentials = new TestCredentials(9);
         var storageInfos = new []
         {
@@ -49,18 +50,19 @@ public class SyncControllerIntegrationTest : IClassFixture<TestingWebAppFactory>
             credentials.RemovedCredentialsInfos[5],
             credentials.RemovedCredentialsInfos[8],
         };
-        storage.AddCredentials(storageInfos);
+        storage.AddCredentials(storageInfos, authId);
         
         var request = new SyncRequest
         {
             AuthKey = SyncUtilities.GetDeviceAuthKey(device.Id, device.Token).ToBase64(),
             DeviceId = device.Id,
+            AuthId = authId,
             LastSyncTime = new DateTime(2022, 1, 3),
             SyncData = new SyncData()
         };
 
         var clientService = new SynchronizationService(_client);
-        var syncResponse = await clientService.TrySync(device.Id, device.Token, request.LastSyncTime,
+        var syncResponse = await clientService.TrySync(device.Id, device.Token, authId, request.LastSyncTime,
             request.SyncData.AddedCredentials, 
             request.SyncData.ModifiedCredentials,
             request.SyncData.DeletedCredentialsIds);
@@ -86,6 +88,7 @@ public class SyncControllerIntegrationTest : IClassFixture<TestingWebAppFactory>
         storage.AddDevice(device);
         
         var credentials = new TestCredentials(9);
+        var authId = "AuthId";
         
         var storedCredentials = new []
         {
@@ -96,13 +99,14 @@ public class SyncControllerIntegrationTest : IClassFixture<TestingWebAppFactory>
             credentials.AddedCredentialsInfos[7],
             credentials.AddedCredentialsInfos[8],
         };
-        storage.AddCredentials(storedCredentials);
+        storage.AddCredentials(storedCredentials, authId);
 
         var request = new SyncRequest
         {
             AuthKey = SyncUtilities.GetDeviceAuthKey(device.Id, device.Token).ToBase64(),
             DeviceId = device.Id,
             LastSyncTime = new DateTime(2022, 1, 3),
+            AuthId = authId,
             SyncData = new SyncData
             {
                 AddedCredentials = new[]
@@ -115,14 +119,14 @@ public class SyncControllerIntegrationTest : IClassFixture<TestingWebAppFactory>
         };
 
         var clientService = new SynchronizationService(_client);
-        var syncResponse = await clientService.TrySync(device.Id, device.Token, request.LastSyncTime,
+        var syncResponse = await clientService.TrySync(device.Id, device.Token, authId, request.LastSyncTime,
             request.SyncData.AddedCredentials, 
             request.SyncData.ModifiedCredentials,
             request.SyncData.DeletedCredentialsIds);
 
         Assert.NotNull(syncResponse);
         Assert.Equal(storedCredentials.Length + request.SyncData.AddedCredentials.Length, 
-            storage.GetAddedCredentials(new DateTime()).Count());
+            storage.GetAddedCredentials(new DateTime(), authId).Count());
 
         request.SyncData.AddedCredentials = Array.Empty<ClassicCredentialsInfo>();
         request.SyncData.ModifiedCredentials = new []
@@ -132,14 +136,14 @@ public class SyncControllerIntegrationTest : IClassFixture<TestingWebAppFactory>
             credentials.ModifiedCredentialsInfos[7]
         };
 
-        syncResponse = await clientService.TrySync(device.Id, device.Token, request.LastSyncTime,
+        syncResponse = await clientService.TrySync(device.Id, device.Token, authId, request.LastSyncTime,
             request.SyncData.AddedCredentials, 
             request.SyncData.ModifiedCredentials,
             request.SyncData.DeletedCredentialsIds);
         
         Assert.NotNull(syncResponse);
         await ReloadTable(_context.ClassicCredentialsInfos); // Костыль, чтобы обновить кеши
-        var modifiedInStorage = storage.GetModifiedCredentials(credentials.AddedCredentialsInfos[0].CreationTime);
+        var modifiedInStorage = storage.GetModifiedCredentials(credentials.AddedCredentialsInfos[0].CreationTime, authId);
         Assert.Equal(request.SyncData.ModifiedCredentials.Length, modifiedInStorage.Intersect(request.SyncData.ModifiedCredentials).Count());
 
         request.SyncData.ModifiedCredentials = Array.Empty<ClassicCredentialsInfo>();
@@ -150,15 +154,15 @@ public class SyncControllerIntegrationTest : IClassFixture<TestingWebAppFactory>
             credentials.RemovedCredentialsInfos[8].Id
         };
         
-        syncResponse = await clientService.TrySync(device.Id, device.Token, request.LastSyncTime,
+        syncResponse = await clientService.TrySync(device.Id, device.Token, authId, request.LastSyncTime,
             request.SyncData.AddedCredentials, 
             request.SyncData.ModifiedCredentials,
             request.SyncData.DeletedCredentialsIds);
 
         Assert.NotNull(syncResponse);
         await ReloadTable(_context.ClassicCredentialsInfos); // Костыль, чтобы обновить кеши
-        var removedIdsInStorage = storage.GetDeletedCredentials(credentials.AddedCredentialsInfos[0].CreationTime);
-        var removedInStorage = storage.GetAllCredentials().Where(x => x.RemoveTime != null);
+        var removedIdsInStorage = storage.GetDeletedCredentials(credentials.AddedCredentialsInfos[0].CreationTime, authId);
+        var removedInStorage = storage.GetAllCredentials(authId).Where(x => x.RemoveTime != null);
         Assert.Equal(request.SyncData.DeletedCredentialsIds.Length, removedIdsInStorage.Count());
         Assert.Single(removedInStorage.DistinctBy(x => (x.Identifier, x.Login, x.Password)));
     }

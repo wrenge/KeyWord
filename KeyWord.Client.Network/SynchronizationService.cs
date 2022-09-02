@@ -27,6 +27,7 @@ namespace KeyWord.Client.Network
         
         public async Task<SyncResponse?> TrySync(string deviceId,
             string deviceToken,
+            string authId,
             DateTime lastSyncTime,
             IEnumerable<ClassicCredentialsInfo> added,
             IEnumerable<ClassicCredentialsInfo> modified,
@@ -37,6 +38,7 @@ namespace KeyWord.Client.Network
             {
                 DeviceId = deviceId,
                 AuthKey = authKey,
+                AuthId = authId,
                 LastSyncTime = lastSyncTime,
                 SyncData = new SyncData
                 {
