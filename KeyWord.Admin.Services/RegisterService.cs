@@ -29,6 +29,13 @@ namespace KeyWord.Admin.Services
                 throw new Exception(await response.Content.ReadAsStringAsync());
         }
         
+        public async Task CloseSession()
+        {
+            var response = await _client.PostAsync("Register/CloseSession", null);
+            if (!response.IsSuccessStatusCode)
+                throw new Exception(await response.Content.ReadAsStringAsync());
+        }
+        
         public async Task<RegisterInfo> RequestNewToken()
         {
             var response = await _client.GetAsync("Register/RequestNewToken");

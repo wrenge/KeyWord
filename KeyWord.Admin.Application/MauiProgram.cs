@@ -20,7 +20,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<WeatherForecastService>();
         builder.Services.AddSingleton(_ => new DevicesService(new HttpClient {BaseAddress = new Uri("https://localhost:7078")}));
-        builder.Services.AddSingleton<RegisterService>();
+        builder.Services.AddSingleton(_ => new RegisterService(new HttpClient {BaseAddress = new Uri("https://localhost:7078")}));
 
         return builder.Build();
     }

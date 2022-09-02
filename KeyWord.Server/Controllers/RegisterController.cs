@@ -53,6 +53,19 @@ public class RegisterController : ControllerBase
         Task.Run(async () => await CloseSessionOnExpire(CurrentSession));
         return Ok();
     }
+    
+    // Only from admin client
+    [Host("localhost")]
+    [HttpPost(nameof(CloseSession))]
+    public ActionResult CloseSession()
+    {
+        if (CurrentSession is {IsClosed: false, IsExpired: false })
+        {
+            CurrentSession.Close();
+        }
+
+        return Ok();
+    }
 
     private async Task CloseSessionOnExpire(RegisterSession session)
     {
