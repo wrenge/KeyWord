@@ -24,7 +24,7 @@
                         <h6 class="card-subtitle mb-2 text-muted">iOS</h6>
                         <p class="card-text">ID: @device.Id</p>
                         <div class="d-flex flex-row position-absolute bottom-0" style="padding-bottom: inherit">
-                            <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#renameModal">Edit</button>
+                            <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#renameModal" @onclick="() => OnEditDeviceBtn_Click(device)">Edit</button>
                             <button class="btn btn-outline-danger me-2" @onclick="async () => await OnRemoveDeviceBtn_Click(device.Id)">Remove</button>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="renameModal" tabindex="-1" aria-labelledby="renameModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog" @onabort="() => _editedDevice = null">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="renameModalLabel">Rename device</h5>
@@ -44,11 +44,11 @@
       </div>
       <div class="modal-body">
       <label for="deviceNameInput" class="form-label">Device name</label>
-      <input type="text" class="form-control" id="deviceNameInput" placeholder="My cool device">
+      <input @bind="_deviceNewName" type="text" class="form-control" id="deviceNameInput" placeholder="My cool device">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renameModal" @onclick="OnRenameDeviceSubmitBtn_Click">Save changes</button>
       </div>
     </div>
   </div>
@@ -56,6 +56,8 @@
 
 @code {
     private Device[] _devices = Array.Empty<Device>();
+    private Device? _editedDevice = null;
+    private string _deviceNewName = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,13 +74,23 @@
         throw new NotImplementedException();
     }
 
-    private async Task OnEditDeviceBtn_Click(string deviceId)
+    private void OnEditDeviceBtn_Click(Device device)
     {
+        _editedDevice = device;
+        _deviceNewName = device.Name;
     }
 
     private async Task OnRemoveDeviceBtn_Click(string deviceId)
     {
         await DevicesService.RemoveDevice(deviceId);
+        await RefreshDeviceList();
+    }
+
+    private async Task OnRenameDeviceSubmitBtn_Click(MouseEventArgs obj)
+    {
+        if(_editedDevice == null)
+            throw new NullReferenceException(nameof(_editedDevice));
+        await DevicesService.RenameDevice(_editedDevice.Id, _deviceNewName);
         await RefreshDeviceList();
     }
 
