@@ -27,7 +27,7 @@ namespace KeyWord.Client.Services
             _client.BaseAddress = baseAddress;
         }
         
-        public async Task<bool> TryRegister(string id, string name, IPAddress host, string token)
+        public async Task<bool> TryRegister(string id, string name, string token)
         {
             var deviceInfo = new DeviceCandidate()
             {

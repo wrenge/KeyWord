@@ -7,6 +7,9 @@
     <ContentPage.Content>
         <TableView Intent="Settings" BackgroundColor="White">
             <TableRoot>
+                <TableSection Title="Sync">
+                    <TextCell Text="Register" Tapped="RegisterCell_OnTapped"></TextCell>
+                </TableSection>
                 <TableSection Title="Security">
                     <TextCell Text="Change Auth Key"/>
                     <TextCell Text="Lock Now"/>

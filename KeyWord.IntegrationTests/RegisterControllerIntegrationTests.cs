@@ -35,7 +35,7 @@ public class RegisterControllerIntegrationTests : IClassFixture<TestingWebAppFac
 
         var deviceId = "MockDeviceId";
         var deviceName = "MockDevice";
-        var registerTask = client.TryRegister(deviceId, deviceName, host, token.Token);
+        var registerTask = client.TryRegister(deviceId, deviceName, token.Token);
 
         var device = await deviceRequestTask;
         
