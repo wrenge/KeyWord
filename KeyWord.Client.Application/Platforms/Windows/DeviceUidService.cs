@@ -1,4 +1,5 @@
 ﻿using Windows.System.Profile;
+using KeyWord.Client.Application.Services;
 using KeyWord.Client.Application.Windows;
 
 [assembly: Dependency(typeof(DeviceUidService))]

@@ -1,4 +1,5 @@
 ﻿using KeyWord.Client.Application.MacCatalyst;
+using KeyWord.Client.Application.Services;
 using UIKit;
 
 [assembly: Dependency(typeof(DeviceUidService))]
