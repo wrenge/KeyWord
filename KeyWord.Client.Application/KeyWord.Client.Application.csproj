@@ -54,6 +54,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.0" />
+		<PackageReference Include="SQLitePCLRaw.provider.sqlite3" Version="2.1.0" />
+		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.0" />
+		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\KeyWord.Client.Services\KeyWord.Client.Services.csproj" />
 	  <ProjectReference Include="..\KeyWord.Communication\KeyWord.Communication.csproj" />
 	  <ProjectReference Include="..\KeyWord.Credentials\KeyWord.Credentials.csproj" />
