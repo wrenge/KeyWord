@@ -32,5 +32,7 @@
 	<string>Authentification</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app uses barcode scanning</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>To discover sync server</string>
 </dict>
 </plist>
