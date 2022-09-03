@@ -1,5 +1,6 @@
 ﻿using Android.Provider;
 using KeyWord.Client.Application.Android;
+using KeyWord.Client.Application.Services;
 
 [assembly: Dependency(typeof(DeviceUidService))]
 namespace KeyWord.Client.Application.Android

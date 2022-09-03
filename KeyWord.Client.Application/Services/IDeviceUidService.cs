@@ -1,4 +1,4 @@
-﻿namespace KeyWord.Client.Application;
+﻿namespace KeyWord.Client.Application.Services;
 
 public interface IDeviceUidService
 {
