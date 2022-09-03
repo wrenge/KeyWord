@@ -5,6 +5,7 @@
 @using System.Drawing.Imaging
 @using System.Runtime.Serialization.Formatters.Binary
 @using System.Text.Json
+@using System.Drawing
 
 @inject DevicesService DevicesService
 @inject RegisterService RegisterService
@@ -166,13 +167,10 @@
 
     private string GenerateQrCode(string input)
     {
-        using var stream = new MemoryStream();
         var qrGenerator = new QRCodeGenerator();
         var qrData = qrGenerator.CreateQrCode(input, QRCodeGenerator.ECCLevel.Q);
-        var qrCode = new QRCode(qrData);
-        using var bitmap = qrCode.GetGraphic(20);
-        bitmap.Save(stream, ImageFormat.Png);
-        return "data:image/png;base64," + Convert.ToBase64String(stream.ToArray());
+        var qrCode = new PngByteQRCode(qrData);
+        return "data:image/png;base64," + Convert.ToBase64String(qrCode.GetGraphic(20));
     }
 
     private async void OnRegistrationModal_Abort()
