@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using KeyWord.Client.Storage.Mobile;
 using KeyWord.Client.Storage;
+using ZXing.Net.Maui;
 
 namespace KeyWord.Client.Application
 {
@@ -16,6 +17,7 @@ namespace KeyWord.Client.Application
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("ionicons.ttf", "IonIcons");
                 })
+                .UseBarcodeReader()
                 .UseMauiCommunityToolkit();
             builder.Services.AddSingleton<ICredentialsStorage>(_ => new CredentialsStorageMobile(databasePath, "storage.db3"));
             return builder.Build();
