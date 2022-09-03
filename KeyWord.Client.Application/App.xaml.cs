@@ -7,13 +7,14 @@ namespace KeyWord.Client.Application
     {
         public App(ICredentialsStorage storage)
         {
-            var passwordService = new PasswordStorageService();
-            var password = passwordService.Get();
-            if (string.IsNullOrEmpty(password))
-            {
-                password = passwordService.Generate();
-                passwordService.Set(password);
-            }
+            var password = "password"; // TODO
+            // var passwordService = new PasswordStorageService();
+            // var password = passwordService.Get();
+            // if (string.IsNullOrEmpty(password))
+            // {
+            //     password = passwordService.Generate();
+            //     passwordService.Set(password);
+            // }
             
             if (!storage.HasPassword()) 
                 storage.ChangePassword(password);
