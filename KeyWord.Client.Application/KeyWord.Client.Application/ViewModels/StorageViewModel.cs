@@ -10,15 +10,32 @@ namespace KeyWord.Client.Application.ViewModels
 {
     public class StorageViewModel : BaseViewModel
     {
+        private StorageItem _selectedItem;
+
+        public StorageItem SelectedItem
+        {
+            get => _selectedItem;
+            private set
+            {
+                SetProperty(ref _selectedItem, value);
+                OnItemSelected(value);
+            }
+        }
+
         public ObservableCollection<StorageItem> Items { get; }
-        public Command LoadItemsCommand { get; }
         public ICredentialsStorage Storage => DependencyService.Get<ICredentialsStorage>();
+        public Command LoadItemsCommand { get; }
+        public Command AddItemCommand { get; }
+        public Command<StorageItem> ItemTapped { get; }
 
         public StorageViewModel ()
         {
             Title = "Storage";
             Items = new ObservableCollection<StorageItem>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            
+            ItemTapped = new Command<StorageItem>(OnItemSelected);
+            AddItemCommand = new Command(OnAddItem);
         }
 
         private async Task ExecuteLoadItemsCommand()
@@ -26,25 +43,21 @@ namespace KeyWord.Client.Application.ViewModels
             IsBusy = true;
             try
             {
-                // TODO password
-                var password = "password";
-                if (!Storage.HasPassword())
+                if (Storage.HasPassword() && Storage.IsPasswordCorrect())
                 {
-                    Storage.ChangePassword(password);
-                }
-
-                Storage.Password = password;
-                
-                Items.Clear();
-                var items = Storage.GetIdentities();
-                foreach (var identity in items)
-                {
-                    var item = new StorageItem()
+                    Items.Clear();
+                    var items = Storage.GetIdentities();
+                    foreach (var identity in items)
                     {
-                        Id = identity.Id,
-                        Identifier = identity.Identifier,
-                    };
-                    Items.Add(item);
+                        var item = new StorageItem()
+                        {
+                            Id = identity.Id,
+                            Identifier = identity.Identifier,
+                            Name = identity.Name,
+                            Login = identity.Login
+                        };
+                        Items.Add(item);
+                    }
                 }
             }
             catch (Exception e)
@@ -59,6 +72,20 @@ namespace KeyWord.Client.Application.ViewModels
 
         public void OnAppearing()
         {
+            IsBusy = true;
+            SelectedItem = null;
+        }
+        
+        private async void OnAddItem(object obj)
+        {
+            // await Shell.Current.GoToAsync(nameof(NewItemPage));
+        }
+
+        private async void OnItemSelected(StorageItem value)
+        {
+            if (value == null)
+                return;
+            
             
         }
     }

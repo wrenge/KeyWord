@@ -2,12 +2,49 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="KeyWord.Client.Application.Views.StoragePage">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Hello, world!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
+             xmlns:local="clr-namespace:KeyWord.Client.Application.ViewModels;assembly=KeyWord.Client.Application"
+             xmlns:models="clr-namespace:KeyWord.Client.Application.Models;assembly=KeyWord.Client.Application"
+             x:Class="KeyWord.Client.Application.Views.StoragePage"
+             x:DataType="local:StorageViewModel"
+             Title="{Binding Title}"
+             x:Name="BrowseStoragePage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" />
+    </ContentPage.ToolbarItems>
+    <RefreshView Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+        <CollectionView x:Name="ItemsListView"
+                        ItemsSource="{Binding Items}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="30, 10, 30, 10" x:DataType="models:StorageItem">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Frame BackgroundColor="{Binding AvatarColor}" CornerRadius="25" WidthRequest="50" HeightRequest="50"
+                               Padding="0">
+                            <Label Text="{Binding AvatarCharacter}"
+                                   FontAttributes="Bold"
+                                   FontSize="28"
+                                   VerticalOptions="Center"
+                                   TextColor="White"
+                                   HorizontalOptions="Center" />
+                        </Frame>
+                        <StackLayout Orientation="Vertical" Grid.Column="1" Margin="10">
+                            <Label Text="{Binding Name}" Style="{DynamicResource ListItemTextStyle}" />
+                            <Label Text="{Binding Login}" Style="{DynamicResource ListItemDetailTextStyle}" />
+                        </StackLayout>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:StorageViewModel}}, Path=ItemTapped}"		
+                                CommandParameter="{Binding .}">
+                            </TapGestureRecognizer>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
 </ContentPage>
