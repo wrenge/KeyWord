@@ -8,7 +8,8 @@
             {
                 Id = info.Id,
                 Identifier = info.Identifier,
-                Login = info.Login
+                Login = info.Login,
+                Name = info.Name
             };
         }
     }
