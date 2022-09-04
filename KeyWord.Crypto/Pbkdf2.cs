@@ -16,8 +16,10 @@ namespace KeyWord.Crypto
 
         public ByteText ComputeKey(ByteText password, ByteText salt)
         {
-            using var pbkdf2 = new Rfc2898DeriveBytes(password.Bytes, salt.Bytes, Iterations);
-            return new ByteText(pbkdf2.GetBytes(Length));
+            using (var pbkdf2 = new Rfc2898DeriveBytes(password.Bytes, salt.Bytes, Iterations))
+            {
+                return new ByteText(pbkdf2.GetBytes(Length));
+            }
         }
     }
 }

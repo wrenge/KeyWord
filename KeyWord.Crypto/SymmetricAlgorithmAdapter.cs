@@ -4,7 +4,8 @@ using System.Security.Cryptography;
 
 namespace KeyWord.Crypto
 {
-    public abstract class SymmetricAlgorithmAdapter<T> : ICipherAlgorithm where T : SymmetricAlgorithm, new()
+    public abstract class SymmetricAlgorithmAdapter<T> : ICipherAlgorithm
+        where T : SymmetricAlgorithm, new()
     {
         protected SymmetricAlgorithmAdapter(ByteText vector)
         {
@@ -19,16 +20,21 @@ namespace KeyWord.Crypto
         {
             if (Vector == null)
                 throw new ArgumentNullException(null, nameof(Vector));
-            
-            using var cipher = new T();
+
+            var cipher = new T();
             cipher.Mode = CipherMode;
             cipher.Padding = PaddingMode;
-            using var encryptor = cipher.CreateEncryptor(key.Bytes, Vector);
-            using var to = new MemoryStream();
-            using var writer = new CryptoStream(to, encryptor, CryptoStreamMode.Write);
+            var encryptor = cipher.CreateEncryptor(key.Bytes, Vector);
+            var to = new MemoryStream();
+            var writer = new CryptoStream(to, encryptor, CryptoStreamMode.Write);
             writer.Write(text.Bytes, 0, text.Bytes.Length);
             writer.FlushFinalBlock();
             var encrypted = to.ToArray();
+
+            cipher.Dispose();
+            encryptor.Dispose();
+            to.Dispose();
+            writer.Dispose();
 
             return new ByteText(encrypted);
         }
@@ -37,18 +43,27 @@ namespace KeyWord.Crypto
         {
             if (Vector == null)
                 throw new ArgumentNullException(null, nameof(Vector));
-            
-            using var cipher = new T();
-            cipher.Mode = CipherMode;
-            cipher.Padding = PaddingMode;
-            using var decryptor = cipher.CreateDecryptor(key.Bytes, Vector);
-            using var to = new MemoryStream();
-            using var writer = new CryptoStream(to, decryptor, CryptoStreamMode.Write);
-            writer.Write(text.Bytes, 0, text.Bytes.Length);
-            writer.FlushFinalBlock();
-            var decrypted = to.ToArray();
 
-            return new ByteText(decrypted);
+            using (var cipher = new T())
+            {
+                byte[] decrypted;
+                cipher.Mode = CipherMode;
+                cipher.Padding = PaddingMode;
+                using (var decryptor = cipher.CreateDecryptor(key.Bytes, Vector))
+                {
+                    using (var to = new MemoryStream())
+                    {
+                        using (var writer = new CryptoStream(to, decryptor, CryptoStreamMode.Write))
+                        {
+                            writer.Write(text.Bytes, 0, text.Bytes.Length);
+                            writer.FlushFinalBlock();
+                        }
+                        decrypted = to.ToArray();
+                    }
+
+                    return new ByteText(decrypted);
+                }
+            }
         }
     }
 }

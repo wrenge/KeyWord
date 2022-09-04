@@ -1,35 +1,36 @@
 ﻿using KeyWord.Credentials;
 using Microsoft.EntityFrameworkCore;
 
-namespace KeyWord.Client.Storage.Mobile;
-
-internal sealed class CredentialsContext : DbContext
+namespace KeyWord.Client.Storage.Mobile
 {
-    public DbSet<ClassicCredentialsInfo> ClassicCredentialsInfos { get; set; } = null!;
-    public DbSet<KeyValueEntry> KeyValues { get; set; } = null!;
-    public string DbFileName { get; }
-    private IDatabasePath _databasePath;
-
-    public CredentialsContext (IDatabasePath databasePath, string dbFileName)
+    internal sealed class CredentialsContext : DbContext
     {
-        DbFileName = dbFileName;
-        _databasePath = databasePath;
-        SQLitePCL.Batteries_V2.Init();
-        this.Database.EnsureCreated();
-    }
+        public DbSet<ClassicCredentialsInfo> ClassicCredentialsInfos { get; set; } = null;
+        public DbSet<KeyValueEntry> KeyValues { get; set; } = null;
+        public string DbFileName { get; }
+        private IDatabasePath _databasePath;
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlite($"Filename={_databasePath.GetPath(DbFileName)}");
-    }
+        public CredentialsContext (IDatabasePath databasePath, string dbFileName)
+        {
+            DbFileName = dbFileName;
+            _databasePath = databasePath;
+            SQLitePCL.Batteries_V2.Init();
+            this.Database.EnsureCreated();
+        }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<ClassicCredentialsInfo>()
-            .Property(e => e.Id)
-            .ValueGeneratedOnAdd();
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite($"Filename={_databasePath.GetPath(DbFileName)}");
+        }
 
-        modelBuilder.Entity<KeyValueEntry>()
-            .HasKey(x => x.Key);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ClassicCredentialsInfo>()
+                .Property(e => e.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<KeyValueEntry>()
+                .HasKey(x => x.Key);
+        }
     }
 }

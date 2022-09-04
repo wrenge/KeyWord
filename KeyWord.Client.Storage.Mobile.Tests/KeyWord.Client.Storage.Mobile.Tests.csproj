@@ -1,24 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
 
-        <IsPackable>false</IsPackable>
-    </PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-        <PackageReference Include="NUnit" Version="3.13.2" />
-        <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
-        <PackageReference Include="coverlet.collector" Version="3.1.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
+    <PackageReference Include="coverlet.collector" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.28" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.28" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\KeyWord.Credentials\KeyWord.Credentials.csproj" />
-      <ProjectReference Include="..\KeyWord.Crypto\KeyWord.Crypto.csproj" />
-      <ProjectReference Include="..\KeyWord.Client.Storage.Mobile\KeyWord.Client.Storage.Mobile.csproj" />
-      <ProjectReference Include="..\KeyWord.Client.Storage\KeyWord.Client.Storage.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KeyWord.Client.Storage.Mobile\KeyWord.Client.Storage.Mobile.csproj" />
+    <ProjectReference Include="..\KeyWord.Credentials\KeyWord.Credentials.csproj" />
+    <ProjectReference Include="..\KeyWord.Crypto\KeyWord.Crypto.csproj" />
+  </ItemGroup>
 
 </Project>

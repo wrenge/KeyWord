@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace KeyWord.Credentials
 {
@@ -8,16 +9,16 @@ namespace KeyWord.Credentials
         public string Identifier { get; set; } = "";
         public string Login { get; set; } = "";
 
-        public bool Equals(CredentialsIdentity? other)
+        public bool Equals(CredentialsIdentity other)
         {
-            if (ReferenceEquals(null, other)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             return Id == other.Id && Identifier == other.Identifier && Login == other.Login;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
             return Equals((CredentialsIdentity) obj);
@@ -25,15 +26,19 @@ namespace KeyWord.Credentials
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Identifier, Login);
+            int hashCode = -2102179360;
+            hashCode = hashCode * -1521134295 + Id.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Identifier);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Login);
+            return hashCode;
         }
 
-        public static bool operator ==(CredentialsIdentity? left, CredentialsIdentity? right)
+        public static bool operator ==(CredentialsIdentity left, CredentialsIdentity right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(CredentialsIdentity? left, CredentialsIdentity? right)
+        public static bool operator !=(CredentialsIdentity left, CredentialsIdentity right)
         {
             return !Equals(left, right);
         }

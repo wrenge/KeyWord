@@ -8,7 +8,7 @@ namespace KeyWord.Client.Storage
         string Password { set; }
         int Count { get; }
         IReadOnlyList<CredentialsIdentity> GetIdentities();
-        ICredentialsInfo? FindInfo(int id);
+        ICredentialsInfo FindInfo(int id);
         void SaveInfo(ICredentialsInfo info);
         void UpdateInfo(int id, ICredentialsInfo info);
         void DeleteInfo(int id);

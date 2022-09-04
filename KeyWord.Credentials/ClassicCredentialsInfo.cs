@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace KeyWord.Credentials
 {
@@ -26,24 +27,19 @@ namespace KeyWord.Credentials
             RemoveTime = info.RemoveTime;
         }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Id, Name, Identifier, Login, Password, CreationTime, ModificationTime, RemoveTime);
-        }
-
-        public static bool operator ==(ClassicCredentialsInfo? left, ClassicCredentialsInfo? right)
+        public static bool operator ==(ClassicCredentialsInfo left, ClassicCredentialsInfo right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(ClassicCredentialsInfo? left, ClassicCredentialsInfo? right)
+        public static bool operator !=(ClassicCredentialsInfo left, ClassicCredentialsInfo right)
         {
             return !Equals(left, right);
         }
 
-        public bool Equals(ICredentialsInfo? other)
+        public bool Equals(ICredentialsInfo other)
         {
-            if (ReferenceEquals(null, other)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
             return Id == other.Id
                    && Name == other.Name
@@ -55,9 +51,23 @@ namespace KeyWord.Credentials
                    Nullable.Equals(RemoveTime, other.RemoveTime);
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             return ReferenceEquals(this, obj) || obj is ClassicCredentialsInfo other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 295467307;
+            hashCode = hashCode * -1521134295 + Id.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Identifier);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Login);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Password);
+            hashCode = hashCode * -1521134295 + CreationTime.GetHashCode();
+            hashCode = hashCode * -1521134295 + ModificationTime.GetHashCode();
+            hashCode = hashCode * -1521134295 + RemoveTime.GetHashCode();
+            return hashCode;
         }
     }
 }

@@ -1,18 +1,19 @@
 ﻿using System.IO;
 
-namespace KeyWord.Client.Storage.Mobile.Tests;
-
-public class TestDatabasePath : IDatabasePath
+namespace KeyWord.Client.Storage.Mobile.Tests
 {
-    private readonly string _path;
-
-    public TestDatabasePath(string path)
+    public class TestDatabasePath : IDatabasePath
     {
-        _path = path;
-    }
+        private readonly string _path;
 
-    public string GetPath(string fileName)
-    {
-        return Path.Combine(_path, fileName);
+        public TestDatabasePath(string path)
+        {
+            _path = path;
+            }
+
+        public string GetPath(string fileName)
+        {
+            return Path.Combine(_path, fileName);
+        }
     }
 }
