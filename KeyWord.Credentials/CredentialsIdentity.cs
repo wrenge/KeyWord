@@ -8,29 +8,30 @@ namespace KeyWord.Credentials
         public int Id { get; set; }
         public string Identifier { get; set; } = "";
         public string Login { get; set; } = "";
+        public string Name { get; set; } = "";
 
         public bool Equals(CredentialsIdentity other)
         {
-            if (other is null) return false;
+            if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Id == other.Id && Identifier == other.Identifier && Login == other.Login;
+            return Id == other.Id && Identifier == other.Identifier && Login == other.Login && Name == other.Name;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is null) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((CredentialsIdentity) obj);
+            return ReferenceEquals(this, obj) || obj is CredentialsIdentity other && Equals(other);
         }
 
         public override int GetHashCode()
         {
-            int hashCode = -2102179360;
-            hashCode = hashCode * -1521134295 + Id.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Identifier);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Login);
-            return hashCode;
+            unchecked
+            {
+                var hashCode = Id;
+                hashCode = (hashCode * 397) ^ (Identifier != null ? Identifier.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Login != null ? Login.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+                return hashCode;
+            }
         }
 
         public static bool operator ==(CredentialsIdentity left, CredentialsIdentity right)
