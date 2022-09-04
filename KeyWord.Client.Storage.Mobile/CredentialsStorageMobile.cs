@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using KeyWord.Credentials;
 using KeyWord.Crypto;
 
@@ -34,7 +35,7 @@ namespace KeyWord.Client.Storage.Mobile
             DbFileName = dbFileName;
             _databasePath = databasePath;
             var savePasswordHash = FindKeyValue(SavedPasswordHashKey)?.Value;
-            _savedPasswordHash = savePasswordHash == null ? (ByteText?) null : new ByteText(savePasswordHash);
+            _savedPasswordHash = savePasswordHash == null ? (ByteText?) null : new ByteText(Convert.FromBase64String(savePasswordHash));
         }
 
         /// <summary>
@@ -50,6 +51,7 @@ namespace KeyWord.Client.Storage.Mobile
             using (var dbContext = new CredentialsContext(_databasePath, DbFileName))
             {
                 return dbContext.ClassicCredentialsInfos
+                    .Where(x => x.RemoveTime == null)
                     .Select(x => x.GetClassicDecrypted(_enteredPasswordHash.Value).ToCredentialsIdentity())
                     .ToArray();
             }
@@ -230,6 +232,16 @@ namespace KeyWord.Client.Storage.Mobile
             }
         }
 
+        public void SetKey(string key, string value)
+        {
+            SetKeyValue(key, value);
+        }
+
+        public string GetKeyOr(string key, string defaultValue = "")
+        {
+            return FindKeyValue(key)?.Value;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -261,7 +273,12 @@ namespace KeyWord.Client.Storage.Mobile
 
             using (var dbContext = new CredentialsContext(_databasePath, DbFileName))
             {
-                dbContext.KeyValues.Update(new KeyValueEntry() {Key = key, Value = value});
+                var kv = dbContext.KeyValues.FirstOrDefault(x => x.Key == key);
+                if (kv != null)
+                    kv.Value = value;
+                else
+                    dbContext.KeyValues.Add(new KeyValueEntry() {Key = key, Value = value});
+                dbContext.SaveChanges();
             }
         }
 
@@ -281,6 +298,88 @@ namespace KeyWord.Client.Storage.Mobile
             var df = new Pbkdf2(CryptoConstants.KdIterations, CryptoConstants.KdLength);
             _enteredPasswordHash = df.ComputeKey(new ByteText(value), new ByteText(CryptoConstants.KdSalt1));
             _checkPasswordHash = df.ComputeKey(new ByteText(value), new ByteText(CryptoConstants.KdSalt2));
+        }
+        
+        public IEnumerable<ClassicCredentialsInfo> GetAddedCredentials(DateTime since)
+        {
+            using (var dbContext = new CredentialsContext(_databasePath, DbFileName))
+            {
+                return dbContext.ClassicCredentialsInfos
+                    .Where(x => x.CreationTime > since)
+                    .ToArray();
+            }
+        }
+
+        public IEnumerable<ClassicCredentialsInfo> GetModifiedCredentials(DateTime since)
+        {
+            using (var dbContext = new CredentialsContext(_databasePath, DbFileName))
+            {
+                return dbContext.ClassicCredentialsInfos
+                    .Where(x => x.CreationTime <= since && x.ModificationTime != null && x.ModificationTime > since)
+                    .ToArray();
+            }
+        }
+
+        public IEnumerable<int> GetDeletedCredentials(DateTime since)
+        {
+            using (var dbContext = new CredentialsContext(_databasePath, DbFileName))
+            {
+                return dbContext.ClassicCredentialsInfos
+                    .Where(x => x.RemoveTime != null && x.RemoveTime > since)
+                    .Select(x => x.Id)
+                    .ToArray();
+            }
+        }
+        
+        public void SetAddedCredentials(IEnumerable<ClassicCredentialsInfo> infos)
+        {
+            // TODO: handle collisions
+            using (var dbContext = new CredentialsContext(_databasePath, DbFileName))
+            {
+                var infosQuery = infos.AsQueryable();
+                var infosIds = infosQuery.Select(x => x.Id).ToArray();
+                var existing = dbContext.ClassicCredentialsInfos
+                    .Where(x => infosIds.Contains(x.Id));
+                var infosToAdd = infosQuery
+                    .Where(x => !existing.Any(y => y.Id == x.Id && y.CreationTime > x.CreationTime && y.ModificationTime > x.ModificationTime));
+                dbContext.ClassicCredentialsInfos.AddRange(infosToAdd);
+                dbContext.SaveChanges();
+            }
+        }
+
+        public void SetModifiedCredentials(IEnumerable<ClassicCredentialsInfo> infos)
+        {
+            using (var dbContext = new CredentialsContext(_databasePath, DbFileName))
+            {
+                var infosQuery = infos.AsQueryable();
+                var infosIds = infosQuery.Select(y => y.Id).ToArray();
+                var modified = dbContext.ClassicCredentialsInfos
+                    .Where(x => infosIds.Contains(x.Id));
+                foreach (var info in modified)
+                {
+                    var counterPart = infosQuery.First(x => x.Id == info.Id);
+                    dbContext.Entry(info).CurrentValues.SetValues(counterPart);
+                }
+
+                dbContext.SaveChanges();
+            }
+        }
+
+        public void SetDeletedCredentials(IEnumerable<int> infos)
+        {
+            using (var dbContext = new CredentialsContext(_databasePath, DbFileName))
+            {
+                var infosArray = infos.ToArray();
+                var now = DateTime.UtcNow;
+                var removed = dbContext.ClassicCredentialsInfos
+                    .Where(x => infosArray.Contains(x.Id));
+                foreach (var info in removed)
+                {
+                    dbContext.Entry(info).CurrentValues.SetValues(new ClassicCredentialsInfo() {Id = info.Id, RemoveTime = now});
+                }
+
+                dbContext.SaveChanges();
+            }
         }
     }
 }

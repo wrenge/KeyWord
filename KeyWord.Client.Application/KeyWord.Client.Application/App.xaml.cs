@@ -10,7 +10,6 @@ namespace KeyWord.Client.Application
 {
     public partial class App
     {
-
         public App()
         {
             InitializeComponent();
@@ -29,12 +28,11 @@ namespace KeyWord.Client.Application
 
         private async void AuthorizeStorage()
         {
-            var password = "password"; // TODO
             var storage = DependencyService.Get<ICredentialsStorage>();
             
             if (!storage.HasPassword()) 
-                storage.ChangePassword(password);
-            storage.Password = password;
+                storage.ChangePassword(ApplicationConstants.StoragePassword);
+            storage.Password = ApplicationConstants.StoragePassword;
         }
 
         protected override void OnSleep()

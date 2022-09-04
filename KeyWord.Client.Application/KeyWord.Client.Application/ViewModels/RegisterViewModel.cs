@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using KeyWord.Client.Storage;
 using KeyWord.Communication;
 using Xamarin.Forms;
 
@@ -14,5 +15,7 @@ namespace KeyWord.Client.Application.ViewModels
             set => SetProperty(ref _qrScannerEnabled, value);
         }
         public bool IsRegistering { get; set; }
+        
+        public ICredentialsStorage Storage => DependencyService.Get<ICredentialsStorage>();
     }
 }

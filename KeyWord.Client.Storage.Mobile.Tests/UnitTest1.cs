@@ -1,4 +1,5 @@
 using KeyWord.Credentials;
+using KeyWord.Crypto;
 using Microsoft.Data.Sqlite;
 
 namespace KeyWord.Client.Storage.Mobile.Tests
@@ -167,6 +168,82 @@ namespace KeyWord.Client.Storage.Mobile.Tests
             Assert.IsFalse(storage.HasPassword());
             storage.ChangePassword(Password);
             Assert.IsTrue(storage.HasPassword());
+        }
+
+        [Test]
+        public void TestBulkEdit()
+        {
+            var storage = new CredentialsStorageMobile(new TestDatabasePath(""), GetDbPath());
+            storage.Password = Password;
+            storage.ChangePassword(Password);
+            var df = new Pbkdf2(CryptoConstants.KdIterations, CryptoConstants.KdLength);
+            var passwordHash = df.ComputeKey(new ByteText(Password), new ByteText(CryptoConstants.KdSalt1));
+            var added = new[]
+            {
+                new ClassicCredentialsInfo
+                {
+                    Id = 1,
+                    Identifier = "www.google.com",
+                    Login = "Test1",
+                    Password = "MyS3cretP@$$w0rD!!!",
+                    CreationTime = new DateTime(2022, 09, 04)
+                }.EncryptClassic(passwordHash),
+                new ClassicCredentialsInfo
+                {
+                    Id = 2,
+                    Identifier = "www.yahoo.com",
+                    Login = "Test2",
+                    Password = "MyS3cretP@$$w0rD!!!",
+                    CreationTime = new DateTime(2022, 09, 04)
+                }.EncryptClassic(passwordHash),
+                new ClassicCredentialsInfo
+                {
+                    Id = 4,
+                    Identifier = "www.yandex.com",
+                    Login = "Test3",
+                    Password = "MyS3cretP@$$w0rD!!!",
+                    CreationTime = new DateTime(2022, 09, 04)
+                }.EncryptClassic(passwordHash)
+            };
+            storage.SetAddedCredentials(added);
+            Assert.AreEqual(3, storage.GetAddedCredentials(new DateTime()).Count());
+
+            var modified = new[]
+            {
+                new ClassicCredentialsInfo
+                {
+                    Id = 1,
+                    Identifier = "www.google.com",
+                    Login = "Test1_Modified",
+                    Password = "MyS3cretP@$$w0rD!!!",
+                    CreationTime = new DateTime(2022, 09, 03),
+                    ModificationTime = new DateTime(2022, 09, 04)
+                }.EncryptClassic(passwordHash),
+                new ClassicCredentialsInfo
+                {
+                    Id = 2,
+                    Identifier = "www.yahoo.com",
+                    Login = "Test2_Modified",
+                    Password = "MyS3cretP@$$w0rD!!!",
+                    CreationTime = new DateTime(2022, 09, 03),
+                    ModificationTime = new DateTime(2022, 09, 04)
+                }.EncryptClassic(passwordHash),
+                new ClassicCredentialsInfo
+                {
+                    Id = 4,
+                    Identifier = "www.yandex.com",
+                    Login = "Test3_Modified",
+                    Password = "MyS3cretP@$$w0rD!!!",
+                    CreationTime = new DateTime(2022, 09, 03),
+                    ModificationTime = new DateTime(2022, 09, 04)
+                }.EncryptClassic(passwordHash)
+            };
+
+            storage.SetModifiedCredentials(modified);
+            Assert.AreEqual(3, storage.GetModifiedCredentials(new DateTime(2022, 09, 03)).Count());
+
+            storage.SetDeletedCredentials(new[] {1, 2, 4});
+            Assert.AreEqual(3, storage.GetDeletedCredentials(new DateTime()).Count());
         }
     }
 }

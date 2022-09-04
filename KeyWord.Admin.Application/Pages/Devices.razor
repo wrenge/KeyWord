@@ -82,8 +82,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @onclick="OnRegistrationModal_Abort">Close</button>
-                <button type="button" class="btn btn-success" disabled="@RegisterButtonDisabled" @onclick="OnRegisterApprove_Click">Approve</button>
-                <button type="button" class="btn btn-danger" disabled="@RegisterButtonDisabled" @onclick="OnRegisterDeny_Click">Deny</button>
+                <button type="button" class="btn btn-success" disabled="@RegisterButtonDisabled" data-bs-toggle="modal" data-bs-target="#renameModal" @onclick="OnRegisterApprove_Click">Approve</button>
+                <button type="button" class="btn btn-danger" disabled="@RegisterButtonDisabled" data-bs-toggle="modal" data-bs-target="#renameModal" @onclick="OnRegisterDeny_Click">Deny</button>
             </div>
         </div>
     </div>

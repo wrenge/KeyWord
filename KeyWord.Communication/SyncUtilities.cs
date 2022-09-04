@@ -39,5 +39,13 @@ namespace KeyWord.Communication
 
             return hasher.ComputeKey(new ByteText(bytes), new ByteText(requestSalt));
         }
+
+        public static ByteText GetAuthId(string password)
+        {
+            var hasher = new Pbkdf2(NetworkConstants.AuthIdIterations, NetworkConstants.AuthIdKeyLength);
+            var bytes = Encoding.Default.GetBytes(password).ToArray();
+
+            return hasher.ComputeKey(new ByteText(bytes), new ByteText(NetworkConstants.AuthIdSalt));
+        }
     }
 }

@@ -50,7 +50,9 @@ namespace KeyWord.Client.Application.Views
             }
             
             _viewModel.IsRegistering = true;
-            
+            Xamarin.Forms.Device.BeginInvokeOnMainThread (async () => {
+                await DisplayAlert ("Hold on!", "QR-Code scanned", "OK");
+            });
             // Discover server ip
             IPAddress serverIp = null;
             try
@@ -67,10 +69,13 @@ namespace KeyWord.Client.Application.Views
             {
                 _viewModel.IsRegistering = false;
                 _viewModel.QrScannerEnabled = true;
+                Xamarin.Forms.Device.BeginInvokeOnMainThread (async () => {
+                   await DisplayAlert ("Fail", "Can not discover server", "OK");
+                });
                 return;
             }
             
-            var serverUri = new UriBuilder("http", serverIp.ToString(), 7078).Uri;
+            var serverUri = new UriBuilder(ApplicationConstants.ServerProtocol, serverIp.ToString(), ApplicationConstants.ServerPort).Uri;
             var register = new RegisterService(serverUri);
             var deviceName = DeviceInfo.Name;
             var deviceUid = DependencyService.Get<IDeviceUidService>().GetUid();
@@ -82,6 +87,22 @@ namespace KeyWord.Client.Application.Views
             catch (Exception e)
             {
                 Debug.WriteLine(e);
+            }
+
+            if (success)
+            {
+                _viewModel.Storage.SetKey(ApplicationConstants.StorageTokenKey, qrData.Token);
+                _viewModel.Storage.SetKey(ApplicationConstants.ServerHostKey, serverIp.ToString());
+                await Shell.Current.GoToAsync("..");
+                Xamarin.Forms.Device.BeginInvokeOnMainThread (async () => {
+                    await DisplayAlert ("Success!", "Device has been added to the server!", "OK");
+                });
+            }
+            else
+            {
+                Xamarin.Forms.Device.BeginInvokeOnMainThread (async () => {
+                    await DisplayAlert ("Fail", "Device has not been added :(", "OK");
+                });
             }
         }
     }

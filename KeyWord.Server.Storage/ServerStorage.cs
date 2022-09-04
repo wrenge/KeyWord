@@ -118,7 +118,7 @@ public class ServerStorage : IStorage
     public void DeleteCredentials(IEnumerable<int> infos, string authId)
     {
         var infosArray = infos.ToArray();
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         var removed = _storageContext.ClassicCredentialsInfos
             .Where(x => x.AuthId == authId)
             .Where(x => infosArray.Contains(x.Id));

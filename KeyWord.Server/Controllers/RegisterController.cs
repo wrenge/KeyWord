@@ -47,7 +47,7 @@ public class RegisterController : ControllerBase
         
         var newToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(TokenByteLength));
         var port = NetworkConstants.RequestPort; // TODO генерировать рандомный порт
-        CurrentSession = new RegisterSession(newToken, DateTime.Now, TimeSpan.FromSeconds(TokenTimeout), port);
+        CurrentSession = new RegisterSession(newToken, DateTime.UtcNow, TimeSpan.FromSeconds(TokenTimeout), port);
         _logger.LogInformation( "Starting session {Token}", CurrentSession.Token);
         Task.Run(async () => await CurrentSession.ListenDiscoveryAsync());
         Task.Run(async () => await CloseSessionOnExpire(CurrentSession));
@@ -150,7 +150,7 @@ public class RegisterController : ControllerBase
         {
             Id = deviceCandidate.Id,
             Name = deviceCandidate.Name,
-            RegisterDate = DateTime.Now,
+            RegisterDate = DateTime.UtcNow,
             Token = deviceCandidate.Token
         });
         return Ok();

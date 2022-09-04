@@ -104,12 +104,12 @@ namespace KeyWord.Client.Application.ViewModels
                 };
                 if (Id <= 0)
                 {
-                    item.CreationTime = DateTime.Now;
+                    item.CreationTime = DateTime.UtcNow;
                     Storage.SaveInfo(item);
                 }
                 else
                 {
-                    item.ModificationTime = DateTime.Now;
+                    item.ModificationTime = DateTime.UtcNow;
                     Storage.UpdateInfo(Id, item);
                 }
 

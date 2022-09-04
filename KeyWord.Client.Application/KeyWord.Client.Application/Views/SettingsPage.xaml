@@ -2,13 +2,16 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:KeyWord.Client.Application.ViewModels;assembly=KeyWord.Client.Application"
              x:Class="KeyWord.Client.Application.Views.SettingsPage"
-             Title="Settings">
+             Title="Settings"
+             x:DataType="viewModels:SettingsViewModel">
     <ContentPage.Content>
         <TableView Intent="Settings">
             <TableRoot>
                 <TableSection Title="Sync">
                     <TextCell Text="Register" Tapped="RegisterCell_OnTapped"></TextCell>
+                    <TextCell Text="Synchronize" Tapped="SynchronizeCell_OnTapped" IsEnabled="{Binding SyncButtonEnabled}"></TextCell>
                 </TableSection>
                 <TableSection Title="Security">
                     <TextCell Text="Change Auth Key"/>

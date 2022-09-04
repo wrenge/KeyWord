@@ -17,5 +17,9 @@ namespace KeyWord.Communication
         public static readonly Encoding DiscoveryEncoding = Encoding.ASCII;
         public const int RequestPort = 8989;
         public const int ResponsePort = 8990;
+        
+        public const int AuthIdKeyLength = 8;
+        public const string AuthIdSalt = "AuthIdSalt";
+        public const int AuthIdIterations = 4;
     }
 }

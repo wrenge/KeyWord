@@ -13,7 +13,7 @@ public class RegisterSession : IDisposable
     public DateTime StartTime { get; }
     public TimeSpan Timeout { get; }
     public TaskCompletionSource<DeviceCandidate> DeviceCandidate { get; }
-    public bool IsExpired => DateTime.Now >= GetExpireDate();
+    public bool IsExpired => DateTime.UtcNow >= GetExpireDate();
     public bool IsOccupied { get; set; } = false;
     public bool IsClosed { get; private set; }
     public bool IsDeviceApproved { get; set; }
@@ -33,7 +33,7 @@ public class RegisterSession : IDisposable
 
     public DateTime GetExpireDate() => StartTime + Timeout;
     
-    public TimeSpan GetTimeLeft() => GetExpireDate() - DateTime.Now;
+    public TimeSpan GetTimeLeft() => GetExpireDate() - DateTime.UtcNow;
 
     public void Close()
     {
