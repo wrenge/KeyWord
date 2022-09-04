@@ -2,6 +2,7 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:local="clr-namespace:KeyWord.Client.Application.ViewModels;assembly=KeyWord.Client.Application"
              xmlns:models="clr-namespace:KeyWord.Client.Application.Models;assembly=KeyWord.Client.Application"
              x:Class="KeyWord.Client.Application.Views.StoragePage"
@@ -22,15 +23,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Frame BackgroundColor="{Binding AvatarColor}" CornerRadius="25" WidthRequest="50" HeightRequest="50"
-                               Padding="0">
-                            <Label Text="{Binding AvatarCharacter}"
-                                   FontAttributes="Bold"
-                                   FontSize="28"
-                                   VerticalOptions="Center"
-                                   TextColor="White"
-                                   HorizontalOptions="Center" />
-                        </Frame>
+                        <xct:AvatarView Text="{Binding AvatarCharacter}" />
                         <StackLayout Orientation="Vertical" Grid.Column="1" Margin="10">
                             <Label Text="{Binding Name}" Style="{DynamicResource ListItemTextStyle}" />
                             <Label Text="{Binding Login}" Style="{DynamicResource ListItemDetailTextStyle}" />

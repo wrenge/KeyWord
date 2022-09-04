@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using KeyWord.Client.Application.Models;
+using KeyWord.Client.Application.Views;
 using KeyWord.Client.Storage;
 using Xamarin.Forms;
 
@@ -78,7 +79,7 @@ namespace KeyWord.Client.Application.ViewModels
         
         private async void OnAddItem(object obj)
         {
-            // await Shell.Current.GoToAsync(nameof(NewItemPage));
+            await Shell.Current.GoToAsync(nameof(EditCredentialsPage));
         }
 
         private async void OnItemSelected(StorageItem value)
@@ -86,7 +87,7 @@ namespace KeyWord.Client.Application.ViewModels
             if (value == null)
                 return;
             
-            
+            await Shell.Current.GoToAsync($"{nameof(CredentialsDetailPage)}?{nameof(CredentialsDetailViewModel.Id)}={value.Id}");
         }
     }
 }

@@ -13,6 +13,8 @@ namespace KeyWord.Client.Application
             InitializeComponent();
             Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
+            Routing.RegisterRoute(nameof(EditCredentialsPage), typeof(EditCredentialsPage));
+            Routing.RegisterRoute(nameof(CredentialsDetailPage), typeof(CredentialsDetailPage));
         }
 
     }

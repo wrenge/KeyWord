@@ -18,12 +18,23 @@ namespace KeyWord.Client.Application
             DependencyService.Register<MockDataStore>();
             var dbPath = DependencyService.Get<IDatabasePath>();
             var storage = new CredentialsStorageMobile(dbPath, "keyword.db3");
-            DependencyService.RegisterSingleton(storage);
+            DependencyService.RegisterSingleton<ICredentialsStorage>(storage);
             MainPage = new AppShell();
         }
 
         protected override void OnStart()
         {
+            AuthorizeStorage();
+        }
+
+        private async void AuthorizeStorage()
+        {
+            var password = "password"; // TODO
+            var storage = DependencyService.Get<ICredentialsStorage>();
+            
+            if (!storage.HasPassword()) 
+                storage.ChangePassword(password);
+            storage.Password = password;
         }
 
         protected override void OnSleep()

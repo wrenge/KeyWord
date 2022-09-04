@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using KeyWord.Client.Application.Views;
 using KeyWord.Client.Storage;
 using Xamarin.Forms;
 
 namespace KeyWord.Client.Application.ViewModels
 {
+    [QueryProperty(nameof(Id), nameof(Id))]
     public class CredentialsDetailViewModel : BaseViewModel
     {
         private string _identifier;
@@ -71,7 +73,7 @@ namespace KeyWord.Client.Application.ViewModels
 
         private async void EditAsync()
         {
-            
+            await Shell.Current.GoToAsync($"{nameof(EditCredentialsPage)}?{nameof(EditCredentialsViewModel.Id)}={Id}");
         }
 
         public async void LoadItem(int id)
@@ -82,7 +84,6 @@ namespace KeyWord.Client.Application.ViewModels
                 if (item == null)
                     throw new NullReferenceException();
 
-                Id = item.Id;
                 Identifier = item.Identifier;
                 Name = item.Name;
                 Password = item.Password;

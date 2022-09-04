@@ -20,6 +20,7 @@ namespace KeyWord.Credentials
         {
             Id = info.Id;
             Identifier = info.Identifier;
+            Name = info.Name;
             Login = info.Login;
             Password = info.Password;
             CreationTime = info.CreationTime;
