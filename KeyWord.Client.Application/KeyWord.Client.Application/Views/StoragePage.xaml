@@ -18,20 +18,20 @@
                         SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="30, 10, 30, 10" x:DataType="models:StorageItem">
+                    <Grid Padding="10, 10, 10, 10" x:DataType="models:StorageItem" HeightRequest="50">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <xct:AvatarView Text="{Binding AvatarCharacter}" />
-                        <StackLayout Orientation="Vertical" Grid.Column="1" Margin="10">
-                            <Label Text="{Binding Name}" Style="{DynamicResource ListItemTextStyle}" />
-                            <Label Text="{Binding Login}" Style="{DynamicResource ListItemDetailTextStyle}" />
+                        <xct:AvatarView Text="{Binding AvatarCharacter}" x:Name="ItemAvatar" Size="50"/>
+                        <StackLayout Orientation="Vertical" Grid.Column="1" Padding="10, 0, 0, 10">
+                            <Label Text="{Binding Name}" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
+                            <Label Text="{Binding Login}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="13" />
                         </StackLayout>
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer 
+                            <TapGestureRecognizer
                                 NumberOfTapsRequired="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:StorageViewModel}}, Path=ItemTapped}"		
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:StorageViewModel}}, Path=ItemTapped}"
                                 CommandParameter="{Binding .}">
                             </TapGestureRecognizer>
                         </Grid.GestureRecognizers>
