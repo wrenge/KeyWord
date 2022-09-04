@@ -70,11 +70,19 @@ namespace KeyWord.Client.Application.Views
                 return;
             }
             
-            var serverUri = new UriBuilder("https", serverIp.ToString(), 7078).Uri;
+            var serverUri = new UriBuilder("http", serverIp.ToString(), 7078).Uri;
             var register = new RegisterService(serverUri);
             var deviceName = DeviceInfo.Name;
             var deviceUid = DependencyService.Get<IDeviceUidService>().GetUid();
-            var success = await register.TryRegister(deviceUid, deviceName, qrData.Token);
+            bool success = false;
+            try
+            {
+                success = await register.TryRegister(deviceUid, deviceName, qrData.Token);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
     }
 }

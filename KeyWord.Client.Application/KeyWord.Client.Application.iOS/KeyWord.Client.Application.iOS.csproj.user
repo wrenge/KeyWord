@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <SelectedDevice>iPhone 13 iOS 15.5</SelectedDevice>
-    <SelectedPlatformGroup>Simulator</SelectedPlatformGroup>
-    <ActiveDebugProfile>iPhone 13 iOS 15.5</ActiveDebugProfile>
+    <SelectedDevice>iPhone WRENGE</SelectedDevice>
+    <SelectedPlatformGroup>RemoteDevice</SelectedPlatformGroup>
+    <ActiveDebugProfile>iPhone WRENGE</ActiveDebugProfile>
     <DefaultDevice>iPhone 13 iOS 15.5</DefaultDevice>
     <TargetiOSDevice>&lt;%3fxml version="1.0" encoding="UTF-8"%3f&gt;
 &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;

@@ -82,8 +82,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @onclick="OnRegistrationModal_Abort">Close</button>
-                <button type="button" class="btn btn-success" disabled="@RegisterButtonDisabled">Approve</button>
-                <button type="button" class="btn btn-danger" disabled="@RegisterButtonDisabled">Deny</button>
+                <button type="button" class="btn btn-success" disabled="@RegisterButtonDisabled" @onclick="OnRegisterApprove_Click">Approve</button>
+                <button type="button" class="btn btn-danger" disabled="@RegisterButtonDisabled" @onclick="OnRegisterDeny_Click">Deny</button>
             </div>
         </div>
     </div>
@@ -138,6 +138,7 @@
             _pendingDevice = await RegisterService.RequestDeviceCandidate();
             _deviceName = _pendingDevice.Name;
             _deviceId = _pendingDevice.Id;
+            StateHasChanged();
         }
         catch (Exception)
         {
@@ -182,4 +183,15 @@
     {
         await RegisterService.CloseSession();
     }
+
+    private async void OnRegisterApprove_Click()
+    {
+        await RegisterService.ApprovePendingDevice();
+    }
+    
+    private async void OnRegisterDeny_Click()
+    {
+        await RegisterService.ApprovePendingDevice();
+    }
+
 }

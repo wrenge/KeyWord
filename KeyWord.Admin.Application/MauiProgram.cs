@@ -19,8 +19,8 @@ public static class MauiProgram
 #endif
 
         builder.Services.AddSingleton<WeatherForecastService>();
-        builder.Services.AddSingleton(_ => new DevicesService(new HttpClient {BaseAddress = new Uri("https://localhost:7078")}));
-        builder.Services.AddSingleton(_ => new RegisterService(new HttpClient {BaseAddress = new Uri("https://localhost:7078")}));
+        builder.Services.AddSingleton(_ => new DevicesService(new HttpClient {BaseAddress = new Uri("http://localhost:7078")}));
+        builder.Services.AddSingleton(_ => new RegisterService(new HttpClient {BaseAddress = new Uri("http://localhost:7078")}));
 
         return builder.Build();
     }
