@@ -15,6 +15,7 @@ namespace KeyWord.Client.Application
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
             Routing.RegisterRoute(nameof(EditCredentialsPage), typeof(EditCredentialsPage));
             Routing.RegisterRoute(nameof(CredentialsDetailPage), typeof(CredentialsDetailPage));
+            Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
         }
 
     }

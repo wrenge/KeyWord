@@ -9,9 +9,9 @@ namespace KeyWord.Client.Services
 {
     public class DiscoveryService
     {
-        public async Task<IPAddress?> DiscoverServer(int port, string token, TimeSpan timeout)
+        public async Task<IPAddress> DiscoverServer(int port, string token, TimeSpan timeout)
         {
-            using var client = new UdpClient(NetworkConstants.ResponsePort);
+            var client = new UdpClient(NetworkConstants.ResponsePort);
             client.EnableBroadcast = true;
             
             var requestCode = SyncUtilities.GetDiscoveryRequestAuthKey(token);
@@ -21,7 +21,7 @@ namespace KeyWord.Client.Services
 
             await client.SendAsync(requestData, requestData.Length, new IPEndPoint(IPAddress.Broadcast, port));
 
-            IPAddress? result = null;
+            IPAddress result = null;
 
             async Task ReceiveData()
             {
@@ -49,7 +49,9 @@ namespace KeyWord.Client.Services
             async Task Wait() => await Task.Delay(timeout);
 
             await Task.WhenAny(ReceiveData(), Wait());
-
+            
+            client.Close();
+            client.Dispose();
             return result;
         }
     }

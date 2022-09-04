@@ -34,5 +34,9 @@
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleIdentifier</key>
 	<string>ru.wrenge.keyword</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Please allow access to the camera to scan barcodes</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>To discover sync server</string>
 </dict>
 </plist>

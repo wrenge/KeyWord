@@ -36,7 +36,7 @@ namespace KeyWord.Client.Services
                 Token = token
             };
             var json = JsonSerializer.Serialize(deviceInfo);
-            var content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
             var postResponse = await _client.PostAsync("/Register/PostDeviceInfo", content);
             if (!postResponse.IsSuccessStatusCode)
                 return false; // TODO детализировать ошибку

@@ -25,7 +25,7 @@ namespace KeyWord.Client.Services
             _client.BaseAddress = baseAddress;
         }
         
-        public async Task<SyncResponse?> TrySync(string deviceId,
+        public async Task<SyncResponse> TrySync(string deviceId,
             string deviceToken,
             string authId,
             DateTime lastSyncTime,

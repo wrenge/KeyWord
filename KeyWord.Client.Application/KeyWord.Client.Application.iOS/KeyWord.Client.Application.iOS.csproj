@@ -69,6 +69,7 @@
     <AppExtensionDebugBundleId />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DeviceUidService.cs" />
     <Compile Include="IosDatabasePath.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
