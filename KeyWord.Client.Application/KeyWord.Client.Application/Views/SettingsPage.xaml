@@ -18,6 +18,7 @@
                     <TextCell Text="Lock Now"/>
                 </TableSection>
                 <TableSection Title="Other">
+                    <TextCell Text="Play Sound" Tapped="PlaySound_OnTapped"></TextCell>
                     <TextCell Text="Remove All Credentials"
                               TextColor="Red"/>
                 </TableSection>

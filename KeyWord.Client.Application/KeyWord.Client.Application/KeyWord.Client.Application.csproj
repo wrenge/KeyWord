@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.6.0" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.4" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />  
@@ -17,5 +18,13 @@
     <ProjectReference Include="..\..\KeyWord.Client.Services\KeyWord.Client.Services.csproj" />
     <ProjectReference Include="..\..\KeyWord.Client.Storage.Mobile\KeyWord.Client.Storage.Mobile.csproj" />
     <ProjectReference Include="..\..\KeyWord.Communication\KeyWord.Communication.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\honk.wav" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="honk.wav" />
   </ItemGroup>
 </Project>

@@ -16,7 +16,6 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v12.0</TargetFrameworkVersion>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <AndroidUseAapt2>true</AndroidUseAapt2>
@@ -72,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AndroidDatabasePath.cs" />
+    <Compile Include="AndroidMediaPlayer.cs" />
     <Compile Include="DeviceUidService.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -107,9 +107,12 @@
       <Name>KeyWord.Client.Storage</Name>
     </ProjectReference>
     <ProjectReference Include="..\KeyWord.Client.Application\KeyWord.Client.Application.csproj">
-      <Project>{F86F0D3A-C0B6-4553-BD70-D582C2F19795}</Project>
+      <Project>{33C7EE80-A6EA-4D04-A71B-F916B9A1A572}</Project>
       <Name>KeyWord.Client.Application</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\KeyWord.Client.Application.honk.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using KeyWord.Client.Application.Services;
@@ -80,6 +82,30 @@ namespace KeyWord.Client.Application.Views
             Xamarin.Forms.Device.BeginInvokeOnMainThread (async () => {
                 await DisplayAlert("Success", "Synced with server!", "OK");
             });
+        }
+
+        private async void PlaySound_OnTapped(object sender, EventArgs e)
+        {
+//             var player = DependencyService.Get<IMediaPlayer>();
+//             var filepath = @"KeyWord.Client.Application." + "honk.wav";
+// // #if __IOS__
+// //             filepath = "KeyWord.Client.Application.iOS." + filepath;
+// // #elif __ANDROID__
+// //             filepath = "KeyWord.Client.Application.Droid." + filepath;
+// // #endif
+//             await player.SetDataSource(filepath);
+//             await player.Prepare();
+//             player.Start();
+            var player = Plugin.SimpleAudioPlayer.CrossSimpleAudioPlayer.Current;
+            player.Load(GetStreamFromFile("honk.wav"));
+            player.Play();
+        }
+        
+        private Stream GetStreamFromFile(string filename)
+        {
+            var assembly = typeof(App).GetTypeInfo().Assembly;
+            var stream = assembly.GetManifestResourceStream("KeyWord.Client.Application." + filename);
+            return stream;
         }
     }
 }
