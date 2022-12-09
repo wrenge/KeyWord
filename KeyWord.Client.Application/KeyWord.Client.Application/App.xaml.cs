@@ -18,12 +18,13 @@ namespace KeyWord.Client.Application
             var dbPath = DependencyService.Get<IDatabasePath>();
             var storage = new CredentialsStorageMobile(dbPath, "keyword.db3");
             DependencyService.RegisterSingleton<ICredentialsStorage>(storage);
+            AuthorizeStorage();
             MainPage = new AppShell();
         }
 
         protected override void OnStart()
         {
-            AuthorizeStorage();
+            
         }
 
         private async void AuthorizeStorage()

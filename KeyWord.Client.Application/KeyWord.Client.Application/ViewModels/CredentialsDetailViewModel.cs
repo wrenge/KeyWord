@@ -86,6 +86,7 @@ namespace KeyWord.Client.Application.ViewModels
 
                 Identifier = item.Identifier;
                 Name = item.Name;
+                Login = item.Login;
                 Password = item.Password;
             }
             catch (Exception e)

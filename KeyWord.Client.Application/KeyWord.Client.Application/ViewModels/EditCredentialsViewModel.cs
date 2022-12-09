@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Web;
 using KeyWord.Client.Storage;
 using KeyWord.Credentials;
 using Xamarin.Forms;
 
 namespace KeyWord.Client.Application.ViewModels
 {
-    public class EditCredentialsViewModel : BaseViewModel
+    public class EditCredentialsViewModel : BaseViewModel, IQueryAttributable
     {
         public ICredentialsStorage Storage => DependencyService.Get<ICredentialsStorage>();
 
@@ -79,9 +81,10 @@ namespace KeyWord.Client.Application.ViewModels
                 var item = Storage.FindInfo(value);
                 if (item == null)
                     throw new NullReferenceException();
-                Id = item.Id;
+
                 Identifier = item.Identifier;
                 Name = item.Name;
+                Login = item.Login;
                 Password = item.Password;
             }
             catch (Exception e)
@@ -118,6 +121,14 @@ namespace KeyWord.Client.Application.ViewModels
             catch (Exception e)
             {
                 Debug.WriteLine(e);
+            }
+        }
+
+        public void ApplyQueryAttributes(IDictionary<string, string> query)
+        {
+            if(query.TryGetValue(nameof(EditCredentialsViewModel.Id), out var id))
+            {
+                Id = int.Parse(id);
             }
         }
     }
