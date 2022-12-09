@@ -134,6 +134,7 @@ namespace KeyWord.Client.Storage.Mobile
                     throw new ElementNotExistException();
                 if (!(info is ClassicCredentialsInfo classicInfo))
                     throw new NotSupportedException(info.GetType().ToString());
+                // TODO: добавить проверку на ElementExistsException
 
                 var newInfo = new ClassicCredentialsInfo(classicInfo);
                 newInfo.Id = id;
