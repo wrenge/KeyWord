@@ -12,7 +12,7 @@ using KeyWord.Communication;
 
 namespace KeyWord.Admin.Services
 {
-    public class DevicesService
+    public class DevicesService : INetworkService
     {
         private readonly HttpClient _client;
 
